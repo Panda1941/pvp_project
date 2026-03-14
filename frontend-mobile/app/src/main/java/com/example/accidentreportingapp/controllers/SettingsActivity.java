@@ -1,49 +1,32 @@
-package com.example.accidentreportingapp;
+package com.example.accidentreportingapp.controllers;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.accidentreportingapp.R;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.Locale;
 
 /**
  * SettingsActivity allows the user to customize application preferences.
  * Currently supports runtime language switching between English and Lithuanian.
+ * Extends BaseActivity for shared localization and utility logic.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private ImageButton btnBack;
     private RadioGroup radioGroupLanguage;
     private RadioButton radioEn, radioLt;
     private MaterialButton btnSave;
     private String selectedLanguage;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Apply saved locale before activity is created
-        SharedPreferences prefs = newBase.getSharedPreferences("Settings", MODE_PRIVATE);
-        String lang = prefs.getString("My_Lang", "en");
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        newBase = newBase.createConfigurationContext(config);
-        super.attachBaseContext(newBase);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

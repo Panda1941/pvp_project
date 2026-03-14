@@ -1,29 +1,24 @@
-package com.example.accidentreportingapp;
+package com.example.accidentreportingapp.controllers;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.accidentreportingapp.R;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.Locale;
 
 /**
  * MainActivity serves as the primary dashboard for the ARA app.
  * It follows a classic MVC architecture where this Activity acts as the Controller,
  * managing the interactions between the UI (View) and the app's data/logic (Model).
+ * Extends BaseActivity for shared localization and utility logic.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     // UI Elements
     private ImageButton settingsButton;
@@ -31,21 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton btnViewReports;
     private MaterialButton btnVehicleInfo;
     private MaterialButton btnEmergencyContacts;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        // Apply saved locale before activity is created
-        SharedPreferences prefs = newBase.getSharedPreferences("Settings", MODE_PRIVATE);
-        String lang = prefs.getString("My_Lang", "");
-        if (!lang.isEmpty()) {
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.setLocale(locale);
-            newBase = newBase.createConfigurationContext(config);
-        }
-        super.attachBaseContext(newBase);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,13 +89,5 @@ public class MainActivity extends AppCompatActivity {
         btnEmergencyContacts.setOnClickListener(v -> 
             showToast(getString(R.string.toast_emergency))
         );
-    }
-
-    /**
-     * Helper method to display short Toast messages.
-     * @param message The text to display.
-     */
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
