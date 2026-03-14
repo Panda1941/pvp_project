@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Accident Reporting App</string>
+    <string name="app_header_title">Accident Reporting App</string>
+    <string name="main_menu_subtitle">Pagrindinis meniu</string>
+    <string name="btn_report_accident">Registruoti naują\neismo įvykį</string>
+    <string name="btn_view_reports">Mano\nįvykiai</string>
+    <string name="btn_vehicle_info">Transporto\npriemonės informacija</string>
+    <string name="btn_emergency_contacts">Skubios pagalbos\nkontaktai</string>
+    <string name="desc_settings">Nustatymai</string>
+    <string name="toast_settings">Atidaryti nustatymus</string>
+    <string name="toast_report">Navigacija į: Registruoti naują eismo įvykį</string>
+    <string name="toast_view_reports">Navigacija į: Mano įvykiai</string>
+    <string name="toast_vehicle">Navigacija į: Transporto priemonės informacija</string>
+    <string name="toast_emergency">Navigacija į: Skubios pagalbos kontaktai</string>
+
+    <!-- Settings Strings -->
+    <string name="title_settings">Nustatymai</string>
+    <string name="label_select_language">Pasirinkite kalbą</string>
+    <string name="lang_english">Anglų</string>
+    <string name="lang_lithuanian">Lietuvių</string>
+    <string name="btn_save">Išsaugoti pakeitimus</string>
+</resources>
