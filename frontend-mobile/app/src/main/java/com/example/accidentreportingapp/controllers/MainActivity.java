@@ -24,8 +24,6 @@ public class MainActivity extends BaseActivity {
     private ImageButton settingsButton;
     private MaterialButton btnReportAccident;
     private MaterialButton btnViewReports;
-    private MaterialButton btnVehicleInfo;
-    private MaterialButton btnEmergencyContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +54,6 @@ public class MainActivity extends BaseActivity {
         settingsButton = findViewById(R.id.settings_button);
         btnReportAccident = findViewById(R.id.btn_report_accident);
         btnViewReports = findViewById(R.id.btn_view_reports);
-        btnVehicleInfo = findViewById(R.id.btn_vehicle_info);
-        btnEmergencyContacts = findViewById(R.id.btn_emergency_contacts);
     }
 
     /**
@@ -76,18 +72,9 @@ public class MainActivity extends BaseActivity {
         );
 
         // Main Menu - View My Reports
-        btnViewReports.setOnClickListener(v -> 
-            showToast(getString(R.string.toast_view_reports))
-        );
-
-        // Main Menu - Vehicle Info
-        btnVehicleInfo.setOnClickListener(v -> 
-            showToast(getString(R.string.toast_vehicle))
-        );
-
-        // Main Menu - Emergency Contacts
-        btnEmergencyContacts.setOnClickListener(v -> 
-            showToast(getString(R.string.toast_emergency))
-        );
+        btnViewReports.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ViewReportsActivity.class);
+            startActivity(intent);
+        });
     }
 }

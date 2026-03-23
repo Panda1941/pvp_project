@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Blue Background -->
+    <path
+        android:fillColor="#012169"
+        android:pathData="M0,4h24v16h-24z" />
+    <!-- White Crosses -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:pathData="M0,4l24,16M0,20l24,-16M12,4v16M0,12h24" />
+    <!-- Red Crosses -->
+    <path
+        android:strokeColor="#C8102E"
+        android:strokeWidth="1.2"
+        android:pathData="M0,4l24,16M0,20l24,-16M12,4v16M0,12h24" />
+</vector>

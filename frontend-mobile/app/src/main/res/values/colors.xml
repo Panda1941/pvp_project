@@ -2,4 +2,24 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Custom Theme Colors -->
+    <color name="primary">#120D31</color> <!-- Deep Midnight -->
+    <color name="primary_dark">#302F4D</color> <!-- Dark Slate -->
+    <color name="primary_container">#F0D3F7</color> <!-- Pale Lavender -->
+    <color name="accent">#A57982</color> <!-- Old Rose -->
+    <color name="tertiary">#B98EA7</color> <!-- Rosy Brown -->
+
+    <!-- Dark Mode Backgrounds -->
+    <color name="dark_grey">#252525</color> <!-- Slightly lighter grey for dark mode -->
+    <color name="surface_dark">#333333</color>
+
+    <!-- Status Colors -->
+    <color name="status_waiting">#FFB300</color> <!-- Amber/Orange -->
+    <color name="status_confirmed">#4CAF50</color> <!-- Green -->
+    <color name="status_issue">#F44336</color> <!-- Red -->
+
+    <!-- Icon Colors -->
+    <color name="icon_light">#000000</color> <!-- Black for light bg -->
+    <color name="icon_dark">#CCCCCC</color>  <!-- Light grey for dark bg -->
 </resources>

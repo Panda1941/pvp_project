@@ -13,10 +13,47 @@
     <string name="toast_vehicle">Navigacija į: Transporto priemonės informacija</string>
     <string name="toast_emergency">Navigacija į: Skubios pagalbos kontaktai</string>
 
+    <!-- Page Titles -->
+    <string name="title_view_reports">Mano įvykiai</string>
+
     <!-- Settings Strings -->
     <string name="title_settings">Nustatymai</string>
     <string name="label_select_language">Pasirinkite kalbą</string>
     <string name="lang_english">Anglų</string>
     <string name="lang_lithuanian">Lietuvių</string>
     <string name="btn_save">Išsaugoti pakeitimus</string>
+
+    <string name="label_select_theme">Pasirinkite temą</string>
+    <string name="theme_system">Sistemos numatytoji</string>
+    <string name="theme_light">Šviesi</string>
+    <string name="theme_dark">Tamsi</string>
+
+    <!-- Report Details Strings -->
+    <string name="title_report_details">Informacija apie įvykį</string>
+    <string name="label_location">Vieta</string>
+    <string name="label_date_time">Data ir laikas</string>
+    <string name="label_plate_number">Valstybinis numeris</string>
+    <string name="label_description">Aprašymas</string>
+
+    <!-- New Section Labels -->
+    <string name="header_vehicle_a">Transporto priemonė A</string>
+    <string name="header_vehicle_b">Transporto priemonė B</string>
+    <string name="label_insured">Draudėjas / Savininkas</string>
+    <string name="label_vehicle">Informacija apie transporto priemonę</string>
+    <string name="label_insurance_company">Draudimo bendrovė</string>
+    <string name="label_driver">Informacija apie vairuotoją</string>
+    <string name="label_circumstances">Aplinkybės</string>
+
+    <!-- Field Labels -->
+    <string name="field_name">Vardas, pavardė:</string>
+    <string name="field_address">Adresas:</string>
+    <string name="field_contact">Kontaktai:</string>
+    <string name="field_make_type">Markė/tipas:</string>
+    <string name="field_policy_no">Poliso Nr.:</string>
+    <string name="field_license_no">Vairuotojo pažymėjimo Nr.:</string>
+
+    <!-- Circumstances -->
+    <string name="circ_parked">Sustojusi / priparkuota</string>
+    <string name="circ_leaving">Išvažiuoja iš stovėjimo vietos / atidaro duris</string>
+    <string name="circ_reversing">Važiuoja atbulomis</string>
 </resources>
