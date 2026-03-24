@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/text_step_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_circumstances"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select all that apply for this vehicle:"
+        android:layout_marginBottom="16dp"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check_parked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/circ_parked"
+        android:layout_marginBottom="8dp" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check_leaving"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/circ_leaving"
+        android:layout_marginBottom="8dp" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check_reversing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/circ_reversing"
+        android:layout_marginBottom="8dp" />
+
+</LinearLayout>

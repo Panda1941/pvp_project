@@ -15,6 +15,7 @@
 
     <!-- Page Titles -->
     <string name="title_view_reports">My Reports</string>
+    <string name="title_create_report">Create New Report</string>
 
     <!-- Settings Strings -->
     <string name="title_settings">Settings</string>
@@ -56,6 +57,21 @@
     <string name="field_make_type">Make/Type:</string>
     <string name="field_policy_no">Policy No:</string>
     <string name="field_license_no">License No:</string>
+
+    <!-- Wizard Strings -->
+    <string name="btn_next">Next</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_finish">Finish</string>
+    <string name="hint_location">Enter accident location</string>
+    <string name="hint_description">Describe what happened</string>
+    <string name="hint_name">Full Name</string>
+    <string name="hint_plate">Plate Number</string>
+    <string name="hint_dob">Date of Birth (YYYY-MM-DD)</string>
+    <string name="hint_insurance_covers">Does insurance cover material damage?</string>
+    <string name="step_indicator">Step %1$d of %2$d</string>
+    <string name="title_summary">Report Summary</string>
+    <string name="summary_demo_note">Note: This report is a draft and will not be saved in this demo version.</string>
+    <string name="label_circ_prompt">Select all that apply for this vehicle:</string>
 
     <!-- Formatting -->
     <string name="format_address">%1$s, %2$s %3$s</string>

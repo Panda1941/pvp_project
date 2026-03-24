@@ -15,6 +15,7 @@
 
     <!-- Page Titles -->
     <string name="title_view_reports">Mano įvykiai</string>
+    <string name="title_create_report">Naujas įvykis</string>
 
     <!-- Settings Strings -->
     <string name="title_settings">Nustatymai</string>
@@ -35,6 +36,11 @@
     <string name="label_plate_number">Valstybinis numeris</string>
     <string name="label_description">Aprašymas</string>
 
+    <!-- Status Strings -->
+    <string name="status_waiting">Laukia</string>
+    <string name="status_confirmed">Patvirtinta</string>
+    <string name="status_issue">Problema</string>
+
     <!-- New Section Labels -->
     <string name="header_vehicle_a">Transporto priemonė A</string>
     <string name="header_vehicle_b">Transporto priemonė B</string>
@@ -51,6 +57,21 @@
     <string name="field_make_type">Markė/tipas:</string>
     <string name="field_policy_no">Poliso Nr.:</string>
     <string name="field_license_no">Vairuotojo pažymėjimo Nr.:</string>
+
+    <!-- Wizard Strings -->
+    <string name="btn_next">Toliau</string>
+    <string name="btn_previous">Atgal</string>
+    <string name="btn_finish">Baigti</string>
+    <string name="hint_location">Įveskite įvykio vietą</string>
+    <string name="hint_description">Aprašykite kas nutiko</string>
+    <string name="hint_name">Vardas Pavardė</string>
+    <string name="hint_plate">Valstybinis numeris</string>
+    <string name="hint_dob">Gimimo data (MMMM-MM-DD)</string>
+    <string name="hint_insurance_covers">Ar draudimas dengia materialinę žalą?</string>
+    <string name="step_indicator">%1$d žingsnis iš %2$d</string>
+    <string name="title_summary">Suvestinė</string>
+    <string name="summary_demo_note">Pastaba: Šis įvykis yra juodraštis ir nebus išsaugotas šioje demo versijoje.</string>
+    <string name="label_circ_prompt">Pažymėkite viską, kas tinka šiai transporto priemonei:</string>
 
     <!-- Circumstances -->
     <string name="circ_parked">Sustojusi / priparkuota</string>

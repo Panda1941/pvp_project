@@ -66,7 +66,7 @@ public class ReportDetailsActivity extends BaseActivity {
         textTimestamp.setText(dateFormat.format(new Date(report.getTimestamp())));
         
         // Set Status
-        setStatusUI(textStatus, report.getStatus());
+        setStatusUI(textStatus, report);
 
         // Display Vehicle A
         View layoutA = findViewById(R.id.layout_vehicle_a);
@@ -77,23 +77,20 @@ public class ReportDetailsActivity extends BaseActivity {
         bindVehicleData(layoutB, report.getVehicleB());
     }
 
-    private void setStatusUI(TextView textView, String status) {
+    private void setStatusUI(TextView textView, AccidentReport report) {
         Context context = textView.getContext();
+        int status = report.getStatus();
         
         int color;
-        String statusText;
-        if (AccidentReport.STATUS_CONFIRMED.equals(status)) {
+        if (status == AccidentReport.STATUS_CONFIRMED) {
             color = ContextCompat.getColor(context, R.color.status_confirmed);
-            statusText = getString(R.string.status_confirmed);
-        } else if (AccidentReport.STATUS_ISSUE.equals(status)) {
+        } else if (status == AccidentReport.STATUS_ISSUE) {
             color = ContextCompat.getColor(context, R.color.status_issue);
-            statusText = getString(R.string.status_issue);
         } else {
             color = ContextCompat.getColor(context, R.color.status_waiting);
-            statusText = getString(R.string.status_waiting);
         }
         
-        textView.setText(statusText);
+        textView.setText(getString(report.getStatusResourceId()));
         textView.setTextColor(color);
     }
 

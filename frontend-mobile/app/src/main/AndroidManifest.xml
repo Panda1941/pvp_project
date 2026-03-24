@@ -44,6 +44,11 @@
             android:exported="false"
             android:label="@string/title_report_details" />
 
+        <activity
+            android:name=".controllers.CreateReportActivity"
+            android:exported="false"
+            android:label="@string/title_create_report" />
+
     </application>
 
 </manifest>

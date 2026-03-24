@@ -51,8 +51,8 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
         String dateString = dateFormat.format(new Date(report.getTimestamp()));
         holder.textTimestamp.setText(dateString);
 
-        // Set status text and color
-        setStatusUI(holder.textStatus, report.getStatus());
+        // Set localized status text and color
+        setStatusUI(holder.textStatus, report);
 
         // Handle item click to open details
         holder.itemView.setOnClickListener(v -> {
@@ -65,14 +65,17 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
     /**
      * Helper to set status text and color based on the report status.
      */
-    private void setStatusUI(TextView textView, String status) {
+    private void setStatusUI(TextView textView, AccidentReport report) {
         Context context = textView.getContext();
-        textView.setText(status);
+        int status = report.getStatus();
+        
+        // Use localized string from resources
+        textView.setText(context.getString(report.getStatusResourceId()));
         
         int color;
-        if (AccidentReport.STATUS_CONFIRMED.equals(status)) {
+        if (status == AccidentReport.STATUS_CONFIRMED) {
             color = ContextCompat.getColor(context, R.color.status_confirmed);
-        } else if (AccidentReport.STATUS_ISSUE.equals(status)) {
+        } else if (status == AccidentReport.STATUS_ISSUE) {
             color = ContextCompat.getColor(context, R.color.status_issue);
         } else {
             color = ContextCompat.getColor(context, R.color.status_waiting);

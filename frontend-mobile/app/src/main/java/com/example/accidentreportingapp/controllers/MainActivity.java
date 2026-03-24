@@ -67,9 +67,10 @@ public class MainActivity extends BaseActivity {
         });
 
         // Main Menu - Report New Accident
-        btnReportAccident.setOnClickListener(v -> 
-            showToast(getString(R.string.toast_report))
-        );
+        btnReportAccident.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CreateReportActivity.class);
+            startActivity(intent);
+        });
 
         // Main Menu - View My Reports
         btnViewReports.setOnClickListener(v -> {
