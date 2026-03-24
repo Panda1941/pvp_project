@@ -33,11 +33,16 @@ public class ViewReportsActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_reports);
 
+        // NOTE: this screen currently populates the list with
+        // hard-coded mock data (useful for demo). In a production app you
+        // would load real data from a database or a remote API. Consider
+        // gating the demo data behind `BuildConfig.DEBUG` so that release
+        // builds don't ship sample content.
         initializeViews();
         setupRecyclerView();
         setupClickListeners();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -45,8 +50,8 @@ public class ViewReportsActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        btnBack = findViewById(R.id.btn_back);
-        recyclerView = findViewById(R.id.recycler_view_reports);
+        btnBack = v(R.id.btn_back);
+        recyclerView = v(R.id.recycler_view_reports);
     }
 
     private void setupRecyclerView() {

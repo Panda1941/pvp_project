@@ -29,6 +29,12 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // NOTE: We enable edge-to-edge so content can extend under
+        // system bars for a modern, immersive look. We then apply window
+        // insets padding to the root view to avoid content being obscured.
+        // This pattern keeps UI consistent across devices with different
+        // status/navigation bar sizes.
+        
         // Enable edge-to-edge display for a modern look
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -40,7 +46,7 @@ public class MainActivity extends BaseActivity {
         setupClickListeners();
 
         // Handle system bar insets for edge-to-edge layout
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -51,9 +57,9 @@ public class MainActivity extends BaseActivity {
      * Initializes all the View components from the XML layout.
      */
     private void initializeViews() {
-        settingsButton = findViewById(R.id.settings_button);
-        btnReportAccident = findViewById(R.id.btn_report_accident);
-        btnViewReports = findViewById(R.id.btn_view_reports);
+        settingsButton = v(R.id.settings_button);
+        btnReportAccident = v(R.id.btn_report_accident);
+        btnViewReports = v(R.id.btn_view_reports);
     }
 
     /**

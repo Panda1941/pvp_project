@@ -26,12 +26,18 @@ public class SettingsActivity extends BaseActivity {
     private RadioGroup radioGroupLanguage;
     private RadioButton radioEn, radioLt;
     private MaterialButtonToggleGroup themeToggleGroup;
+    private MaterialButtonToggleGroup locationToggleGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
+
+        // NOTE: Changing language requires a restart of the
+        // activity stack to apply a new locale cleanly across the app.
+        // We handle this by saving the preference and restarting `MainActivity`.
 
         initializeViews();
         loadSettings();
@@ -45,11 +51,12 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        btnBack = findViewById(R.id.btn_back);
-        radioGroupLanguage = findViewById(R.id.radio_group_language);
-        radioEn = findViewById(R.id.radio_en);
-        radioLt = findViewById(R.id.radio_lt);
-        themeToggleGroup = findViewById(R.id.theme_toggle_group);
+        btnBack = v(R.id.btn_back);
+        radioGroupLanguage = v(R.id.radio_group_language);
+        radioEn = v(R.id.radio_en);
+        radioLt = v(R.id.radio_lt);
+        themeToggleGroup = v(R.id.theme_toggle_group);
+        locationToggleGroup = v(R.id.location_toggle_group);
     }
 
     private void loadSettings() {
@@ -71,6 +78,14 @@ public class SettingsActivity extends BaseActivity {
             themeToggleGroup.check(R.id.btn_theme_light);
         } else {
             themeToggleGroup.check(R.id.btn_theme_system);
+        }
+
+        // Load Location Accuracy - Default to Quick
+        String locMode = prefs.getString("Location_Mode", "quick");
+        if (locMode.equals("precise")) {
+            locationToggleGroup.check(R.id.btn_loc_precise);
+        } else {
+            locationToggleGroup.check(R.id.btn_loc_quick);
         }
     }
 
@@ -97,6 +112,14 @@ public class SettingsActivity extends BaseActivity {
                 saveTheme(themeMode);
             }
         });
+
+        // Location Accuracy change - Saves immediately
+        locationToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                String mode = (checkedId == R.id.btn_loc_precise) ? "precise" : "quick";
+                saveLocationMode(mode);
+            }
+        });
     }
 
     private void saveLanguage(String lang) {
@@ -121,6 +144,14 @@ public class SettingsActivity extends BaseActivity {
         if (currentTheme != themeMode) {
             prefs.edit().putInt("Theme_Mode", themeMode).apply();
             AppCompatDelegate.setDefaultNightMode(themeMode);
+        }
+    }
+
+    private void saveLocationMode(String mode) {
+        SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
+        String current = prefs.getString("Location_Mode", "quick");
+        if (!current.equals(mode)) {
+            prefs.edit().putString("Location_Mode", mode).apply();
         }
     }
 }

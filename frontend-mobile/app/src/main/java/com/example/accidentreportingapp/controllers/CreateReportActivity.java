@@ -1,5 +1,7 @@
 package com.example.accidentreportingapp.controllers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,17 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import android.os.Handler;
+import android.os.Looper;
+import java.util.Locale;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+// Location-fetching removed per user request; keep manual entry of coordinates
 
 /**
  * CreateReportActivity implements a multi-step wizard for reporting a new accident.
@@ -45,22 +58,40 @@ public class CreateReportActivity extends BaseActivity {
     private LinearProgressIndicator progressIndicator;
     private ViewGroup stepContainer;
     private MaterialButton btnPrevious, btnNext;
+    private ImageButton btnUseCurrentLocation;
+    private static final int REQ_PERMISSION_LOCATION_ONLY = 1002;
 
     // View caches for the steps
     private View viewGeneral, viewVehicleInfo, viewInsurance, viewDriver, viewCircumstances, viewSummary;
+
+    // Use shared helpers from BaseActivity: v(root, id) and safeText(...)
+    // no automatic location fields
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_create_report);
+        // NOTE: we check whether permissions are already granted so we
+        // can politely inform the user if device features (GPS/camera) are
+        // unavailable. We intentionally do NOT force a permission request here
+        // because we want users to be able to file a report manually even if
+        // they don't grant permissions now. Camera capture will be added later
+        // and should request permissions on-demand.
+        String[] required = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.CAMERA};
+        if (!hasPermissions(required)) {
+            showToast("Location/Camera permissions not granted — you can enter location manually.");
+        }
 
         draftReport = new AccidentReport();
         initializeViews();
         updateStepUI();
         setupClickListeners();
+        // Automatic location disabled
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -68,12 +99,12 @@ public class CreateReportActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        btnBack = findViewById(R.id.btn_back);
-        textTitle = findViewById(R.id.text_title);
-        progressIndicator = findViewById(R.id.progress_indicator);
-        stepContainer = findViewById(R.id.step_container);
-        btnPrevious = findViewById(R.id.btn_previous);
-        btnNext = findViewById(R.id.btn_next);
+        btnBack = v(R.id.btn_back);
+        textTitle = v(R.id.text_title);
+        progressIndicator = v(R.id.progress_indicator);
+        stepContainer = v(R.id.step_container);
+        btnPrevious = v(R.id.btn_previous);
+        btnNext = v(R.id.btn_next);
 
         // Pre-inflate step views for smooth transitions
         viewGeneral = getLayoutInflater().inflate(R.layout.step_general_info, stepContainer, false);
@@ -82,12 +113,148 @@ public class CreateReportActivity extends BaseActivity {
         viewDriver = getLayoutInflater().inflate(R.layout.step_driver_info, stepContainer, false);
         viewCircumstances = getLayoutInflater().inflate(R.layout.step_circumstances, stepContainer, false);
         viewSummary = getLayoutInflater().inflate(R.layout.step_summary, stepContainer, false);
+
+        // Find the "Use current location" button inside the pre-inflated general step.
+        int btnId = getResources().getIdentifier("btn_use_current_location", "id", getPackageName());
+        if (btnId != 0) {
+            View maybeBtn = v(viewGeneral, btnId);
+            if (maybeBtn instanceof ImageButton) {
+                btnUseCurrentLocation = (ImageButton) maybeBtn;
+            }
+        }
     }
 
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> handleBack());
         btnPrevious.setOnClickListener(v -> goToPreviousStep());
         btnNext.setOnClickListener(v -> goToNextStep());
+        if (btnUseCurrentLocation != null) {
+            btnUseCurrentLocation.setOnClickListener(v -> onUseCurrentLocationClicked());
+        }
+    }
+
+    private void onUseCurrentLocationClicked() {
+        String fine = android.Manifest.permission.ACCESS_FINE_LOCATION;
+        if (hasPermissions(fine)) {
+            fetchAndSetCurrentLocation();
+        } else {
+            requestAppPermissions(new String[]{fine}, REQ_PERMISSION_LOCATION_ONLY,
+                    "Allow location to auto-fill your current accident location.");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_PERMISSION_LOCATION_ONLY) {
+            if (grantResults != null && grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                fetchAndSetCurrentLocation();
+            } else {
+                showToast("Location permission denied. You can enter location manually.");
+            }
+        }
+    }
+
+    // Automatic location methods removed; manual entry only
+    private void fetchAndSetCurrentLocation() {
+        try {
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (lm == null) {
+                showToast("Location services unavailable");
+                return;
+            }
+
+            if (!hasPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                showToast("Location permission not granted");
+                return;
+            }
+
+            // Try last-known locations first (fast). If none available, request
+            // a single fresh update from the providers and wait briefly.
+            Location loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (loc == null) loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (loc == null) loc = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+            if (loc != null) {
+                applyLocationToForm(loc);
+                showToast("Location filled from device GPS");
+                return;
+            }
+
+            // No last-known location — request a single update and timeout after 10s
+            showToast("Attempting to get current location — please wait...");
+            final String[] providers = new String[]{LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER};
+            final LocationListener listener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    applyLocationToForm(location);
+                    try { lm.removeUpdates(this); } catch (Exception ignored) {}
+                }
+
+                @Override public void onProviderEnabled(String provider) {}
+                @Override public void onProviderDisabled(String provider) {}
+                @Override public void onStatusChanged(String provider, int status, android.os.Bundle extras) {}
+            };
+
+            for (String p : providers) {
+                try {
+                    lm.requestLocationUpdates(p, 0L, 0f, listener, Looper.getMainLooper());
+                } catch (SecurityException se) {
+                    // Shouldn't happen because we checked permissions, but guard anyway
+                } catch (IllegalArgumentException iae) {
+                    // provider not available on device; ignore
+                }
+            }
+
+            // Timeout: stop listening after 10 seconds if no update
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                try { lm.removeUpdates(listener); } catch (Exception ignored) {}
+                showToast("Could not determine current location. Enter manually.");
+            }, 10_000);
+        } catch (SecurityException se) {
+            showToast("Permission error while accessing location");
+        } catch (Exception e) {
+            showToast("Error obtaining location: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Attempt to get a single high-accuracy location via the fused provider.
+     * Falls back to the legacy LocationManager flow if fused fails or returns null.
+     */
+    // Fused location logic removed
+
+    private void requestContinuousFusedUpdates() {
+        // continuous fused updates removed
+    }
+
+    /**
+     * Resolve address by performing a network reverse-geocode only when online.
+     * This keeps internet usage minimal: single fused request + at most one reverse-geocode.
+     */
+    private void resolveAddressIfOnline(double lat, double lon) {
+        // network reverse-geocode removed (manual entry only)
+    }
+
+    private void applyLocationToForm(Location loc) {
+        if (loc == null) return;
+        TextInputEditText editLoc = v(viewGeneral, R.id.edit_location);
+        String text = String.format(Locale.getDefault(), "Lat: %.5f, Lon: %.5f", loc.getLatitude(), loc.getLongitude());
+        if (editLoc != null) editLoc.setText(text);
+        draftReport.setLocation(text);
+    }
+
+    private void resolveAddressOffline(double lat, double lon) {
+        // offline reverse-geocode disabled; keep manual coordinate entry
+    }
+
+    /**
+     * Simple network availability check used to decide whether to call
+     * the fused provider reverse-geocode and to avoid unnecessary network calls.
+     */
+    private boolean hasNetworkConnection() {
+        // network checks removed — no network-based features
+        return false;
     }
 
     private void updateStepUI() {
@@ -160,7 +327,7 @@ public class CreateReportActivity extends BaseActivity {
     }
 
     private void setupStepTitle(View view, int titleResId) {
-        TextView tv = view.findViewById(R.id.text_step_title);
+        TextView tv = v(view, R.id.text_step_title);
         if (tv != null) tv.setText(titleResId);
     }
 
@@ -185,10 +352,10 @@ public class CreateReportActivity extends BaseActivity {
     private void saveCurrentStepData() {
         switch (currentStep) {
             case STEP_GENERAL:
-                TextInputEditText editLoc = viewGeneral.findViewById(R.id.edit_location);
-                TextInputEditText editDesc = viewGeneral.findViewById(R.id.edit_description);
-                draftReport.setLocation(editLoc.getText().toString());
-                draftReport.setDescription(editDesc.getText().toString());
+                TextInputEditText editLoc = v(viewGeneral, R.id.edit_location);
+                TextInputEditText editDesc = v(viewGeneral, R.id.edit_description);
+                draftReport.setLocation(safeText(editLoc));
+                draftReport.setDescription(safeText(editDesc));
                 break;
             case STEP_VEHICLE_A_INFO:
                 saveVehicleInfo(draftReport.getVehicleA());
@@ -220,37 +387,52 @@ public class CreateReportActivity extends BaseActivity {
     // Data Loading Helpers
 
     private void loadGeneralData() {
-        ((TextInputEditText) viewGeneral.findViewById(R.id.edit_location)).setText(draftReport.getLocation());
-        ((TextInputEditText) viewGeneral.findViewById(R.id.edit_description)).setText(draftReport.getDescription());
+        TextInputEditText el = v(viewGeneral, R.id.edit_location);
+        TextInputEditText ed = v(viewGeneral, R.id.edit_description);
+        if (el != null) el.setText(draftReport.getLocation());
+        if (ed != null) ed.setText(draftReport.getDescription());
     }
 
     private void loadVehicleInfo(VehicleSection vehicle) {
-        ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_insured_name)).setText(vehicle.insuredName);
-        ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_insured_address)).setText(vehicle.insuredAddress);
-        ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_vehicle_make)).setText(vehicle.vehicleMakeType);
-        ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_vehicle_plate)).setText(vehicle.vehicleRegistration);
+        TextInputEditText in = v(viewVehicleInfo, R.id.edit_insured_name);
+        TextInputEditText ia = v(viewVehicleInfo, R.id.edit_insured_address);
+        TextInputEditText vm = v(viewVehicleInfo, R.id.edit_vehicle_make);
+        TextInputEditText vp = v(viewVehicleInfo, R.id.edit_vehicle_plate);
+        if (in != null) in.setText(vehicle.insuredName);
+        if (ia != null) ia.setText(vehicle.insuredAddress);
+        if (vm != null) vm.setText(vehicle.vehicleMakeType);
+        if (vp != null) vp.setText(vehicle.vehicleRegistration);
     }
 
     private void loadInsuranceInfo(VehicleSection vehicle) {
-        ((TextInputEditText) viewInsurance.findViewById(R.id.edit_insurance_name)).setText(vehicle.insuranceName);
-        ((TextInputEditText) viewInsurance.findViewById(R.id.edit_policy_number)).setText(vehicle.policyNumber);
-        ((MaterialCheckBox) viewInsurance.findViewById(R.id.check_covers_damage)).setChecked(vehicle.coversDamage);
+        TextInputEditText in = v(viewInsurance, R.id.edit_insurance_name);
+        TextInputEditText pn = v(viewInsurance, R.id.edit_policy_number);
+        MaterialCheckBox cb = v(viewInsurance, R.id.check_covers_damage);
+        if (in != null) in.setText(vehicle.insuranceName);
+        if (pn != null) pn.setText(vehicle.policyNumber);
+        if (cb != null) cb.setChecked(vehicle.coversDamage);
     }
 
     private void loadDriverInfo(VehicleSection vehicle) {
-        ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_name)).setText(vehicle.driverName);
-        ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_dob)).setText(vehicle.driverDob);
-        ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_license)).setText(vehicle.licenseNumber);
+        TextInputEditText dn = v(viewDriver, R.id.edit_driver_name);
+        TextInputEditText dd = v(viewDriver, R.id.edit_driver_dob);
+        TextInputEditText dl = v(viewDriver, R.id.edit_driver_license);
+        if (dn != null) dn.setText(vehicle.driverName);
+        if (dd != null) dd.setText(vehicle.driverDob);
+        if (dl != null) dl.setText(vehicle.licenseNumber);
     }
 
     private void loadCircumstances(VehicleSection vehicle) {
-        ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_parked)).setChecked(vehicle.isParkedStopped);
-        ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_leaving)).setChecked(vehicle.isLeavingParking);
-        ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_reversing)).setChecked(vehicle.isReversing);
+        MaterialCheckBox cp = v(viewCircumstances, R.id.check_parked);
+        MaterialCheckBox cl = v(viewCircumstances, R.id.check_leaving);
+        MaterialCheckBox cr = v(viewCircumstances, R.id.check_reversing);
+        if (cp != null) cp.setChecked(vehicle.isParkedStopped);
+        if (cl != null) cl.setChecked(vehicle.isLeavingParking);
+        if (cr != null) cr.setChecked(vehicle.isReversing);
     }
 
     private void loadSummary() {
-        TextView tvSummary = viewSummary.findViewById(R.id.summary_text);
+        TextView tvSummary = v(viewSummary, R.id.summary_text);
         StringBuilder sb = new StringBuilder();
         
         sb.append("General Information:\n");
@@ -282,28 +464,41 @@ public class CreateReportActivity extends BaseActivity {
     // Data Saving Helpers
 
     private void saveVehicleInfo(VehicleSection vehicle) {
-        vehicle.insuredName = ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_insured_name)).getText().toString();
-        vehicle.insuredAddress = ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_insured_address)).getText().toString();
-        vehicle.vehicleMakeType = ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_vehicle_make)).getText().toString();
-        vehicle.vehicleRegistration = ((TextInputEditText) viewVehicleInfo.findViewById(R.id.edit_vehicle_plate)).getText().toString();
+        TextInputEditText in = v(viewVehicleInfo, R.id.edit_insured_name);
+        TextInputEditText ia = v(viewVehicleInfo, R.id.edit_insured_address);
+        TextInputEditText vm = v(viewVehicleInfo, R.id.edit_vehicle_make);
+        TextInputEditText vp = v(viewVehicleInfo, R.id.edit_vehicle_plate);
+        vehicle.insuredName = safeText(in);
+        vehicle.insuredAddress = safeText(ia);
+        vehicle.vehicleMakeType = safeText(vm);
+        vehicle.vehicleRegistration = safeText(vp);
     }
 
     private void saveInsuranceInfo(VehicleSection vehicle) {
-        vehicle.insuranceName = ((TextInputEditText) viewInsurance.findViewById(R.id.edit_insurance_name)).getText().toString();
-        vehicle.policyNumber = ((TextInputEditText) viewInsurance.findViewById(R.id.edit_policy_number)).getText().toString();
-        vehicle.coversDamage = ((MaterialCheckBox) viewInsurance.findViewById(R.id.check_covers_damage)).isChecked();
+        TextInputEditText in = v(viewInsurance, R.id.edit_insurance_name);
+        TextInputEditText pn = v(viewInsurance, R.id.edit_policy_number);
+        MaterialCheckBox cb = v(viewInsurance, R.id.check_covers_damage);
+        vehicle.insuranceName = safeText(in);
+        vehicle.policyNumber = safeText(pn);
+        vehicle.coversDamage = cb != null && cb.isChecked();
     }
 
     private void saveDriverInfo(VehicleSection vehicle) {
-        vehicle.driverName = ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_name)).getText().toString();
-        vehicle.driverDob = ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_dob)).getText().toString();
-        vehicle.licenseNumber = ((TextInputEditText) viewDriver.findViewById(R.id.edit_driver_license)).getText().toString();
+        TextInputEditText dn = v(viewDriver, R.id.edit_driver_name);
+        TextInputEditText dd = v(viewDriver, R.id.edit_driver_dob);
+        TextInputEditText dl = v(viewDriver, R.id.edit_driver_license);
+        vehicle.driverName = safeText(dn);
+        vehicle.driverDob = safeText(dd);
+        vehicle.licenseNumber = safeText(dl);
     }
 
     private void saveCircumstances(VehicleSection vehicle) {
-        vehicle.isParkedStopped = ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_parked)).isChecked();
-        vehicle.isLeavingParking = ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_leaving)).isChecked();
-        vehicle.isReversing = ((MaterialCheckBox) viewCircumstances.findViewById(R.id.check_reversing)).isChecked();
+        MaterialCheckBox cp = v(viewCircumstances, R.id.check_parked);
+        MaterialCheckBox cl = v(viewCircumstances, R.id.check_leaving);
+        MaterialCheckBox cr = v(viewCircumstances, R.id.check_reversing);
+        vehicle.isParkedStopped = cp != null && cp.isChecked();
+        vehicle.isLeavingParking = cl != null && cl.isChecked();
+        vehicle.isReversing = cr != null && cr.isChecked();
     }
 
     private void handleBack() {
@@ -317,5 +512,11 @@ public class CreateReportActivity extends BaseActivity {
     private void finishWizard() {
         showToast("Accident Report Created Successfully (Demo)");
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // cleaned up location resources removed
     }
 }

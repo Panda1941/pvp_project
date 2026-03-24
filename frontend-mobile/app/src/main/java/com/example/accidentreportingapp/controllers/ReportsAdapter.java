@@ -26,10 +26,20 @@ import java.util.Locale;
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHolder> {
 
     private final List<AccidentReport> reports;
+    // NOTE: We use `Serializable` for `AccidentReport` in this demo.
+    // When passing objects via Intents consider switching to `Parcelable`
+    // for better performance on Android IPC. The `dateFormat` below is
+    // kept per-adapter to allow locale-sensitive formatting without
+    // dealing with threading issues.
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     public ReportsAdapter(List<AccidentReport> reports) {
         this.reports = reports;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends View> T vv(View root, int id) {
+        return (T) root.findViewById(id);
     }
 
     @NonNull
@@ -93,11 +103,11 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
-            textLocation = view.findViewById(R.id.text_location);
-            textTimestamp = view.findViewById(R.id.text_timestamp);
-            textPlate = view.findViewById(R.id.text_plate);
-            textDescription = view.findViewById(R.id.text_description);
-            textStatus = view.findViewById(R.id.text_status);
+            textLocation = vv(view, R.id.text_location);
+            textTimestamp = vv(view, R.id.text_timestamp);
+            textPlate = vv(view, R.id.text_plate);
+            textDescription = vv(view, R.id.text_description);
+            textStatus = vv(view, R.id.text_status);
         }
     }
 }

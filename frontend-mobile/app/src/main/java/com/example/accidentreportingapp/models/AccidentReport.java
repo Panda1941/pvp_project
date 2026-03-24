@@ -38,6 +38,19 @@ public class AccidentReport implements Serializable {
         this.vehicleB = new VehicleSection();
     }
 
+    /*
+     * NOTE: `AccidentReport` is the main data model used across the
+     * app to represent a submitted or draft report. It implements
+     * `Serializable` for simplicity in this demo so objects can be passed
+     * between Activities in `Intent` extras. In a production app you may
+     * prefer `Parcelable` for better performance when passing many objects
+     * or when optimizing memory/IPC behavior.
+     *
+     * Fields are intentionally public inside `VehicleSection` to keep the
+     * model simple; consider adding validation or using builders if you need
+     * stronger invariants later.
+     */
+
     /**
      * Convenience constructor for legacy support/quick creation.
      */
@@ -87,4 +100,18 @@ public class AccidentReport implements Serializable {
 
     public VehicleSection getVehicleB() { return vehicleB; }
     public void setVehicleB(VehicleSection vehicleB) { this.vehicleB = vehicleB; }
+
+    @Override
+    public String toString() {
+        String aReg = (vehicleA != null && vehicleA.vehicleRegistration != null) ? vehicleA.vehicleRegistration : "-";
+        String bReg = (vehicleB != null && vehicleB.vehicleRegistration != null) ? vehicleB.vehicleRegistration : "-";
+        return "AccidentReport{" +
+                "id='" + id + '\'' +
+                ", ts=" + timestamp +
+                ", loc='" + location + '\'' +
+                ", status=" + status +
+                ", A=" + aReg +
+                ", B=" + bReg +
+                '}';
+    }
 }

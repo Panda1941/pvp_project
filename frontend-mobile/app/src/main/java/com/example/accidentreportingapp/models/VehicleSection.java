@@ -45,4 +45,23 @@ public class VehicleSection implements Serializable {
 
     public VehicleSection() {
     }
+
+    /*
+     * NOTE: `VehicleSection` groups together all information related
+     * to one side of the accident (insured, vehicle, insurance and driver).
+     * The fields are public to keep the model lightweight and easy to use in
+     * the demo UI code. If you need stronger guarantees (non-null fields,
+     * validation, or immutability) consider adding getters/setters or moving
+     * to an immutable/builder pattern.
+     */
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(insuredName != null ? insuredName : "-");
+            sb.append(" |");
+            sb.append(vehicleRegistration != null ? vehicleRegistration : "-");
+            sb.append(" |");
+            sb.append(driverName != null ? driverName : "-");
+            return sb.toString();
+        }
 }

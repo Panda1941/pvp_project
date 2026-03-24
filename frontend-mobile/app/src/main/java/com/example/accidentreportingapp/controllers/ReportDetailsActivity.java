@@ -16,6 +16,7 @@ import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
 import com.example.accidentreportingapp.models.VehicleSection;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,7 +29,19 @@ public class ReportDetailsActivity extends BaseActivity {
 
     private ImageButton btnBack;
     private TextView textLocation, textTimestamp, textDescription, textStatus;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+    // Shared date formatter for showing report timestamps. Kept static to
+    // avoid allocating a new formatter per Activity instance. For more robust
+    // timezone/locale handling consider using `java.time` APIs on newer SDKs.
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+
+    // Small null-safe helpers to shorten view-binding code and make intent clearer
+    private String nn(String s) {
+        return s != null ? s : "---";
+    }
+
+    private String nnEmpty(String s) {
+        return s != null ? s : "";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,27 +66,27 @@ public class ReportDetailsActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        btnBack = findViewById(R.id.btn_back);
-        textLocation = findViewById(R.id.detail_location);
-        textTimestamp = findViewById(R.id.detail_timestamp);
-        textDescription = findViewById(R.id.detail_description);
-        textStatus = findViewById(R.id.text_detail_status);
+        btnBack = v(R.id.btn_back);
+        textLocation = v(R.id.detail_location);
+        textTimestamp = v(R.id.detail_timestamp);
+        textDescription = v(R.id.detail_description);
+        textStatus = v(R.id.text_detail_status);
     }
 
     private void displayReportDetails(AccidentReport report) {
         textLocation.setText(report.getLocation());
         textDescription.setText(report.getDescription());
-        textTimestamp.setText(dateFormat.format(new Date(report.getTimestamp())));
+        textTimestamp.setText(DATE_FORMAT.format(new Date(report.getTimestamp())));
         
         // Set Status
         setStatusUI(textStatus, report);
 
         // Display Vehicle A
-        View layoutA = findViewById(R.id.layout_vehicle_a);
+        View layoutA = v(R.id.layout_vehicle_a);
         bindVehicleData(layoutA, report.getVehicleA());
 
         // Display Vehicle B
-        View layoutB = findViewById(R.id.layout_vehicle_b);
+        View layoutB = v(R.id.layout_vehicle_b);
         bindVehicleData(layoutB, report.getVehicleB());
     }
 
@@ -95,49 +108,49 @@ public class ReportDetailsActivity extends BaseActivity {
     }
 
     private void bindVehicleData(View root, VehicleSection vehicle) {
-        TextView insuredName = root.findViewById(R.id.text_insured_name);
-        TextView insuredAddress = root.findViewById(R.id.text_insured_address);
-        TextView vehicleInfo = root.findViewById(R.id.text_vehicle_info);
-        TextView insuranceInfo = root.findViewById(R.id.text_insurance_info);
-        TextView driverName = root.findViewById(R.id.text_driver_name);
-        TextView driverLicense = root.findViewById(R.id.text_driver_license);
-        TextView circumstances = root.findViewById(R.id.text_circumstances);
+        TextView insuredName = v(root, R.id.text_insured_name);
+        TextView insuredAddress = v(root, R.id.text_insured_address);
+        TextView vehicleInfo = v(root, R.id.text_vehicle_info);
+        TextView insuranceInfo = v(root, R.id.text_insurance_info);
+        TextView driverName = v(root, R.id.text_driver_name);
+        TextView driverLicense = v(root, R.id.text_driver_license);
+        TextView circumstances = v(root, R.id.text_circumstances);
 
-        insuredName.setText(vehicle.insuredName);
-        
+        insuredName.setText(nn(vehicle.insuredName));
+
         // Use formatted strings from resources for better localization
-        String address = getString(R.string.format_address, 
-                vehicle.insuredAddress, 
-                vehicle.insuredPostalCode != null ? vehicle.insuredPostalCode : "", 
-                vehicle.insuredCountry != null ? vehicle.insuredCountry : "");
-        insuredAddress.setText(address);
+        String address = getString(R.string.format_address,
+            nnEmpty(vehicle.insuredAddress),
+            nnEmpty(vehicle.insuredPostalCode),
+            nnEmpty(vehicle.insuredCountry));
+        insuredAddress.setText(address.isEmpty() ? "---" : address);
 
-        String vInfo = getString(R.string.format_vehicle_info, 
-                vehicle.vehicleMakeType != null ? vehicle.vehicleMakeType : "---", 
-                vehicle.vehicleRegistration != null ? vehicle.vehicleRegistration : "---");
+        String vInfo = getString(R.string.format_vehicle_info,
+            nn(vehicle.vehicleMakeType),
+            nn(vehicle.vehicleRegistration));
         vehicleInfo.setText(vInfo);
 
-        String iInfo = getString(R.string.format_insurance_info, 
-                vehicle.insuranceName != null ? vehicle.insuranceName : "---", 
-                vehicle.policyNumber != null ? vehicle.policyNumber : "---");
+        String iInfo = getString(R.string.format_insurance_info,
+            nn(vehicle.insuranceName),
+            nn(vehicle.policyNumber));
         insuranceInfo.setText(iInfo);
 
-        String dInfo = getString(R.string.format_driver_info, 
-                vehicle.driverName != null ? vehicle.driverName : "---", 
-                vehicle.driverDob != null ? vehicle.driverDob : "---");
+        String dInfo = getString(R.string.format_driver_info,
+            nn(vehicle.driverName),
+            nn(vehicle.driverDob));
         driverName.setText(dInfo);
 
-        String lInfo = getString(R.string.format_license_info, 
-                getString(R.string.field_license_no), 
-                vehicle.licenseNumber != null ? vehicle.licenseNumber : "---", 
-                vehicle.licenseCategory != null ? vehicle.licenseCategory : "");
+        String lInfo = getString(R.string.format_license_info,
+            getString(R.string.field_license_no),
+            nn(vehicle.licenseNumber),
+            nnEmpty(vehicle.licenseCategory));
         driverLicense.setText(lInfo);
 
         StringBuilder circStr = new StringBuilder();
         if (vehicle.isParkedStopped) circStr.append("• ").append(getString(R.string.circ_parked)).append("\n");
         if (vehicle.isLeavingParking) circStr.append("• ").append(getString(R.string.circ_leaving)).append("\n");
         if (vehicle.isReversing) circStr.append("• ").append(getString(R.string.circ_reversing)).append("\n");
-        
+
         circumstances.setText(circStr.length() > 0 ? circStr.toString().trim() : "---");
     }
 

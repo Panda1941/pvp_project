@@ -64,6 +64,7 @@
     <string name="btn_finish">Finish</string>
     <string name="hint_location">Enter accident location</string>
     <string name="hint_description">Describe what happened</string>
+    <string name="desc_use_current_location">Use device GPS to fill location</string>
     <string name="hint_name">Full Name</string>
     <string name="hint_plate">Plate Number</string>
     <string name="hint_dob">Date of Birth (YYYY-MM-DD)</string>
