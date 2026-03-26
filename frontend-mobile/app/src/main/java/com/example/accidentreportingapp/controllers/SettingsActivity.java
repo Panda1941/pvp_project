@@ -26,7 +26,6 @@ public class SettingsActivity extends BaseActivity {
     private RadioGroup radioGroupLanguage;
     private RadioButton radioEn, radioLt;
     private MaterialButtonToggleGroup themeToggleGroup;
-    private MaterialButtonToggleGroup locationToggleGroup;
 
 
     @Override
@@ -37,7 +36,7 @@ public class SettingsActivity extends BaseActivity {
 
         // NOTE: Changing language requires a restart of the
         // activity stack to apply a new locale cleanly across the app.
-        // We handle this by saving the preference and restarting `MainActivity`.
+        // We handle this by saving the preference and restarting the activity stack.
 
         initializeViews();
         loadSettings();
@@ -56,7 +55,6 @@ public class SettingsActivity extends BaseActivity {
         radioEn = v(R.id.radio_en);
         radioLt = v(R.id.radio_lt);
         themeToggleGroup = v(R.id.theme_toggle_group);
-        locationToggleGroup = v(R.id.location_toggle_group);
     }
 
     private void loadSettings() {
@@ -78,14 +76,6 @@ public class SettingsActivity extends BaseActivity {
             themeToggleGroup.check(R.id.btn_theme_light);
         } else {
             themeToggleGroup.check(R.id.btn_theme_system);
-        }
-
-        // Load Location Accuracy - Default to Quick
-        String locMode = prefs.getString("Location_Mode", "quick");
-        if (locMode.equals("precise")) {
-            locationToggleGroup.check(R.id.btn_loc_precise);
-        } else {
-            locationToggleGroup.check(R.id.btn_loc_quick);
         }
     }
 
@@ -112,14 +102,6 @@ public class SettingsActivity extends BaseActivity {
                 saveTheme(themeMode);
             }
         });
-
-        // Location Accuracy change - Saves immediately
-        locationToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                String mode = (checkedId == R.id.btn_loc_precise) ? "precise" : "quick";
-                saveLocationMode(mode);
-            }
-        });
     }
 
     private void saveLanguage(String lang) {
@@ -129,11 +111,19 @@ public class SettingsActivity extends BaseActivity {
         if (!currentLang.equals(lang)) {
             prefs.edit().putString("My_Lang", lang).apply();
             
-            // Restart to apply language
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            // Restart the app to apply the language change globally.
+            // We start MainActivity with CLEAR_TOP to refresh it, 
+            // then immediately launch SettingsActivity again so the user stays here.
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(mainIntent);
+            
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            
             finish();
+            // Use a smooth fade transition
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 
@@ -144,14 +134,6 @@ public class SettingsActivity extends BaseActivity {
         if (currentTheme != themeMode) {
             prefs.edit().putInt("Theme_Mode", themeMode).apply();
             AppCompatDelegate.setDefaultNightMode(themeMode);
-        }
-    }
-
-    private void saveLocationMode(String mode) {
-        SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
-        String current = prefs.getString("Location_Mode", "quick");
-        if (!current.equals(mode)) {
-            prefs.edit().putString("Location_Mode", mode).apply();
         }
     }
 }
