@@ -59,6 +59,7 @@
     <string name="field_license_no">Vairuotojo pažymėjimo Nr.:</string>
 
     <!-- Wizard Strings -->
+    <string name="photos_header">Prašome nufotografuoti arba pridėti avarijos vietos ir transporto priemonės apgadinimų nuotraukas.</string>
     <string name="btn_next">Toliau</string>
     <string name="btn_previous">Atgal</string>
     <string name="btn_finish">Baigti</string>
@@ -77,4 +78,5 @@
     <string name="circ_parked">Sustojusi / priparkuota</string>
     <string name="circ_leaving">Išvažiuoja iš stovėjimo vietos / atidaro duris</string>
     <string name="circ_reversing">Važiuoja atbulomis</string>
+    <string name="btn_addphoto">Paspauskite, kad pridėtumėte nuotrauką</string>
 </resources>
