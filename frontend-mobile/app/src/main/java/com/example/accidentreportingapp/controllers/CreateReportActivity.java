@@ -1,9 +1,6 @@
 package com.example.accidentreportingapp.controllers;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +11,18 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 
 import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
@@ -26,18 +31,16 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
-import java.io.IOException;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.io.File;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import android.os.Handler;
 import android.os.Looper;
 import java.util.Locale;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.provider.MediaStore;
-// Location-fetching removed per user request; keep manual entry of coordinates
 
 /**
  * CreateReportActivity implements a multi-step wizard for reporting a new accident.
@@ -69,18 +72,29 @@ public class CreateReportActivity extends BaseActivity {
     private MaterialButton btnAddPhoto;
     private RecyclerView recyclerPhotos;
     private PhotoAdapter photoAdapter;
-    private java.util.List<Bitmap> capturedPhotos = new java.util.ArrayList<>();
+    private List<String> capturedPhotos = new java.util.ArrayList<>();
+    private ImageView imgOverlay;
+    private ImageView imgFullPreview;
+    private int currentPhotoStep = 0;
+
 
     private ImageButton btnUseCurrentLocation;
     private static final int REQ_PERMISSION_LOCATION_ONLY = 1002;
     private static final int REQ_CAPTURE_PHOTO = 1003;
     private static final int REQ_PERMISSION_CAMERA = 1004;
 
+    private ImageCapture imageCapture;
     // View caches for the steps
     private View viewGeneral, viewVehicleInfo, viewInsurance, viewDriver, viewCircumstances, viewPhotos, viewSummary;
-
+    private PreviewView previewView;
     // Use shared helpers from BaseActivity: v(root, id) and safeText(...)
     // no automatic location fields
+    private final int[] overlays = new int[] {
+            R.drawable.truck_front_left,
+            R.drawable.truck_front_right,
+            R.drawable.truck_back_left,
+            R.drawable.truck_back_right
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +110,9 @@ public class CreateReportActivity extends BaseActivity {
         String[] required = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.CAMERA};
+
+
+
         if (!hasPermissions(required)) {
             showToast("Location/Camera permissions not granted — you can enter location manually.");
         }
@@ -105,7 +122,6 @@ public class CreateReportActivity extends BaseActivity {
         updateStepUI();
         setupClickListeners();
         // Automatic location disabled
-
         ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -130,6 +146,9 @@ public class CreateReportActivity extends BaseActivity {
         viewPhotos = getLayoutInflater().inflate(R.layout.step_photos, stepContainer, false);
         viewSummary = getLayoutInflater().inflate(R.layout.step_summary, stepContainer, false);
 
+        imgFullPreview = viewPhotos.findViewById(R.id.img_full_preview);
+        previewView = viewPhotos.findViewById(R.id.previewView);
+        imgOverlay = viewPhotos.findViewById(R.id.img_overlay);
         btnAddPhoto = v(viewPhotos, R.id.btn_add_photo);
         recyclerPhotos = v(viewPhotos, R.id.recycler_photos);
         photoAdapter = new PhotoAdapter(capturedPhotos);
@@ -159,26 +178,78 @@ public class CreateReportActivity extends BaseActivity {
         }
     }
 
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
+                ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+
+                Preview preview = new Preview.Builder().build();
+                preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+                imageCapture = new ImageCapture.Builder().build();
+
+                CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+
+                cameraProvider.unbindAll();
+                cameraProvider.bindToLifecycle(
+                        this,
+                        cameraSelector,
+                        preview,
+                        imageCapture
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+    private void setOverlayStep(int step) {
+        if (imgOverlay == null) return;
+
+        imgOverlay.setImageResource(overlays[step]);
+    }
+    private void takePhoto() {
+        if (imageCapture == null) return;
+
+        File photoFile = new File(
+                getExternalFilesDir(null),
+                System.currentTimeMillis() + ".jpg"
+        );
+
+        ImageCapture.OutputFileOptions outputOptions =
+                new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+
+        imageCapture.takePicture(
+                outputOptions,
+                ContextCompat.getMainExecutor(this),
+                new ImageCapture.OnImageSavedCallback() {
+
+                    @Override
+                    public void onImageSaved(ImageCapture.OutputFileResults output) {
+                        runOnUiThread(() -> {
+                            capturedPhotos.add(photoFile.getAbsolutePath());
+                            photoAdapter.notifyItemInserted(capturedPhotos.size() - 1);
+                            currentPhotoStep++;
+
+                            if (currentPhotoStep < overlays.length) {
+                                setOverlayStep(currentPhotoStep);
+                            }
+                        });
+                    }
+                    @Override
+                    public void onError(ImageCaptureException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+        );
+    }
+
     private void onAddPhotoClicked() {
-        if (hasPermissions(android.Manifest.permission.CAMERA)) {
-            launchCamera();
-        } else {
-            requestAppPermissions(new String[]{android.Manifest.permission.CAMERA},
-                    REQ_PERMISSION_CAMERA,
-                    "Camera permission is required to take photos of the accident.");
-        }
+        takePhoto();
     }
-
-    private void launchCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQ_CAPTURE_PHOTO);
-        } else {
-            showToast("No camera application found");
-        }
-    }
-
     private void onUseCurrentLocationClicked() {
         String fine = android.Manifest.permission.ACCESS_FINE_LOCATION;
         if (hasPermissions(fine)) {
@@ -197,12 +268,6 @@ public class CreateReportActivity extends BaseActivity {
                 fetchAndSetCurrentLocation();
             } else {
                 showToast("Location permission denied. You can enter location manually.");
-            }
-        } else if (requestCode == REQ_PERMISSION_CAMERA) {
-            if (grantResults != null && grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                launchCamera();
-            } else {
-                showToast("Camera permission denied.");
             }
         }
     }
@@ -373,6 +438,18 @@ public class CreateReportActivity extends BaseActivity {
             case STEP_PHOTOS:
                 setupStepTitle(viewPhotos, R.string.header_photos);
                 stepContainer.addView(viewPhotos);
+
+                if (hasPermissions(android.Manifest.permission.CAMERA)) {
+                    startCamera();
+                    currentPhotoStep = 0;
+                    setOverlayStep(currentPhotoStep);
+                } else {
+                    requestAppPermissions(
+                            new String[]{android.Manifest.permission.CAMERA},
+                            REQ_PERMISSION_CAMERA,
+                            "Camera permission required"
+                    );
+                }
                 break;
             case STEP_SUMMARY:
                 textTitle.setText(R.string.title_summary);
@@ -573,27 +650,10 @@ public class CreateReportActivity extends BaseActivity {
         finish();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CAPTURE_PHOTO && resultCode == RESULT_OK && data != null) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                if (imageBitmap != null) {
-                    capturedPhotos.add(imageBitmap);
-                    if (photoAdapter != null) {
-                        photoAdapter.notifyItemInserted(capturedPhotos.size() - 1);
-                    }
-                }
-            }
-        }
-    }
+    private class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+        private final java.util.List<String> photos;
 
-    private static class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
-        private final java.util.List<Bitmap> photos;
-
-        PhotoAdapter(java.util.List<Bitmap> photos) {
+        PhotoAdapter(java.util.List<String> photos) {
             this.photos = photos;
         }
 
@@ -605,8 +665,31 @@ public class CreateReportActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.imageView.setImageBitmap(photos.get(position));
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+        {
+            String photoPath = photos.get(position);
+
+            Glide.with(holder.itemView.getContext())
+                    .load(new File(photoPath))
+                    .into(holder.imageView);
+
+            holder.imageView.setOnClickListener(v -> {
+
+                String previewPhotoPath = photos.get(holder.getAdapterPosition());
+
+                // show full preview
+                imgFullPreview.setVisibility(View.VISIBLE);
+
+                Glide.with(v.getContext())
+                        .load(new File(previewPhotoPath))
+                        .into(imgFullPreview);
+            });
+
+            imgFullPreview.setOnClickListener(v -> {
+                imgFullPreview.setVisibility(View.GONE);
+            });
+
+
         }
 
         @Override
@@ -614,7 +697,7 @@ public class CreateReportActivity extends BaseActivity {
             return photos.size();
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
             ViewHolder(View v) {
                 super(v);
