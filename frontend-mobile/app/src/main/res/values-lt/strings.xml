@@ -79,4 +79,12 @@
     <string name="circ_leaving">Išvažiuoja iš stovėjimo vietos / atidaro duris</string>
     <string name="circ_reversing">Važiuoja atbulomis</string>
     <string name="btn_addphoto">Paspauskite, kad pridėtumėte nuotrauką</string>
+
+    <!-- Dialogai -->
+    <string name="dialog_finish_title">Patvirtinimas</string>
+    <string name="dialog_finish_message">Ar tikrai norite užbaigti ataskaitos kūrimą?</string>
+    <string name="dialog_yes">Taip</string>
+    <string name="dialog_no">Ne</string>
+    <string name="toast_report_created">Eismo įvykio ataskaita sėkmingai sukurta (Demo)</string>
+
 </resources>
