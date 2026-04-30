@@ -90,6 +90,13 @@
     <string name="circ_leaving">Leaving parking / opening door</string>
     <string name="circ_reversing">Reversing</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_finish_title">Confirmation</string>
+    <string name="dialog_finish_message">Are you sure you want to finish creating the report?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="toast_report_created">Accident Report Created Successfully (Demo)</string>
+
     <!-- Mock Data (For Demo) -->
     <string name="mock_loc_kaunas">Kaunas, Savanoriu ave. 123</string>
     <string name="mock_loc_vilnius">Vilnius, Gediminas ave. 1</string>

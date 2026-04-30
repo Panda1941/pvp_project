@@ -646,8 +646,15 @@ public class CreateReportActivity extends BaseActivity {
     }
 
     private void finishWizard() {
-        showToast("Accident Report Created Successfully (Demo)");
-        finish();
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_finish_title)
+                .setMessage(R.string.dialog_finish_message)
+                .setPositiveButton(R.string.dialog_yes, (dialog, which) -> {
+                    showToast(getString(R.string.toast_report_created));
+                    finish();
+                })
+                .setNegativeButton(R.string.dialog_no, (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
