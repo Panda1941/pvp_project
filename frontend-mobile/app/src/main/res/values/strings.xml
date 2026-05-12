@@ -59,6 +59,8 @@
     <string name="field_policy_no">Policy No:</string>
     <string name="field_license_no">License No:</string>
     <string name="photos_header">Please take or attach photos of the accident scene and vehicle damage.</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 
 
     <!-- Wizard Strings -->
