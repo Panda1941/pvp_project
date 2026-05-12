@@ -555,11 +555,29 @@ public class CreateReportActivity extends BaseActivity {
                 @Override
                 public void onMapReady(@NonNull GoogleMap map) {
                     googleMap = map;
+                    
+                    // Allow location selection by clicking on the map
+                    googleMap.setOnMapClickListener(latLng -> {
+                        updateLocationFromMap(latLng);
+                    });
+
                     // Initial setup if location exists in draft
                     updateMapFromDraft();
                 }
             });
         }
+    }
+
+    private void updateLocationFromMap(LatLng latLng) {
+        if (latLng == null) return;
+        
+        String text = String.format(Locale.getDefault(), "Lat: %.5f, Lon: %.5f", latLng.latitude, latLng.longitude);
+        TextInputEditText editLoc = v(viewGeneral, R.id.edit_location);
+        if (editLoc != null) editLoc.setText(text);
+        draftReport.setLocation(text);
+
+        googleMap.clear();
+        googleMap.addMarker(new MarkerOptions().position(latLng).title("Accident Location"));
     }
 
     private void updateMapFromDraft() {
