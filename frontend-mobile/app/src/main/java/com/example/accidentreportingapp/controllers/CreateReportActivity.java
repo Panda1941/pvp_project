@@ -710,6 +710,17 @@ public class CreateReportActivity extends BaseActivity {
         appendVehicleSummary(sb, "Vehicle B", draftReport.getVehicleB());
 
         tvSummary.setText(sb.toString());
+
+        ImageView summaryPreview = viewSummary.findViewById(R.id.img_summary_full_preview);
+        if (summaryPreview != null) {
+            summaryPreview.setOnClickListener(v -> summaryPreview.setVisibility(View.GONE));
+        }
+
+        RecyclerView recyclerSummaryPhotos = v(viewSummary, R.id.recycler_summary_photos);
+        if (recyclerSummaryPhotos != null) {
+            SummaryPhotoAdapter summaryAdapter = new SummaryPhotoAdapter(capturedPhotos, summaryPreview);
+            recyclerSummaryPhotos.setAdapter(summaryAdapter);
+        }
     }
 
     private void appendVehicleSummary(StringBuilder sb, String label, VehicleSection vehicle) {
@@ -826,8 +837,22 @@ public class CreateReportActivity extends BaseActivity {
                 imgFullPreview.setVisibility(View.GONE);
             });
 
+            // Photo deletion
+            holder.btnDelete.setOnClickListener(v -> {
+
+                int currentPos = holder.getAdapterPosition();
+
+                if (currentPos != RecyclerView.NO_POSITION) {
+                    photos.remove(currentPos);
+                    notifyItemRemoved(currentPos);
+                    notifyItemRangeChanged(currentPos, photos.size());
+                }
+            });
+
 
         }
+
+
 
         @Override
         public int getItemCount() {
@@ -836,9 +861,58 @@ public class CreateReportActivity extends BaseActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
+            ImageButton btnDelete;
             ViewHolder(View v) {
                 super(v);
                 imageView = v.findViewById(R.id.image_preview);
+                btnDelete = v.findViewById(R.id.btn_delete_photo);
+            }
+        }
+    }
+
+    private class SummaryPhotoAdapter extends RecyclerView.Adapter<SummaryPhotoAdapter.ViewHolder> {
+        private final List<String> photos;
+        private final ImageView localPreview;
+
+        SummaryPhotoAdapter(List<String> photos, ImageView preview) {
+            this.photos = photos;
+            this.localPreview = preview;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo_preview, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            String path = photos.get(position);
+            Glide.with(holder.itemView.getContext())
+                    .load(new java.io.File(path))
+                    .into(holder.imageView);
+
+            holder.imageView.setOnClickListener(v -> {
+                if (localPreview != null) {
+                    localPreview.setVisibility(View.VISIBLE);
+                    Glide.with(v.getContext()).load(new java.io.File(path)).into(localPreview);
+                }
+            });
+
+            holder.btnDeleteContainer.setVisibility(View.GONE);
+        }
+        @Override
+        public int getItemCount() { return photos.size(); }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
+            View btnDeleteContainer;
+            ViewHolder(View v) {
+                super(v);
+                imageView = v.findViewById(R.id.image_preview);
+                btnDeleteContainer = v.findViewById(R.id.btn_delete_photo).getParent() instanceof View ?
+                        (View) v.findViewById(R.id.btn_delete_photo).getParent() : v.findViewById(R.id.btn_delete_photo);
             }
         }
     }
