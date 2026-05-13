@@ -1,4 +1,5 @@
 package com.example.accidentreportingapp.controllers;
+import com.example.accidentreportingapp.controllers.PdfReportGenerator;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import java.util.Locale;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * CreateReportActivity implements a multi-step wizard for reporting a new accident.
@@ -65,17 +68,24 @@ public class CreateReportActivity extends BaseActivity {
     private AccidentReport draftReport;
 
     private ImageButton btnBack;
+    ImageButton btnPrevOverlay;
+    ImageButton btnNextOverlay;
     private TextView textTitle;
     private LinearProgressIndicator progressIndicator;
     private ViewGroup stepContainer;
     private MaterialButton btnPrevious, btnNext;
     private MaterialButton btnAddPhoto;
+    private MaterialButton btnDownloadReport;
     private RecyclerView recyclerPhotos;
     private PhotoAdapter photoAdapter;
     private List<String> capturedPhotos = new java.util.ArrayList<>();
     private ImageView imgOverlay;
     private ImageView imgFullPreview;
     private int currentPhotoStep = 0;
+    private boolean overlayManualMode = false;
+    private int selectedOverlayIndex = 0;
+    private TextInputEditText editDate;
+    private TextInputEditText editTime;
 
 
     private ImageButton btnUseCurrentLocation;
@@ -145,6 +155,10 @@ public class CreateReportActivity extends BaseActivity {
         viewCircumstances = getLayoutInflater().inflate(R.layout.step_circumstances, stepContainer, false);
         viewPhotos = getLayoutInflater().inflate(R.layout.step_photos, stepContainer, false);
         viewSummary = getLayoutInflater().inflate(R.layout.step_summary, stepContainer, false);
+        btnDownloadReport = viewSummary.findViewById(R.id.btn_download_report);
+        btnPrevOverlay = viewPhotos.findViewById(R.id.btn_overlay_prev);
+        btnNextOverlay = viewPhotos.findViewById(R.id.btn_overlay_next);
+
 
         imgFullPreview = viewPhotos.findViewById(R.id.img_full_preview);
         previewView = viewPhotos.findViewById(R.id.previewView);
@@ -152,6 +166,11 @@ public class CreateReportActivity extends BaseActivity {
         btnAddPhoto = v(viewPhotos, R.id.btn_add_photo);
         recyclerPhotos = v(viewPhotos, R.id.recycler_photos);
         photoAdapter = new PhotoAdapter(capturedPhotos);
+
+        editDate = viewGeneral.findViewById(R.id.edit_date);
+        editTime = viewGeneral.findViewById(R.id.edit_time);
+        setupDateTimePickers();
+
         if (recyclerPhotos != null) {
             recyclerPhotos.setAdapter(photoAdapter);
         }
@@ -176,6 +195,42 @@ public class CreateReportActivity extends BaseActivity {
         if (btnAddPhoto != null) {
             btnAddPhoto.setOnClickListener(v -> onAddPhotoClicked());
         }
+
+        if (btnDownloadReport != null) {
+
+            btnDownloadReport.setOnClickListener(v -> {
+                generateAndDownloadPdf();
+            });
+        }
+        btnPrevOverlay.setOnClickListener(v -> {
+            overlayManualMode = true;
+            selectedOverlayIndex--;
+            updateOverlay();
+        });
+
+        btnNextOverlay.setOnClickListener(v -> {
+            overlayManualMode = true;
+            selectedOverlayIndex++;
+            updateOverlay();
+        });
+
+    }
+
+    private void setupDateTimePickers() {
+
+        editDate.setFocusable(false);
+        editDate.setClickable(true);
+
+        editTime.setFocusable(false);
+        editTime.setClickable(true);
+
+        editDate.setOnClickListener(v ->
+                DateTimePicker.showDatePicker(this, editDate)
+        );
+
+        editTime.setOnClickListener(v ->
+                DateTimePicker.showTimePicker(this, editTime)
+        );
     }
 
     private void startCamera() {
@@ -206,11 +261,38 @@ public class CreateReportActivity extends BaseActivity {
             }
         }, ContextCompat.getMainExecutor(this));
     }
-    private void setOverlayStep(int step) {
+    private void setOverlayStep() {
         if (imgOverlay == null) return;
 
-        imgOverlay.setImageResource(overlays[step]);
+        int index;
+
+        if (overlayManualMode) {
+            index = selectedOverlayIndex;
+        } else {
+            index = currentPhotoStep;
+        }
+
+        if (index >= 0 && index < overlays.length) {
+            imgOverlay.setImageResource(overlays[index]);
+        }
     }
+
+    private void updateOverlay() {
+        if (imgOverlay == null) return;
+
+        int len = overlays.length;
+
+        if (selectedOverlayIndex < 0) {
+            selectedOverlayIndex = len - 1;
+        }
+
+        if (selectedOverlayIndex >= len) {
+            selectedOverlayIndex = 0;
+        }
+
+        imgOverlay.setImageResource(overlays[selectedOverlayIndex]);
+    }
+
     private void takePhoto() {
         if (imageCapture == null) return;
 
@@ -234,9 +316,8 @@ public class CreateReportActivity extends BaseActivity {
                             photoAdapter.notifyItemInserted(capturedPhotos.size() - 1);
                             currentPhotoStep++;
 
-                            if (currentPhotoStep < overlays.length) {
-                                setOverlayStep(currentPhotoStep);
-                            }
+                            if (!overlayManualMode) { selectedOverlayIndex = currentPhotoStep; }
+                            setOverlayStep();
                         });
                     }
                     @Override
@@ -246,7 +327,6 @@ public class CreateReportActivity extends BaseActivity {
                 }
         );
     }
-
     private void onAddPhotoClicked() {
         takePhoto();
     }
@@ -258,6 +338,51 @@ public class CreateReportActivity extends BaseActivity {
             requestAppPermissions(new String[]{fine}, REQ_PERMISSION_LOCATION_ONLY,
                     "Allow location to auto-fill your current accident location.");
         }
+    }
+
+    private void generateAndDownloadPdf() {
+
+        if (btnDownloadReport != null) {
+            btnDownloadReport.setEnabled(false);
+            btnDownloadReport.setText("Generating...");
+        }
+
+        new Thread(() -> {
+
+            try {
+
+                File pdfFile = PdfReportGenerator.generate(
+                        this,
+                        draftReport,
+                        capturedPhotos
+                );
+
+                runOnUiThread(() -> {
+
+                    if (btnDownloadReport != null) {
+                        btnDownloadReport.setEnabled(true);
+                        btnDownloadReport.setText("Download Report");
+                    }
+
+                    showToast("Saved to Downloads");
+                });
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+                runOnUiThread(() -> {
+
+                    if (btnDownloadReport != null) {
+                        btnDownloadReport.setEnabled(true);
+                        btnDownloadReport.setText("Download Report");
+                    }
+
+                    showToast("Failed to generate PDF");
+                });
+            }
+
+        }).start();
     }
 
     @Override
@@ -442,7 +567,7 @@ public class CreateReportActivity extends BaseActivity {
                 if (hasPermissions(android.Manifest.permission.CAMERA)) {
                     startCamera();
                     currentPhotoStep = 0;
-                    setOverlayStep(currentPhotoStep);
+                    setOverlayStep();
                 } else {
                     requestAppPermissions(
                             new String[]{android.Manifest.permission.CAMERA},
@@ -487,8 +612,12 @@ public class CreateReportActivity extends BaseActivity {
             case STEP_GENERAL:
                 TextInputEditText editLoc = v(viewGeneral, R.id.edit_location);
                 TextInputEditText editDesc = v(viewGeneral, R.id.edit_description);
+                editDate = v(viewGeneral, R.id.edit_date);
+                editTime = v(viewGeneral, R.id.edit_time);
+
                 draftReport.setLocation(safeText(editLoc));
                 draftReport.setDescription(safeText(editDesc));
+                draftReport.setTimestamp(safeText(editDate),safeText(editTime));
                 break;
             case STEP_VEHICLE_A_INFO:
                 saveVehicleInfo(draftReport.getVehicleA());
@@ -573,7 +702,8 @@ public class CreateReportActivity extends BaseActivity {
         
         sb.append("General Information:\n");
         sb.append("Location: ").append(draftReport.getLocation()).append("\n");
-        sb.append("Description: ").append(draftReport.getDescription()).append("\n\n");
+        sb.append("Description: ").append(draftReport.getDescription()).append("\n");
+        sb.append("Date: ").append(draftReport.getTimestampAsDate()).append("\n\n");
 
         appendVehicleSummary(sb, "Vehicle A", draftReport.getVehicleA());
         sb.append("\n");

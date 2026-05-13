@@ -49,6 +49,7 @@
     <string name="label_insurance_company">Draudimo bendrovė</string>
     <string name="label_driver">Informacija apie vairuotoją</string>
     <string name="label_circumstances">Aplinkybės</string>
+    <string name="header_photos">Įvykio nuotraukos</string>
 
     <!-- Field Labels -->
     <string name="field_name">Vardas, pavardė:</string>
@@ -57,6 +58,8 @@
     <string name="field_make_type">Markė/tipas:</string>
     <string name="field_policy_no">Poliso Nr.:</string>
     <string name="field_license_no">Vairuotojo pažymėjimo Nr.:</string>
+    <string name="date">Data</string>
+    <string name="time">Laikas</string>
 
     <!-- Wizard Strings -->
     <string name="photos_header">Prašome nufotografuoti arba pridėti avarijos vietos ir transporto priemonės apgadinimų nuotraukas.</string>
@@ -65,6 +68,7 @@
     <string name="btn_finish">Baigti</string>
     <string name="hint_location">Įveskite įvykio vietą</string>
     <string name="hint_description">Aprašykite kas nutiko</string>
+    <string name="desc_use_current_location">Užpildyti įvykio vietą pagal GPS</string>
     <string name="hint_name">Vardas Pavardė</string>
     <string name="hint_plate">Valstybinis numeris</string>
     <string name="hint_dob">Gimimo data (MMMM-MM-DD)</string>

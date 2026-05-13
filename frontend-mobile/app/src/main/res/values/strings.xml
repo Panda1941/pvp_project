@@ -59,6 +59,8 @@
     <string name="field_policy_no">Policy No:</string>
     <string name="field_license_no">License No:</string>
     <string name="photos_header">Please take or attach photos of the accident scene and vehicle damage.</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 
 
     <!-- Wizard Strings -->
@@ -74,6 +76,8 @@
     <string name="hint_insurance_covers">Does insurance cover material damage?</string>
     <string name="step_indicator">Step %1$d of %2$d</string>
     <string name="title_summary">Report Summary</string>
+    <string name="btn_download_report">Download Report</string>
+    <string name="summary_photos">Photos:</string>
     <string name="summary_demo_note">Note: This report is a draft and will not be saved in this demo version.</string>
     <string name="label_circ_prompt">Select all that apply for this vehicle:</string>
     <string name="btn_addphoto">Tap to Add Photo</string>

@@ -3,6 +3,9 @@ package com.example.accidentreportingapp.models;
 import com.example.accidentreportingapp.R;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
+
 
 /**
  * The 'Model' in our MVC architecture.
@@ -67,6 +70,34 @@ public class AccidentReport implements Serializable {
 
     public long getTimestamp() { return timestamp; }
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+
+    public void setTimestamp(String date, String time)
+    {
+        String dateTime = date + " " + time;
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date parsedDate = format.parse(dateTime);
+
+            if (parsedDate != null) {
+                this.timestamp = parsedDate.getTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getTimestampAsDate()
+    {
+        long timestamp = this.timestamp;
+
+        SimpleDateFormat format =
+                new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+
+        String dateTime = format.format(new Date(timestamp));
+
+        return dateTime;
+    }
 
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
