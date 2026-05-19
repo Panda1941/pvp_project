@@ -219,6 +219,8 @@
     <!-- Dialogai -->
     <string name="dialog_finish_title">Patvirtinimas</string>
     <string name="dialog_finish_message">Ar tikrai norite užbaigti ataskaitos kūrimą?</string>
+    <string name="dialog_exit_title">Išeiti iš vedlio</string>
+    <string name="dialog_exit_message">Ar tikrai norite išeiti? Visi neišsaugoti duomenys bus prarasti.</string>
     <string name="dialog_yes">Taip</string>
     <string name="dialog_no">Ne</string>
     <string name="toast_report_created">Eismo įvykio ataskaita sėkmingai sukurta (Demo)</string>

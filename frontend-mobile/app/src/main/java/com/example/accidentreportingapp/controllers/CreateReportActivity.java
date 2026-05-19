@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -56,6 +58,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 import java.io.IOException;
+
+import network.api.ReportApi;
+import network.client.ApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * CreateReportActivity implements a multi-step wizard for reporting a new accident.
@@ -142,6 +150,13 @@ public class CreateReportActivity extends BaseActivity {
         if (!hasPermissions(required)) {
             showToast(getString(R.string.msg_permissions_not_granted));
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                handleBack();
+            }
+        });
 
         draftReport = new AccidentReport();
         initializeViews();
@@ -433,23 +448,32 @@ public class CreateReportActivity extends BaseActivity {
         MaterialButton tabSigB = stepView.findViewById(R.id.tab_sig_b);
         FrameLayout signatureContainer = stepView.findViewById(R.id.signature_container);
         TextView tvSignHint = stepView.findViewById(R.id.tv_sign_hint);
+        signatureContainer.removeAllViews();
+        signatureContainer.addView(signatureViewA);
+        signatureContainer.addView(signatureViewB);
+        signatureContainer.addView(tvSignHint);
+        signatureViewA.setVisibility(View.VISIBLE);
+        signatureViewB.setVisibility(View.GONE);
+        activeSignatureTab = 0;
 
         tabSigA.setOnClickListener(v -> {
             activeSignatureTab = 0;
-            signatureContainer.removeAllViews();
-            signatureContainer.addView(signatureViewA);
-            signatureContainer.addView(tvSignHint);
-            tvSignHint.setVisibility(signatureViewA.isEmpty() ? View.VISIBLE : View.GONE);
+            signatureViewA.setVisibility(View.VISIBLE);
+            signatureViewB.setVisibility(View.GONE);
+            tvSignHint.setVisibility(
+                    signatureViewA.isEmpty() ? View.VISIBLE : View.GONE
+            );
             tabSigA.setAlpha(1.0f);
             tabSigB.setAlpha(0.6f);
         });
 
         tabSigB.setOnClickListener(v -> {
             activeSignatureTab = 1;
-            signatureContainer.removeAllViews();
-            signatureContainer.addView(signatureViewB);
-            signatureContainer.addView(tvSignHint);
-            tvSignHint.setVisibility(signatureViewB.isEmpty() ? View.VISIBLE : View.GONE);
+            signatureViewA.setVisibility(View.GONE);
+            signatureViewB.setVisibility(View.VISIBLE);
+            tvSignHint.setVisibility(
+                    signatureViewB.isEmpty() ? View.VISIBLE : View.GONE
+            );
             tabSigA.setAlpha(0.6f);
             tabSigB.setAlpha(1.0f);
         });
@@ -1113,8 +1137,12 @@ public class CreateReportActivity extends BaseActivity {
     }
 
     private void handleBack() {
-        if (currentStep > 0) goToPreviousStep();
-        else finish();
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_exit_title)
+                .setMessage(R.string.dialog_exit_message)
+                .setPositiveButton(R.string.dialog_yes, (dialog, which) -> finish())
+                .setNegativeButton(R.string.dialog_no, (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void finishWizard() {
@@ -1123,6 +1151,9 @@ public class CreateReportActivity extends BaseActivity {
                 .setMessage(R.string.dialog_finish_message)
                 .setPositiveButton(R.string.dialog_yes, (dialog, which) -> {
                     showToast(getString(R.string.toast_report_created));
+
+                    createReportInDB(draftReport);
+
                     finish();
                 })
                 .setNegativeButton(R.string.dialog_no, (dialog, which) -> dialog.dismiss())
@@ -1197,5 +1228,24 @@ public class CreateReportActivity extends BaseActivity {
                         (View) v.findViewById(R.id.btn_delete_photo).getParent() : v.findViewById(R.id.btn_delete_photo);
             }
         }
+    }
+    private static void createReportInDB(AccidentReport draftReport)
+    {
+        ReportApi api = ApiClient.getClient().create(ReportApi.class);
+        Call<AccidentReport> call = api.createReport(draftReport);
+
+        call.enqueue(new Callback<AccidentReport>() {
+            @Override
+            public void onResponse(Call<AccidentReport> call, Response<AccidentReport> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    AccidentReport saved = response.body();
+                    String id = saved.getId();
+                }
+            }
+            @Override
+            public void onFailure(Call<AccidentReport> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }

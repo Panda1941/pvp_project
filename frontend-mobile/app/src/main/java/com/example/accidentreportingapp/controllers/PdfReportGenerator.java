@@ -116,16 +116,14 @@ public class PdfReportGenerator {
         int yB = drawVehicleColumn(canvas, "VEHICLE B", report.getVehicleB(), 1, report, midX + 30, yVehiclesStart, colWidth, textPaint, labelPaint, headerPaint);
         
         y = Math.max(yA, yB) + 60;
-        
-        // Overflow check
-        if (y > PAGE_HEIGHT - 400) {
-            pdfDocument.finishPage(page);
-            pageNumber++;
-            pageInfo = new PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, pageNumber).create();
-            page = pdfDocument.startPage(pageInfo);
-            canvas = page.getCanvas();
-            y = START_Y;
-        }
+
+        // NEW LINE FOR CLEANLINESS
+        pdfDocument.finishPage(page);
+        pageNumber++;
+        pageInfo = new PdfDocument.PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, pageNumber).create();
+        page = pdfDocument.startPage(pageInfo);
+        canvas = page.getCanvas();
+        y = START_Y;
 
         // 3. WITNESSES
         canvas.drawText("3. WITNESSES", START_X, y, subTitlePaint);
