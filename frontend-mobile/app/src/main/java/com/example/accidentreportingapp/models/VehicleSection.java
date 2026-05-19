@@ -19,6 +19,11 @@ public class VehicleSection implements Serializable {
     public String vehicleMakeType;
     public String vehicleRegistration;
     public String vehicleCountry;
+    public boolean hasTrailer;
+    public String trailerRegistration;
+    public boolean noLicencePlate;
+    public String contactPhone;
+    public String contactEmail;
 
     // Insurance Company Info
     public String insuranceName;
@@ -30,9 +35,17 @@ public class VehicleSection implements Serializable {
 
     // Driver Info
     public String driverName;
+    public String driverFirstName;
+    public String driverLastName;
     public String driverDob;
-    public String driverAddress;
+    public String driverStreet;
+    public String driverHouseNumber;
+    public String driverApartment;
+    public String driverCity;
+    public String driverPostalCode;
     public String driverCountry;
+    public String driverPersonalId;
+    public String driverEmail;
     public String driverContact;
     public String licenseNumber;
     public String licenseCategory;
@@ -42,6 +55,20 @@ public class VehicleSection implements Serializable {
     public boolean isParkedStopped;
     public boolean isLeavingParking;
     public boolean isReversing;
+    public boolean isStopping;
+    public boolean isStartingOff;
+    public boolean isOpeningDoor;
+    public boolean isEnteringParking;
+    public boolean isEnteringRoundabout;
+    public boolean isCirculatingRoundabout;
+    public boolean isRearEndSameDirection;
+    public boolean isChangingLanes;
+    public boolean isOvertaking;
+    public boolean isTurningRight;
+    public boolean isTurningLeft;
+    public boolean isEnteringOppositelane;
+    public boolean isFromRightAtIntersection;
+    public boolean isFailedToPrioritize;
 
     public VehicleSection() {
     }
@@ -54,14 +81,20 @@ public class VehicleSection implements Serializable {
      * validation, or immutability) consider adding getters/setters or moving
      * to an immutable/builder pattern.
      */
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append(insuredName != null ? insuredName : "-");
-            sb.append(" |");
-            sb.append(vehicleRegistration != null ? vehicleRegistration : "-");
-            sb.append(" |");
-            sb.append(driverName != null ? driverName : "-");
-            return sb.toString();
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(insuredName != null ? insuredName : "-");
+        sb.append(" |");
+        sb.append(vehicleRegistration != null ? vehicleRegistration : "-");
+        sb.append(" |");
+        if (driverName != null) {
+            sb.append(driverName);
+        } else {
+            sb.append(driverFirstName != null ? driverFirstName : "-");
+            sb.append(" ");
+            sb.append(driverLastName != null ? driverLastName : "-");
         }
+        return sb.toString();
+    }
 }

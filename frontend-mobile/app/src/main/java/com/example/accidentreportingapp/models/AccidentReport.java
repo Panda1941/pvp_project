@@ -2,7 +2,9 @@ package com.example.accidentreportingapp.models;
 
 import com.example.accidentreportingapp.R;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
 
@@ -30,6 +32,15 @@ public class AccidentReport implements Serializable {
     private VehicleSection vehicleA;
     private VehicleSection vehicleB;
 
+    private List<Witness> witnesses;
+    private List<Damage> damages;
+    private String address;
+    private Double latitude;
+    private Double longitude;
+    private String atFaultVehicle;
+    private String signatureA;
+    private String signatureB;
+
     /**
      * Default constructor for Firebase/GSON or manual creation.
      */
@@ -39,6 +50,8 @@ public class AccidentReport implements Serializable {
         this.status = STATUS_WAITING; // Default status
         this.vehicleA = new VehicleSection();
         this.vehicleB = new VehicleSection();
+        this.witnesses = new ArrayList<>();
+        this.damages = new ArrayList<>();
     }
 
     /*
@@ -131,6 +144,70 @@ public class AccidentReport implements Serializable {
 
     public VehicleSection getVehicleB() { return vehicleB; }
     public void setVehicleB(VehicleSection vehicleB) { this.vehicleB = vehicleB; }
+
+    public List<Witness> getWitnesses() {
+        return witnesses;
+    }
+
+    public void setWitnesses(List<Witness> witnesses) {
+        this.witnesses = witnesses;
+    }
+
+    public List<Damage> getDamages() {
+        return damages;
+    }
+
+    public void setDamages(List<Damage> damages) {
+        this.damages = damages;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getAtFaultVehicle() {
+        return atFaultVehicle;
+    }
+
+    public void setAtFaultVehicle(String atFaultVehicle) {
+        this.atFaultVehicle = atFaultVehicle;
+    }
+
+    public String getSignatureA() {
+        return signatureA;
+    }
+
+    public void setSignatureA(String signatureA) {
+        this.signatureA = signatureA;
+    }
+
+    public String getSignatureB() {
+        return signatureB;
+    }
+
+    public void setSignatureB(String signatureB) {
+        this.signatureB = signatureB;
+    }
 
     @Override
     public String toString() {
