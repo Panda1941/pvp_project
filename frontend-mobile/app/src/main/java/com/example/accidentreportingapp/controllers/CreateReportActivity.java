@@ -28,6 +28,12 @@ import com.bumptech.glide.Glide;
 import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
 import com.example.accidentreportingapp.models.VehicleSection;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -97,6 +103,8 @@ public class CreateReportActivity extends BaseActivity {
     // View caches for the steps
     private View viewGeneral, viewVehicleInfo, viewInsurance, viewDriver, viewCircumstances, viewPhotos, viewSummary;
     private PreviewView previewView;
+    private MapView mapView;
+    private GoogleMap googleMap;
     // Use shared helpers from BaseActivity: v(root, id) and safeText(...)
     // no automatic location fields
     private final int[] overlays = new int[] {
@@ -129,6 +137,11 @@ public class CreateReportActivity extends BaseActivity {
 
         draftReport = new AccidentReport();
         initializeViews();
+
+        if (mapView != null) {
+            mapView.onCreate(savedInstanceState);
+        }
+
         updateStepUI();
         setupClickListeners();
         // Automatic location disabled
@@ -183,6 +196,8 @@ public class CreateReportActivity extends BaseActivity {
                 btnUseCurrentLocation = (ImageButton) maybeBtn;
             }
         }
+
+        mapView = viewGeneral.findViewById(R.id.map_view);
     }
 
     private void setupClickListeners() {
@@ -484,6 +499,13 @@ public class CreateReportActivity extends BaseActivity {
         String text = String.format(Locale.getDefault(), "Lat: %.5f, Lon: %.5f", loc.getLatitude(), loc.getLongitude());
         if (editLoc != null) editLoc.setText(text);
         draftReport.setLocation(text);
+
+        if (googleMap != null) {
+            LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+            googleMap.clear();
+            googleMap.addMarker(new MarkerOptions().position(latLng).title("Accident Location"));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        }
     }
 
     private void resolveAddressOffline(double lat, double lon) {
@@ -656,6 +678,55 @@ public class CreateReportActivity extends BaseActivity {
         TextInputEditText ed = v(viewGeneral, R.id.edit_description);
         if (el != null) el.setText(draftReport.getLocation());
         if (ed != null) ed.setText(draftReport.getDescription());
+
+        if (mapView != null) {
+            mapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(@NonNull GoogleMap map) {
+                    googleMap = map;
+                    
+                    // Allow location selection by clicking on the map
+                    googleMap.setOnMapClickListener(latLng -> {
+                        updateLocationFromMap(latLng);
+                    });
+
+                    // Initial setup if location exists in draft
+                    updateMapFromDraft();
+                }
+            });
+        }
+    }
+
+    private void updateLocationFromMap(LatLng latLng) {
+        if (latLng == null) return;
+        
+        String text = String.format(Locale.getDefault(), "Lat: %.5f, Lon: %.5f", latLng.latitude, latLng.longitude);
+        TextInputEditText editLoc = v(viewGeneral, R.id.edit_location);
+        if (editLoc != null) editLoc.setText(text);
+        draftReport.setLocation(text);
+
+        googleMap.clear();
+        googleMap.addMarker(new MarkerOptions().position(latLng).title("Accident Location"));
+    }
+
+    private void updateMapFromDraft() {
+        if (googleMap == null || draftReport.getLocation() == null || draftReport.getLocation().isEmpty()) return;
+
+        try {
+            // Very simple parser for "Lat: X, Lon: Y" format
+            String loc = draftReport.getLocation();
+            String latStr = loc.substring(loc.indexOf("Lat: ") + 5, loc.indexOf(","));
+            String lonStr = loc.substring(loc.indexOf("Lon: ") + 5);
+            double lat = Double.parseDouble(latStr);
+            double lon = Double.parseDouble(lonStr);
+
+            LatLng latLng = new LatLng(lat, lon);
+            googleMap.clear();
+            googleMap.addMarker(new MarkerOptions().position(latLng).title("Accident Location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        } catch (Exception e) {
+            // Ignore parsing errors
+        }
     }
 
     private void loadVehicleInfo(VehicleSection vehicle) {
@@ -918,8 +989,45 @@ public class CreateReportActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mapView != null) mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mapView != null) mapView.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mapView != null) mapView.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mapView != null) mapView.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mapView != null) mapView.onDestroy();
         // cleaned up location resources removed
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null) mapView.onLowMemory();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mapView != null) mapView.onSaveInstanceState(outState);
     }
 }

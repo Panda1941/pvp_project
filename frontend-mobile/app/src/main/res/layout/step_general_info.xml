@@ -108,4 +108,11 @@
             android:minLines="5" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
 </LinearLayout>
