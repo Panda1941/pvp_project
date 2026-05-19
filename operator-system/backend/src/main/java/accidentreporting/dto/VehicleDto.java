@@ -8,6 +8,7 @@ public class VehicleDto {
     public String insuranceName;
     public String policyNumber;
     public String contactPhone;
+    public DriverDto driver;
 
     public VehicleDto() {}
 }

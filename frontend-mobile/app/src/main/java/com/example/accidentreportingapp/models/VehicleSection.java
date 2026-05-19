@@ -50,6 +50,7 @@ public class VehicleSection implements Serializable {
     public String licenseNumber;
     public String licenseCategory;
     public String licenseExpiry;
+    public Driver driver;
 
     // Circumstances (per vehicle)
     public boolean isParkedStopped;

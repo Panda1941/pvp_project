@@ -234,6 +234,7 @@ h2 {
 :root[data-theme="dark"] .detail-item,
 :root[data-theme="dark"] .witness-item,
 :root[data-theme="dark"] .damage-item,
+:root[data-theme="dark"] .mini-detail-item,
 :root[data-theme="dark"] .signature-panel,
 :root[data-theme="dark"] .report-summary-panel {
   background: #162434;
@@ -540,6 +541,24 @@ select {
   align-items: center;
 }
 
+.report-admin-card {
+  display: grid;
+  gap: 12px;
+}
+
+.report-admin-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.report-admin-status-select {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+}
+
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -618,6 +637,20 @@ select {
   margin-top: 16px;
 }
 
+.mini-detail-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f8fbff;
+  border: 1px solid #e3edf7;
+  min-width: 0;
+}
+
+.mini-detail-item span:last-child {
+  overflow-wrap: anywhere;
+}
+
 .detail-item {
   display: grid;
   gap: 4px;
@@ -641,7 +674,7 @@ select {
 }
 
 .vehicle-grid,
-.damage-layout,
+.damage-section-grid,
 .fault-signature-grid {
   display: grid;
   gap: 16px;
@@ -651,8 +684,28 @@ select {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.damage-layout {
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+.damage-section-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.damage-diagram-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.damage-sketch-card,
+.damage-entries-card {
+  min-width: 0;
+}
+
+.damage-sketch-card {
+  padding: 18px;
+}
+
+.damage-entries-card {
+  display: grid;
+  gap: 12px;
 }
 
 .fault-signature-grid {
@@ -668,7 +721,7 @@ select {
 
 .vehicle-card h3 {
   margin: 0 0 4px;
-  font-size: 22px;
+  font-size: 24px;
 }
 
 .vehicle-divider {
@@ -680,6 +733,13 @@ select {
 .vehicle-subsection {
   display: grid;
   gap: 4px;
+}
+
+.driver-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
 }
 
 .witness-list,
@@ -867,6 +927,11 @@ select {
   display: block;
 }
 
+.signature-panel img.is-rotated {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
 .fault-summary {
   margin-top: 0;
 }
@@ -894,6 +959,31 @@ select {
   .damage-layout,
   .fault-signature-grid {
     grid-template-columns: 1fr;
+  }
+
+  .driver-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .damage-diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+  }
+
+  .damage-target-pill {
+    min-height: 26px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .damage-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
   .status-grid {

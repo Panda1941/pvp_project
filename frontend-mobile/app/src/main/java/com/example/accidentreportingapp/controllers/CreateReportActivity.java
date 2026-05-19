@@ -1,9 +1,13 @@
 package com.example.accidentreportingapp.controllers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +41,8 @@ import com.bumptech.glide.Glide;
 import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
 import com.example.accidentreportingapp.models.Damage;
+import com.example.accidentreportingapp.models.Driver;
+import com.example.accidentreportingapp.models.Photo;
 import com.example.accidentreportingapp.models.VehicleSection;
 import com.example.accidentreportingapp.models.Witness;
 import com.example.accidentreportingapp.views.DamageDiagramView;
@@ -48,6 +54,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
@@ -165,7 +172,9 @@ public class CreateReportActivity extends BaseActivity {
         
         ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+            // React to both system navigation bars and the keyboard (IME)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, Math.max(systemBars.bottom, ime.bottom));
             return insets;
         });
     }
@@ -366,6 +375,72 @@ public class CreateReportActivity extends BaseActivity {
             combinedList.add(new Damage(area, "unknown", 1));
         }
         draftReport.setDamages(combinedList);
+    }
+
+    private void savePhotoData() {
+        List<Photo> reportPhotos = new ArrayList<>();
+        for (int i = 0; i < capturedPhotos.size(); i++) {
+            String path = capturedPhotos.get(i);
+            String dataUri = toCompressedDataUri(path);
+            reportPhotos.add(new Photo(dataUri != null ? dataUri : path, "Captured photo " + (i + 1), i + 1));
+        }
+        draftReport.setPhotos(reportPhotos);
+    }
+
+    private String toCompressedDataUri(String path) {
+        Bitmap bitmap = decodeScaledBitmap(path, 1400, 1400);
+        if (bitmap == null) return null;
+        bitmap = rotateBitmapIfRequired(bitmap, path);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 72, out);
+        byte[] bytes = out.toByteArray();
+        return "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.NO_WRAP);
+    }
+
+    private Bitmap rotateBitmapIfRequired(Bitmap bitmap, String path) {
+        try {
+            android.media.ExifInterface exif = new android.media.ExifInterface(path);
+            int orientation = exif.getAttributeInt(
+                    android.media.ExifInterface.TAG_ORIENTATION,
+                    android.media.ExifInterface.ORIENTATION_NORMAL
+            );
+
+            Matrix matrix = new Matrix();
+            switch (orientation) {
+                case android.media.ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    break;
+                case android.media.ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    break;
+                case android.media.ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    break;
+                default:
+                    return bitmap;
+            }
+
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (Exception e) {
+            return bitmap;
+        }
+    }
+
+    private Bitmap decodeScaledBitmap(String path, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        int inSampleSize = 1;
+        int outHeight = options.outHeight;
+        int outWidth = options.outWidth;
+        while ((outHeight / inSampleSize) > reqHeight || (outWidth / inSampleSize) > reqWidth) {
+            inSampleSize *= 2;
+        }
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeFile(path, options);
     }
 
     private void setupCircumstancesStep(View stepView) {
@@ -768,6 +843,9 @@ public class CreateReportActivity extends BaseActivity {
             case STEP_WITNESSES:
                 saveWitnessData(viewWitnesses);
                 break;
+            case STEP_PHOTOS:
+                savePhotoData();
+                break;
             case STEP_VEHICLE_INFO:
                 saveVehicleInfo(activeVehicleInfoTab == 0 ? draftReport.getVehicleA() : draftReport.getVehicleB(), viewVehicleInfo);
                 saveDriverInfo(activeVehicleInfoTab == 0 ? draftReport.getVehicleA() : draftReport.getVehicleB(), viewVehicleInfo);
@@ -1092,6 +1170,20 @@ public class CreateReportActivity extends BaseActivity {
         vehicle.licenseExpiry = safeText(le);
         vehicle.driverPersonalId = safeText(pi);
         vehicle.driverName = vehicle.driverFirstName + " " + vehicle.driverLastName;
+
+        Driver driver = new Driver();
+        driver.firstName = vehicle.driverFirstName;
+        driver.lastName = vehicle.driverLastName;
+        driver.name = vehicle.driverName;
+        driver.dob = vehicle.driverDob;
+        driver.country = vehicle.driverCountry;
+        driver.street = vehicle.driverStreet;
+        driver.contact = vehicle.driverContact;
+        driver.personalId = vehicle.driverPersonalId;
+        driver.licenseNumber = vehicle.licenseNumber;
+        driver.licenseCategory = vehicle.licenseCategory;
+        driver.licenseExpiry = vehicle.licenseExpiry;
+        vehicle.driver = driver;
         
         // Sync insured info
         vehicle.insuredName = vehicle.driverName;
@@ -1151,6 +1243,8 @@ public class CreateReportActivity extends BaseActivity {
                 .setMessage(R.string.dialog_finish_message)
                 .setPositiveButton(R.string.dialog_yes, (dialog, which) -> {
                     showToast(getString(R.string.toast_report_created));
+
+                    savePhotoData();
 
                     createReportInDB(draftReport);
 
@@ -1231,6 +1325,7 @@ public class CreateReportActivity extends BaseActivity {
     }
     private static void createReportInDB(AccidentReport draftReport)
     {
+        draftReport.setDraft(false);
         ReportApi api = ApiClient.getClient().create(ReportApi.class);
         Call<AccidentReport> call = api.createReport(draftReport);
 

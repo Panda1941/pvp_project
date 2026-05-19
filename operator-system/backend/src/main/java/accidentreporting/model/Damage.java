@@ -13,6 +13,7 @@ public class Damage {
     // free-form area description (e.g., "front-left bumper", "rear-right door")
     private String area;
     private String severity; // optional severity descriptor
+    private Integer vehicleTarget;
 
     public Damage() {}
 
@@ -24,4 +25,7 @@ public class Damage {
 
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
+
+    public Integer getVehicleTarget() { return vehicleTarget; }
+    public void setVehicleTarget(Integer vehicleTarget) { this.vehicleTarget = vehicleTarget; }
 }

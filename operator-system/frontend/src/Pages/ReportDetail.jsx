@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 
 const STATUS_META = {
@@ -22,8 +22,13 @@ const DAMAGE_POSITIONS = [
 
 export default function ReportDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [report, setReport] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("0");
+  const [actionBusy, setActionBusy] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -32,9 +37,65 @@ export default function ReportDetail() {
         if (!r.ok) throw new Error("Not found");
         return r.json();
       })
-      .then(setReport)
+      .then(data => {
+        setReport(data);
+        setSelectedStatus(String(data.status ?? 0));
+      })
       .catch(err => console.error(err));
   }, [id, user]);
+
+  const handleStatusUpdate = async () => {
+    if (!report || actionBusy) return;
+    setActionError("");
+    setActionMessage("");
+    setActionBusy(true);
+
+    try {
+      const response = await fetch(`/api/reports/${id}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: Number(selectedStatus) })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Could not update status (${response.status})`);
+      }
+
+      const updated = await response.json();
+      setReport(updated);
+      setSelectedStatus(String(updated.status ?? 0));
+      setActionMessage("Status updated.");
+    } catch (err) {
+      setActionError(err.message || "Could not update report status.");
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const handleDeleteReport = async () => {
+    if (!report || actionBusy) return;
+    const confirmed = window.confirm("Delete this report? This cannot be undone.");
+    if (!confirmed) return;
+
+    setActionError("");
+    setActionMessage("");
+    setActionBusy(true);
+
+    try {
+      const response = await fetch(`/api/reports/${id}`, {
+        method: "DELETE"
+      });
+
+      if (!response.ok) {
+        throw new Error(`Could not delete report (${response.status})`);
+      }
+
+      navigate("/reports");
+    } catch (err) {
+      setActionError(err.message || "Could not delete report.");
+      setActionBusy(false);
+    }
+  };
 
   if (!user) return <p>Please login.</p>;
   if (user.role !== "ADMIN" && user.role !== "OPERATOR") return <p>Access denied.</p>;
@@ -44,11 +105,11 @@ export default function ReportDetail() {
   const witnesses = Array.isArray(report.witnesses) ? report.witnesses : [];
   const photos = Array.isArray(report.photos) ? report.photos : [];
   const damages = Array.isArray(report.damages) ? report.damages : [];
+  const damageGroups = groupDamagesByVehicle(damages);
   const generalItems = [
     { label: "When", value: new Date(report.timestamp).toLocaleString() },
-    { label: "Location", value: report.location || "—" },
     { label: "Address", value: report.address || "—" },
-    { label: "Draft", value: report.isDraft ? "Yes" : "No" }
+    // { label: "Draft", value: report.isDraft ? "Yes" : "No" }
   ];
   const signatureA = normalizeSignature(report.signatureA);
   const signatureB = normalizeSignature(report.signatureB);
@@ -69,6 +130,27 @@ export default function ReportDetail() {
           <Link className="button button-small" to="/reports">Back to reports</Link>
         </div>
       </div>
+
+      <article className="card report-admin-card">
+        <div className="report-admin-controls">
+          <label className="report-admin-status-select">
+            <span className="detail-label">Change status</span>
+            <select value={selectedStatus} onChange={event => setSelectedStatus(event.target.value)} disabled={actionBusy}>
+              <option value="0">Waiting</option>
+              <option value="1">Confirmed</option>
+              <option value="2">Issue</option>
+            </select>
+          </label>
+          <button type="button" className="button button-primary button-small" onClick={handleStatusUpdate} disabled={actionBusy}>
+            Save status
+          </button>
+          <button type="button" className="button button-danger button-small" onClick={handleDeleteReport} disabled={actionBusy}>
+            Delete report
+          </button>
+        </div>
+        {actionMessage ? <p className="alert alert-success">{actionMessage}</p> : null}
+        {actionError ? <p className="alert alert-error">{actionError}</p> : null}
+      </article>
 
       <div className="stack-lg report-detail-stack">
         <article className="card report-hero-card">
@@ -135,17 +217,25 @@ export default function ReportDetail() {
               <h2>Damage drawing</h2>
             </div>
           </div>
-          <div className="damage-layout">
-            <div className="card report-section-card damage-visual-card">
-              <DamageSketch damages={damages} />
+          <div className="damage-section-grid">
+            <div className="damage-diagram-grid">
+              <article className="card report-section-card damage-sketch-card">
+                <DamageSketch title="Vehicle A" damages={damageGroups.vehicleA} />
+              </article>
+              <article className="card report-section-card damage-sketch-card">
+                <DamageSketch title="Vehicle B" damages={damageGroups.vehicleB} />
+              </article>
             </div>
-            <div className="card report-section-card">
+            <div className="card report-section-card damage-entries-card">
               <p className="section-kicker">Damage entries</p>
               {damages.length > 0 ? (
                 <div className="damage-list">
                   {damages.map(damage => (
-                    <div className="damage-item" key={damage.id ?? `${damage.area}-${damage.severity}`}>
-                      <strong>{damage.area || "Unspecified area"}</strong>
+                    <div className="damage-item" key={damage.id ?? `${damage.area}-${damage.severity}-${damage.vehicleTarget}`}>
+                      <div className="damage-item-header">
+                        <strong>{damage.area || "Unspecified area"}</strong>
+                        <span className="status-pill damage-target-pill">{getVehicleLabel(damage.vehicleTarget)}</span>
+                      </div>
                       <span>{damage.severity || "Severity not provided"}</span>
                     </div>
                   ))}
@@ -230,22 +320,22 @@ function VehicleCard({ vehicle, title }) {
       <p className="muted">{vehicle.vehicleMakeType || "Vehicle details unavailable"}</p>
 
       <div className="mini-detail-grid">
-        <div>
+        <div className="mini-detail-item">
           <span className="detail-label">Country</span>
           <span>{vehicleCountry}</span>
         </div>
-        <div>
+        <div className="mini-detail-item">
           <span className="detail-label">Insurance</span>
           <span>{vehicle.insuranceName || "—"}</span>
         </div>
-        <div>
+        <div className="mini-detail-item">
           <span className="detail-label">Policy</span>
           <span>{vehicle.policyNumber || "—"}</span>
         </div>
-        <div>
+        {/* <div className="mini-detail-item">
           <span className="detail-label">Contact</span>
           <span>{vehicle.contactPhone || vehicle.insuranceContact || vehicle.insuredContact || "—"}</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="vehicle-divider" />
@@ -253,19 +343,60 @@ function VehicleCard({ vehicle, title }) {
       <div className="vehicle-subsection">
         <span className="detail-label">Driver</span>
         <strong>{driver ? joinName(driver.firstName, driver.lastName) : "—"}</strong>
-        <span>{driver?.contact || "No contact provided"}</span>
+        {driver ? (
+          <div className="driver-details-grid">
+            <div className="mini-detail-item">
+              <span className="detail-label">Name</span>
+              <span>{driver.name || joinName(driver.firstName, driver.lastName) || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">Date of birth</span>
+              <span>{driver.dob || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">Country</span>
+              <span>{driver.country || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">Contact</span>
+              <span>{driver.contact || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">Personal ID</span>
+              <span>{driver.personalId || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">License number</span>
+              <span>{driver.licenseNumber || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">License category</span>
+              <span>{driver.licenseCategory || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">License expiry</span>
+              <span>{driver.licenseExpiry || "—"}</span>
+            </div>
+            <div className="mini-detail-item">
+              <span className="detail-label">Address</span>
+              <span>{driver.street || "—"}</span>
+            </div>
+          </div>
+        ) : (
+          <span>No contact provided</span>
+        )}
       </div>
     </article>
   );
 }
 
-function DamageSketch({ damages }) {
+function DamageSketch({ damages, title }) {
   // Render an SVG top-down car diagram and place markers based on damage area
   const primary = damages && damages.length > 0 ? damages[0] : null;
 
   return (
     <div className="damage-sketch">
-      <div className="section-kicker">Damage sketch</div>
+      <div className="section-kicker">{title || "Damage sketch"}</div>
       <div className="damage-outline">
         <div className="damage-svg-wrap" aria-hidden="true">
           <svg className="damage-svg" viewBox="0 0 100 120" preserveAspectRatio="xMidYMid meet">
@@ -331,13 +462,23 @@ function DamageSketch({ damages }) {
 }
 
 function SignaturePanel({ signature, label }) {
+  const [isRotated, setIsRotated] = useState(false);
+
   if (!signature) {
     return <p className="muted">No signature captured for {label}.</p>;
   }
 
   return (
     <div className="signature-panel">
-      <img src={signature} alt={`${label} signature`} />
+      <img
+        src={signature}
+        alt={`${label} signature`}
+        className={isRotated ? "is-rotated" : ""}
+        onLoad={event => {
+          const image = event.currentTarget;
+          setIsRotated(image.naturalHeight > image.naturalWidth);
+        }}
+      />
     </div>
   );
 }
@@ -349,6 +490,29 @@ function joinName(firstName, lastName) {
 function normalizeSignature(signature) {
   if (!signature) return null;
   return signature.startsWith("data:") ? signature : `data:image/png;base64,${signature}`;
+}
+
+function getVehicleLabel(vehicleTarget) {
+  if (Number(vehicleTarget) === 1) return "Vehicle B";
+  if (Number(vehicleTarget) === 0) return "Vehicle A";
+  return "Unassigned";
+}
+
+function groupDamagesByVehicle(damages) {
+  return damages.reduce(
+    (groups, damage) => {
+      if (Number(damage.vehicleTarget) === 1) {
+        groups.vehicleB.push(damage);
+      } else if (Number(damage.vehicleTarget) === 0) {
+        groups.vehicleA.push(damage);
+      } else {
+        groups.vehicleA.push(damage);
+        groups.vehicleB.push(damage);
+      }
+      return groups;
+    },
+    { vehicleA: [], vehicleB: [] }
+  );
 }
 
 function getDamageAnchor(area) {

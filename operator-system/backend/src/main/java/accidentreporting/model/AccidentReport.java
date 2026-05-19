@@ -25,7 +25,11 @@ public class AccidentReport {
     private String address;
     private Double latitude;
     private Double longitude;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String signatureA;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String signatureB;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -25,14 +25,14 @@ export default function ReportsList() {
       {loading ? <p>Loading…</p> : (
         <table className="table">
           <thead>
-            <tr><th>ID</th><th>When</th><th>Location</th><th>Status</th><th /></tr>
+            <tr><th>ID</th><th>When</th><th>Address</th><th>Status</th><th /></tr>
           </thead>
           <tbody>
             {reports.map(r => (
               <tr key={r.id}>
                 <td>{r.id}</td>
                 <td>{new Date(r.timestamp).toLocaleString()}</td>
-                <td>{r.address || r.location}</td>
+                <td>{r.address || "—"}</td>
                 <td>{r.status}</td>
                 <td><Link to={`/reports/${r.id}`}>View</Link></td>
               </tr>

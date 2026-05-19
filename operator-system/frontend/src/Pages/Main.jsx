@@ -137,7 +137,7 @@ export default function Main() {
                       <tr key={report.id}>
                         <td>#{report.id}</td>
                         <td>{report.timestamp ? new Date(report.timestamp).toLocaleString() : "—"}</td>
-                        <td>{report.address || report.location || "—"}</td>
+                        <td>{report.address || "—"}</td>
                         <td>
                           <span className={`status-pill ${STATUS_CLASS[report.status] || ""}`}>
                             {STATUS_LABELS[report.status] || "Unknown"}

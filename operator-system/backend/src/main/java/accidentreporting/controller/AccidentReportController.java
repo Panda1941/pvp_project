@@ -2,6 +2,7 @@ package accidentreporting.controller;
 
 import accidentreporting.dto.*;
 import accidentreporting.model.AccidentReport;
+import accidentreporting.model.Driver;
 import accidentreporting.model.Vehicle;
 import accidentreporting.model.Photo;
 import accidentreporting.model.Damage;
@@ -52,6 +53,42 @@ public class AccidentReportController {
         return ResponseEntity.ok(toDto(saved));
     }
 
+    @PutMapping("/{id}/status")
+    @CacheEvict(value = {"reportList", "reports"}, allEntries = true)
+    public ResponseEntity<AccidentReportDto> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
+        if (request == null || request.status == null || request.status < 0 || request.status > 2) {
+            return ResponseEntity.badRequest().build();
+        }
+        return repo.findById(id)
+                .map(report -> {
+                    report.setStatus(request.status);
+                    if (request.status != null) {
+                        report.setIsDraft(false);
+                    }
+                    AccidentReport saved = repo.save(report);
+                    if (cacheLoggingEnabled) logger.info("Updated status for report {} and evicted caches", saved.getId());
+                    return ResponseEntity.ok(toDto(saved));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @CacheEvict(value = {"reportList", "reports"}, allEntries = true)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        var existing = repo.findById(id);
+        if (existing.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        repo.delete(existing.get());
+        if (cacheLoggingEnabled) logger.info("Deleted report {} and evicted caches", id);
+        return ResponseEntity.noContent().build();
+    }
+
+    public static class StatusUpdateRequest {
+        public Integer status;
+    }
+
     private AccidentReportDto toDto(AccidentReport r) {
         AccidentReportDto dto = new AccidentReportDto();
         dto.id = r.getId();
@@ -85,6 +122,28 @@ public class AccidentReportController {
         d.insuranceName = v.getInsuranceName();
         d.policyNumber = v.getPolicyNumber();
         d.contactPhone = v.getContactPhone();
+        if (v.getDriver() != null) d.driver = toDriverDto(v.getDriver());
+        return d;
+    }
+
+    private DriverDto toDriverDto(Driver driver) {
+        DriverDto d = new DriverDto();
+        d.id = driver.getId();
+        d.name = driver.getName();
+        d.firstName = driver.getFirstName();
+        d.lastName = driver.getLastName();
+        d.dob = driver.getDob();
+        d.country = driver.getCountry();
+        d.street = driver.getStreet();
+        d.houseNumber = driver.getHouseNumber();
+        d.apartment = driver.getApartment();
+        d.city = driver.getCity();
+        d.postalCode = driver.getPostalCode();
+        d.contact = driver.getContact();
+        d.personalId = driver.getPersonalId();
+        d.licenseNumber = driver.getLicenseNumber();
+        d.licenseCategory = driver.getLicenseCategory();
+        d.licenseExpiry = driver.getLicenseExpiry();
         return d;
     }
 
@@ -101,6 +160,7 @@ public class AccidentReportController {
         d.id = p.getId();
         d.area = p.getArea();
         d.severity = p.getSeverity();
+        d.vehicleTarget = p.getVehicleTarget();
         return d;
     }
 
