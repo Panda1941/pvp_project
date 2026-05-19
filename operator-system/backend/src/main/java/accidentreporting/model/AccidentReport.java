@@ -25,6 +25,8 @@ public class AccidentReport {
     private String address;
     private Double latitude;
     private Double longitude;
+    private String signatureA;
+    private String signatureB;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_a_id")
@@ -97,4 +99,10 @@ public class AccidentReport {
 
     public java.util.List<Damage> getDamages() { return damages; }
     public void setDamages(java.util.List<Damage> damages) { this.damages = damages; }
+
+    public String getSignatureA() { return signatureA; }
+    public void setSignatureA(String signatureA) { this.signatureA = signatureA; }
+
+    public String getSignatureB() { return signatureB; }
+    public void setSignatureB(String signatureB) { this.signatureB = signatureB; }
 }

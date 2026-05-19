@@ -1,9 +1,21 @@
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   color: #102238;
-  background: #eef3f8;
+  background:
+    radial-gradient(circle at top left, rgba(29, 112, 213, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(18, 13, 49, 0.1), transparent 28%),
+    linear-gradient(180deg, #f6f9fc 0%, #edf3f8 100%);
   line-height: 1.5;
   font-weight: 400;
+
+  --app-bg-main:
+    radial-gradient(circle at top left, rgba(29, 112, 213, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(18, 13, 49, 0.1), transparent 28%),
+    linear-gradient(180deg, #f6f9fc 0%, #edf3f8 100%);
+  --app-text-main: #102238;
+  --app-card-bg: #ffffff;
+  --app-card-border: #d9e3ee;
+  --app-muted: #627b92;
 }
 
 /* Brand colors imported from Android colors.xml */
@@ -26,6 +38,8 @@
 body {
   margin: 0;
   min-width: 320px;
+  background: var(--app-bg-main);
+  color: var(--app-text-main);
 }
 
 button,
@@ -36,6 +50,13 @@ select {
 
 button {
   cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 a {
@@ -123,7 +144,7 @@ h2 {
 }
 
 .muted {
-  color: #627b92;
+  color: var(--app-muted);
 }
 
 .page-heading,
@@ -141,11 +162,174 @@ h2 {
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #d9e3ee;
+  background: var(--app-card-bg);
+  border: 1px solid var(--app-card-border);
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 10px 24px rgba(16, 34, 56, 0.06);
+}
+
+.theme-toggle {
+  width: 42px;
+  min-width: 42px;
+  min-height: 34px;
+  padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon {
+  width: 21px;
+  height: 21px;
+  display: block;
+}
+
+:root[data-theme="dark"] {
+  --app-bg-main:
+    radial-gradient(circle at top left, rgba(53, 106, 171, 0.16), transparent 34%),
+    radial-gradient(circle at top right, rgba(67, 45, 117, 0.16), transparent 30%),
+    linear-gradient(180deg, #0e1622 0%, #0a111b 100%);
+  --app-text-main: #dbe7f4;
+  --app-card-bg: #121d2a;
+  --app-card-border: #233346;
+  --app-muted: #95abc0;
+}
+
+:root[data-theme="dark"] .topbar {
+  background: #0d1430;
+  border-bottom: 1px solid #24324a;
+}
+
+:root[data-theme="dark"] .topbar .top-nav a,
+:root[data-theme="dark"] .topbar .brand,
+:root[data-theme="dark"] .user-actions .muted {
+  color: #e4ecf8;
+}
+
+:root[data-theme="dark"] .button,
+:root[data-theme="dark"] .nav-link {
+  background: #1a2738;
+  border-color: #30465f;
+  color: #dbe7f4;
+}
+
+:root[data-theme="dark"] th {
+  background: #192636;
+  color: #c5d5e7;
+}
+
+:root[data-theme="dark"] td {
+  border-bottom-color: #22364a;
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select {
+  background: #101c2b;
+  border-color: #31475f;
+  color: #dce9f6;
+}
+
+:root[data-theme="dark"] .detail-item,
+:root[data-theme="dark"] .witness-item,
+:root[data-theme="dark"] .damage-item,
+:root[data-theme="dark"] .signature-panel,
+:root[data-theme="dark"] .report-summary-panel {
+  background: #162434;
+  border-color: #2a3f55;
+}
+
+:root[data-theme="dark"] .vehicle-card,
+:root[data-theme="dark"] .photo-card,
+:root[data-theme="dark"] .damage-visual-card,
+:root[data-theme="dark"] .report-section-card,
+:root[data-theme="dark"] .report-hero-card {
+  background: #121d2a;
+  border-color: #26394e;
+  box-shadow: 0 10px 24px rgba(2, 8, 16, 0.35);
+}
+
+:root[data-theme="dark"] .section-kicker,
+:root[data-theme="dark"] .eyebrow,
+:root[data-theme="dark"] .detail-label,
+:root[data-theme="dark"] .photo-card span,
+:root[data-theme="dark"] .damage-legend .muted {
+  color: #8fb0cf;
+}
+
+:root[data-theme="dark"] .report-description,
+:root[data-theme="dark"] .fault-summary,
+:root[data-theme="dark"] .vehicle-subsection strong,
+:root[data-theme="dark"] .vehicle-card h3 {
+  color: #dbe7f4;
+}
+
+:root[data-theme="dark"] .vehicle-divider {
+  background: #2c4259;
+}
+
+:root[data-theme="dark"] .photo-card {
+  border-color: #2b4057;
+}
+
+:root[data-theme="dark"] .photo-card img {
+  background: #102033;
+}
+
+:root[data-theme="dark"] .damage-outline {
+  border-color: #2a3f55;
+  --diagram-stroke: #8da7c2;
+  --diagram-wheel-fill: #253448;
+}
+
+:root[data-theme="dark"] .damage-svg rect:first-of-type {
+  fill: #252f3d;
+  stroke: #95acc7;
+}
+
+:root[data-theme="dark"] .damage-svg rect:not(:first-of-type) {
+  fill: #2a3749;
+  stroke: #90a7c1;
+}
+
+:root[data-theme="dark"] .damage-svg text {
+  fill: #d8e5f3;
+}
+
+:root[data-theme="dark"] .status-pill {
+  background: #243749;
+  color: #d8e6f4;
+}
+
+:root[data-theme="dark"] .status-pill.is-confirmed {
+  background: #1f4731;
+  color: #bcf0ce;
+}
+
+:root[data-theme="dark"] .status-pill.is-waiting {
+  background: #4d4021;
+  color: #ffe6a0;
+}
+
+:root[data-theme="dark"] .status-pill.is-issue {
+  background: #4a2328;
+  color: #ffb9c0;
+}
+
+:root[data-theme="dark"] .status-pill.is-draft {
+  background: #2a3a4f;
+  color: #c9daed;
+}
+
+:root[data-theme="dark"] .dashboard-stat strong,
+:root[data-theme="dark"] .status-block strong {
+  color: #e2edf8;
+}
+
+:root[data-theme="dark"] .status-block {
+  border-color: #2b4057;
+  background: #162434;
 }
 
 .table-card {
@@ -219,6 +403,11 @@ tr:last-child td {
   font-size: 14px;
 }
 
+.login-status {
+  margin: 10px 0 0;
+  font-size: 13px;
+}
+
 .alert {
   padding: 14px 16px;
   border-radius: 14px;
@@ -284,6 +473,404 @@ select {
   font-size: 14px;
 }
 
+.report-detail-page {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-page {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.dashboard-stat {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-stat strong {
+  font-size: 34px;
+  line-height: 1;
+  color: #1d3a58;
+}
+
+.dashboard-card {
+  display: grid;
+  gap: 14px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.status-block {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #d7e3ef;
+  background: #f6faff;
+}
+
+.status-block strong {
+  font-size: 24px;
+  color: #1d3a58;
+}
+
+.report-detail-hero {
+  align-items: flex-end;
+}
+
+.report-detail-subtitle {
+  max-width: 64ch;
+}
+
+.report-detail-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: #dfe8f3;
+  color: #274562;
+}
+
+.status-pill.is-confirmed {
+  background: #e4f7ea;
+  color: #1b6b34;
+}
+
+.status-pill.is-waiting {
+  background: #fff3d7;
+  color: #9a6500;
+}
+
+.status-pill.is-issue {
+  background: #ffe2e2;
+  color: #a22c2c;
+}
+
+.status-pill.is-draft {
+  background: #e8edf4;
+  color: #4d647d;
+}
+
+.section-kicker {
+  margin: 0 0 8px;
+  color: #54708f;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.report-hero-card,
+.report-section-card {
+  overflow: hidden;
+}
+
+.report-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: 20px;
+}
+
+.report-summary-panel {
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5fb 100%);
+  border: 1px solid #e1ebf4;
+}
+
+.report-description {
+  margin: 0;
+  font-size: 16px;
+  color: #21364a;
+}
+
+.detail-grid,
+.mini-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.mini-detail-grid {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  margin-top: 16px;
+}
+
+.detail-item {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #f8fbff;
+  border: 1px solid #e3edf7;
+}
+
+.detail-label {
+  color: #5e7790;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.report-section {
+  display: grid;
+  gap: 12px;
+}
+
+.vehicle-grid,
+.damage-layout,
+.fault-signature-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.vehicle-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.damage-layout {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+}
+
+.fault-signature-grid {
+  grid-template-columns: minmax(0, 0.9fr) repeat(2, minmax(0, 1fr));
+}
+
+.vehicle-card,
+.signature-panel,
+.photo-card,
+.damage-visual-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.vehicle-card h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.vehicle-divider {
+  height: 1px;
+  margin: 18px 0;
+  background: #e3edf7;
+}
+
+.vehicle-subsection {
+  display: grid;
+  gap: 4px;
+}
+
+.witness-list,
+.damage-list {
+  display: grid;
+  gap: 12px;
+}
+
+.witness-item,
+.damage-item {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f8fbff;
+  border: 1px solid #e3edf7;
+  display: grid;
+  gap: 4px;
+}
+
+.damage-sketch {
+  display: grid;
+  gap: 14px;
+}
+
+.damage-outline {
+  position: relative;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: inherit; /* match surrounding card so dark mode looks consistent */
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  --diagram-car-fill: transparent;
+  --diagram-stroke: rgba(22,40,59,0.9);
+  --diagram-wheel-fill: #ddd;
+  --diagram-marker-minor: #ff63b2;
+  --diagram-marker-major: #ff4a6a;
+  --diagram-marker-critical: #c84bff;
+}
+
+/* SVG diagram wrapper and styling for damage markers */
+.damage-svg-wrap {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 18px 12px;
+}
+
+.damage-svg {
+  width: min(72%, 380px);
+  height: auto;
+  display: block;
+}
+
+.damage-svg circle {
+  filter: drop-shadow(0 6px 12px rgba(14,31,49,0.18));
+}
+
+.damage-outline path,
+.damage-outline rect,
+.damage-outline circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.damage-caption {
+  margin: 0;
+}
+
+.damage-legend {
+  padding: 10px 14px 0;
+}
+
+.damage-legend .muted {
+  color: #5e7790;
+  margin: 0;
+  font-size: 13px;
+}
+
+.damage-car {
+  position: relative;
+  width: min(72%, 380px);
+  height: 220px;
+  border-radius: 44px;
+}
+
+.damage-car::before,
+.damage-car::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  height: 54px;
+  border-radius: 34px 34px 20px 20px;
+  background: linear-gradient(180deg, rgba(22, 40, 59, 0.12), rgba(22, 40, 59, 0));
+}
+
+.damage-car::before {
+  top: 16px;
+}
+
+.damage-car::after {
+  bottom: 18px;
+}
+
+.damage-wheel {
+  position: absolute;
+  width: 42px;
+  height: 64px;
+  border-radius: 24px;
+  border: 3px solid var(--diagram-stroke);
+  background: var(--diagram-wheel-fill);
+  bottom: -30px;
+}
+
+.damage-wheel--front-left { left: -26px; }
+.damage-wheel--front-right { left: 54px; }
+.damage-wheel--rear-left { right: 54px; }
+.damage-wheel--rear-right { right: -26px; }
+
+.damage-marker {
+  filter: drop-shadow(0 6px 12px rgba(14,31,49,0.18));
+}
+
+.damage-marker.is-minor circle { fill: var(--diagram-marker-minor); }
+.damage-marker.is-major circle { fill: var(--diagram-marker-major); }
+.damage-marker.is-critical circle { fill: var(--diagram-marker-critical); }
+
+.damage-label {
+  position: absolute;
+  color: #5e7790;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.damage-label--front { top: 14px; }
+.damage-label--rear { bottom: 14px; }
+
+.damage-caption {
+  margin: 0;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.photo-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid #dce7f1;
+  box-shadow: 0 10px 24px rgba(16, 34, 56, 0.05);
+}
+
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  background: #eef3f8;
+}
+
+.photo-card span {
+  color: #304861;
+  font-size: 14px;
+}
+
+.signature-panel {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px dashed #c9d7e4;
+  background: #f8fbff;
+}
+
+.signature-panel img {
+  max-width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  display: block;
+}
+
+.fault-summary {
+  margin-top: 0;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -302,8 +889,23 @@ select {
     padding: 24px 14px 40px;
   }
 
+  .report-hero-grid,
+  .vehicle-grid,
+  .damage-layout,
+  .fault-signature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
   th,
   td {
     padding: 12px;
+  }
+
+  .damage-car {
+    width: min(84%, 320px);
   }
 }
