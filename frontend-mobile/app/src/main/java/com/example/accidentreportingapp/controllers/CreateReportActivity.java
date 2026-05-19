@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 import java.io.IOException;
+
+import network.api.ReportApi;
+import network.client.ApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * CreateReportActivity implements a multi-step wizard for reporting a new accident.
@@ -1144,6 +1151,9 @@ public class CreateReportActivity extends BaseActivity {
                 .setMessage(R.string.dialog_finish_message)
                 .setPositiveButton(R.string.dialog_yes, (dialog, which) -> {
                     showToast(getString(R.string.toast_report_created));
+
+                    createReportInDB(draftReport);
+
                     finish();
                 })
                 .setNegativeButton(R.string.dialog_no, (dialog, which) -> dialog.dismiss())
@@ -1218,5 +1228,24 @@ public class CreateReportActivity extends BaseActivity {
                         (View) v.findViewById(R.id.btn_delete_photo).getParent() : v.findViewById(R.id.btn_delete_photo);
             }
         }
+    }
+    private static void createReportInDB(AccidentReport draftReport)
+    {
+        ReportApi api = ApiClient.getClient().create(ReportApi.class);
+        Call<AccidentReport> call = api.createReport(draftReport);
+
+        call.enqueue(new Callback<AccidentReport>() {
+            @Override
+            public void onResponse(Call<AccidentReport> call, Response<AccidentReport> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    AccidentReport saved = response.body();
+                    String id = saved.getId();
+                }
+            }
+            @Override
+            public void onFailure(Call<AccidentReport> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }
