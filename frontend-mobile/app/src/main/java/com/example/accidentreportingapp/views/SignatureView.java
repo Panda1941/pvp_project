@@ -68,13 +68,16 @@ public class SignatureView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                getParent().requestDisallowInterceptTouchEvent(true);
                 performClick();
                 drawPath.moveTo(touchX, touchY);
                 break;
             case MotionEvent.ACTION_MOVE:
+                getParent().requestDisallowInterceptTouchEvent(true);
                 drawPath.lineTo(touchX, touchY);
                 break;
             case MotionEvent.ACTION_UP:
+                getParent().requestDisallowInterceptTouchEvent(true);
                 paths.add(new Path(drawPath));
                 drawPath.reset();
                 break;
@@ -104,22 +107,30 @@ public class SignatureView extends View {
     public String toBase64Png() {
         int width = getWidth();
         int height = getHeight();
-        
-        if (width <= 0 || height <= 0) return "";
-        
+
+        //if (width <= 0 || height <= 0) return "";
+        width = width > 0 ? width : 400;
+        height = height > 0 ? height : 200;
+
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        
+        canvas.drawColor(android.graphics.Color.WHITE);
+
+        int originalColor = drawPaint.getColor();
+        drawPaint.setColor(android.graphics.Color.BLACK);
+
         // Draw the current signature paths onto the bitmap
         for (Path path : paths) {
             canvas.drawPath(path, drawPaint);
         }
 
+        drawPaint.setColor(originalColor);
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         // PNG is a lossless format, so quality 100 is standard.
         // We use @SuppressLint("WrongThread") because this is currently called from the UI thread during step saving.
         boolean success = bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        
+
         if (!success) {
             bitmap.recycle();
             return "";
@@ -127,7 +138,7 @@ public class SignatureView extends View {
 
         byte[] bytes = outputStream.toByteArray();
         String result = Base64.encodeToString(bytes, Base64.DEFAULT);
-        
+
         bitmap.recycle();
         return result;
     }
