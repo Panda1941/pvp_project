@@ -147,9 +147,9 @@ public class ReportDetailsActivity extends BaseActivity {
         driverLicense.setText(lInfo);
 
         StringBuilder circStr = new StringBuilder();
-        if (vehicle.isParkedStopped) circStr.append("• ").append(getString(R.string.circ_parked)).append("\n");
-        if (vehicle.isLeavingParking) circStr.append("• ").append(getString(R.string.circ_leaving)).append("\n");
-        if (vehicle.isReversing) circStr.append("• ").append(getString(R.string.circ_reversing)).append("\n");
+        if (vehicle.isParkedStopped) circStr.append("• ").append(getString(R.string.circ_parked_short)).append("\n");
+        if (vehicle.isLeavingParking) circStr.append("• ").append(getString(R.string.circ_leaving_parking_short)).append("\n");
+        if (vehicle.isReversing) circStr.append("• ").append(getString(R.string.circ_reversing_short)).append("\n");
 
         circumstances.setText(circStr.length() > 0 ? circStr.toString().trim() : "---");
     }

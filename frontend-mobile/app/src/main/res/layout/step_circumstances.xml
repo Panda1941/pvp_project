@@ -1,44 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/text_step_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/label_circumstances"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select all that apply for this vehicle:"
-        android:layout_marginBottom="16dp"/>
+        <TextView
+            android:id="@+id/text_step_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Circumstances"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textColor="?android:attr/textColorPrimary" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/check_parked"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/circ_parked"
-        android:layout_marginBottom="8dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Select all that apply for each vehicle"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/check_leaving"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/circ_leaving"
-        android:layout_marginBottom="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/check_reversing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/circ_reversing"
-        android:layout_marginBottom="8dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/tab_circ_a"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Vehicle A" />
 
-</LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/tab_circ_b"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0.6"
+                android:text="Vehicle B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/circumstances_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_parked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was stationary / parked" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_stopping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was stopping" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_starting_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was starting off" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_opening_door"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was opening a door" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_leaving_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was leaving a parking space, private road, or path" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_entering_parking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was entering a parking space, private road, or path" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_entering_roundabout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was entering a roundabout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_circulating_roundabout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was circulating in a roundabout" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_rear_end_same"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Struck the rear of the same-direction vehicle in same lane" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_changing_lanes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was changing lanes" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_overtaking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was overtaking" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_turning_right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was turning right" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_turning_left"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was turning left" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_reversing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was reversing" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_entering_opposite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was encroaching on the opposite lane" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_from_right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Was coming from the right at an intersection" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_failed_priority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Failed to observe priority / ran a red light" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

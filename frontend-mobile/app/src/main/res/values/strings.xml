@@ -46,10 +46,38 @@
     <string name="header_vehicle_b">Vehicle B</string>
     <string name="label_insured">Insured / Policy Holder</string>
     <string name="label_vehicle">Vehicle Information</string>
+    <string name="header_insurance_info">Insurance Information</string>
     <string name="label_insurance_company">Insurance Company</string>
     <string name="label_driver">Driver Information</string>
-    <string name="label_circumstances">Circumstances</string>
+    <string name="label_circumstances">Accident Circumstances</string>
+    <string name="header_circumstances">Accident Circumstances</string>
     <string name="header_photos">Accident Photos</string>
+    <string name="header_vehicle_insurance">Vehicle &amp; Insurance Info</string>
+    <string name="header_insurance_driver">Insurance &amp; Driver Information</string>
+    <string name="header_driver_vehicle">Driver and Vehicle Info</string>
+    <string name="header_witnesses">Witnesses</string>
+    <string name="header_damage">Damage Diagram</string>
+    <string name="header_signature">Signature &amp; Fault</string>
+
+    <!-- Plate Step Strings -->
+    <string name="header_license_plates">License Plates</string>
+    <string name="label_your_vehicle">Your vehicle</string>
+    <string name="label_other_party">Other party</string>
+    <string name="hint_plate_example">ABC123</string>
+    <string name="label_has_trailer">Has trailer</string>
+    <string name="hint_trailer_plate">Trailer plate</string>
+    <string name="label_no_plate">No license plate</string>
+
+    <!-- Time & Location Step Strings -->
+    <string name="header_time_location">Time &amp; Location</string>
+    <string name="label_date_mandatory">Date *</string>
+    <string name="label_time_mandatory">Time *</string>
+    <string name="label_address">Address</string>
+    <string name="hint_address_format">Street, house no., city</string>
+    <string name="hint_driver_address">Full Address (Street, House no., City, etc.)</string>
+    <string name="label_or">OR</string>
+    <string name="label_map_instruction">Pin accident location on map *</string>
+    <string name="placeholder_map_loading">Map loading...</string>
 
     <!-- Field Labels -->
     <string name="field_name">Name:</string>
@@ -82,6 +110,74 @@
     <string name="label_circ_prompt">Select all that apply for this vehicle:</string>
     <string name="btn_addphoto">Tap to Add Photo</string>
 
+    <!-- Summary Sections -->
+    <string name="summary_general_info">GENERAL INFORMATION</string>
+    <string name="summary_date_time">Date &amp; Time: %1$s</string>
+    <string name="summary_address">Address: %1$s</string>
+    <string name="summary_not_specified">Not specified</string>
+    <string name="summary_coordinates">Coordinates: %1$.5f, %2$.5f</string>
+    <string name="summary_description">Description: %1$s</string>
+    <string name="summary_witnesses">WITNESSES</string>
+    <string name="summary_no_witnesses">No witnesses recorded.</string>
+    <string name="summary_fault_signatures">FAULT &amp; SIGNATURES</string>
+    <string name="summary_fault_not_assigned">At-fault party: Not assigned</string>
+    <string name="summary_fault_both">At-fault party: Both vehicles</string>
+    <string name="summary_fault_vehicle">At-fault party: Vehicle %1$s</string>
+    <string name="summary_signature_a">Signature A: %1$s</string>
+    <string name="summary_signature_b">Signature B: %1$s</string>
+    <string name="summary_signed">✓ Signed</string>
+    <string name="summary_missing">✗ Missing</string>
+
+    <!-- Vehicle Summary -->
+    <string name="summary_plate">Plate: %1$s</string>
+    <string name="summary_trailer">Trailer: %1$s</string>
+    <string name="summary_yes_no_plate">Yes (no plate)</string>
+    <string name="summary_vehicle_label">Vehicle: %1$s</string>
+    <string name="summary_na">N/A</string>
+    <string name="summary_driver">Driver: %1$s %2$s</string>
+    <string name="summary_contact">Contact: %1$s</string>
+    <string name="summary_insurance">Insurance: %1$s</string>
+    <string name="summary_policy_format">(Policy: %1$s)</string>
+    <string name="summary_damages">Damages: %1$s</string>
+    <string name="summary_none_noted">None noted</string>
+    <string name="summary_circumstances">Circumstances: %1$s</string>
+    <string name="summary_none_selected">None selected</string>
+
+    <!-- PDF Generation -->
+    <string name="pdf_title">Accident Report</string>
+    <string name="pdf_label_location">Location: %1$s</string>
+    <string name="pdf_label_description">Description: %1$s</string>
+    <string name="pdf_label_date">Date: %1$s</string>
+    <string name="pdf_header_witnesses">Witnesses</string>
+    <string name="pdf_header_photos">Photos</string>
+    <string name="pdf_label_owner">Owner: </string>
+    <string name="pdf_label_address">Address: </string>
+    <string name="pdf_label_vehicle">Vehicle: </string>
+    <string name="pdf_label_plate">Plate: </string>
+    <string name="pdf_label_insurance">Insurance: </string>
+    <string name="pdf_label_policy">Policy: </string>
+    <string name="pdf_label_driver">Driver: </string>
+    <string name="pdf_label_dob">DOB: </string>
+    <string name="pdf_label_license">License: </string>
+    <string name="pdf_label_circumstances">Circumstances: </string>
+
+    <!-- Operational Messages -->
+    <string name="msg_permissions_not_granted">Location/Camera permissions not granted — you can enter location manually.</string>
+    <string name="msg_generating_pdf">Generating...</string>
+    <string name="msg_saved_to_downloads">Saved to Downloads</string>
+    <string name="msg_failed_pdf">Failed to generate PDF</string>
+    <string name="msg_location_denied">Location permission denied. You can enter location manually.</string>
+    <string name="msg_location_error">Permission error while accessing location</string>
+    <string name="label_lat_lon">Lat: %1$.5f, Lon: %2$.5f</string>
+    <string name="fault_summary_a">Vehicle A selected as the at-fault party.</string>
+    <string name="fault_summary_b">Vehicle B selected as the at-fault party.</string>
+    <string name="fault_summary_both">Both vehicles selected as at-fault.</string>
+    <string name="label_vehicle_a">Vehicle A</string>
+    <string name="label_vehicle_b">Vehicle B</string>
+    <string name="label_none">---</string>
+    <string name="rationale_location">Allow location to auto-fill your current accident location.</string>
+    <string name="rationale_camera">Camera permission required to take accident photos.</string>
+
     <!-- Formatting -->
     <string name="format_address">%1$s, %2$s %3$s</string>
     <string name="format_vehicle_info">%1$s (%2$s)</string>
@@ -89,10 +185,37 @@
     <string name="format_driver_info">%1$s (%2$s)</string>
     <string name="format_license_info">%1$s %2$s [%3$s]</string>
 
-    <!-- Circumstances -->
-    <string name="circ_parked">Parked / Stopped</string>
-    <string name="circ_leaving">Leaving parking / opening door</string>
-    <string name="circ_reversing">Reversing</string>
+    <!-- Circumstances (Short) -->
+    <string name="circ_parked_short">Parked</string>
+    <string name="circ_stopping_short">Stopping</string>
+    <string name="circ_starting_off_short">Starting off</string>
+    <string name="circ_opening_door_short">Opening door</string>
+    <string name="circ_leaving_parking_short">Leaving parking</string>
+    <string name="circ_entering_parking_short">Entering parking</string>
+    <string name="circ_entering_roundabout_short">Entering roundabout</string>
+    <string name="circ_in_roundabout_short">In roundabout</string>
+    <string name="circ_rear_end_short">Rear-end (same lane)</string>
+    <string name="circ_changing_lanes_short">Changing lanes</string>
+    <string name="circ_overtaking_short">Overtaking</string>
+    <string name="circ_turning_right_short">Turning right</string>
+    <string name="circ_turning_left_short">Turning left</string>
+    <string name="circ_reversing_short">Reversing</string>
+    <string name="circ_opposite_lane_short">Opposite lane</string>
+    <string name="circ_from_right_short">From right</string>
+    <string name="circ_failed_priority_short">Failed priority</string>
+
+    <!-- Damage Zones -->
+    <string name="label_front">FRONT</string>
+    <string name="label_rear">REAR</string>
+    <string name="zone_front_left">front-left</string>
+    <string name="zone_front_right">front-right</string>
+    <string name="zone_front_center">front-center</string>
+    <string name="zone_rear_left">rear-left</string>
+    <string name="zone_rear_right">rear-right</string>
+    <string name="zone_rear_center">rear-center</string>
+    <string name="zone_left_side">left-side</string>
+    <string name="zone_right_side">right-side</string>
+    <string name="zone_center">center</string>
 
     <!-- Dialogs -->
     <string name="dialog_finish_title">Confirmation</string>
@@ -102,13 +225,14 @@
     <string name="toast_report_created">Accident Report Created Successfully (Demo)</string>
 
     <!-- Mock Data (For Demo) -->
-    <string name="mock_loc_kaunas">Kaunas, Savanoriu ave. 123</string>
-    <string name="mock_loc_vilnius">Vilnius, Gediminas ave. 1</string>
-    <string name="mock_loc_klaipeda">Klaipeda, Taikos ave. 50</string>
-    <string name="mock_desc_1">Side-swipe collision near the intersection. Both drivers were moving.</string>
-    <string name="mock_desc_2">The driver of vehicle A was reversing and didn\'t see vehicle B. Damage confirmed by both parties.</string>
-    <string name="mock_desc_3">Missing insurance details for Vehicle B. License plate does not match policy.</string>
+    <string name="mock_unknown_driver">Unknown Driver</string>
     <string name="mock_country_lithuania">Lithuania</string>
     <string name="mock_insurance_missing">Missing data</string>
+    <string name="mock_loc_kaunas">Kaunas, Lithuania</string>
+    <string name="mock_loc_vilnius">Vilnius, Lithuania</string>
+    <string name="mock_loc_klaipeda">Klaipėda, Lithuania</string>
+    <string name="mock_desc_1">Minor fender bender at the roundabout.</string>
+    <string name="mock_desc_2">Side-swipe collision while changing lanes.</string>
+    <string name="mock_desc_3">Reverse collision in a parking lot.</string>
 
 </resources>

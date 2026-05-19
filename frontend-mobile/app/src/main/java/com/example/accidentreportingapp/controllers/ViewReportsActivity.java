@@ -139,7 +139,7 @@ public class ViewReportsActivity extends BaseActivity {
         VehicleSection v3B = r3.getVehicleB();
         v3B.vehicleRegistration = "GHE-666";
         v3B.vehicleMakeType = "BMW 520d";
-        v3B.driverName = "Nežinomas Vairuotojas";
+        v3B.driverName = getString(R.string.mock_unknown_driver);
         v3B.insuranceName = getString(R.string.mock_insurance_missing);
         v3B.isLeavingParking = true;
 
