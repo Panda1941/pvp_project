@@ -354,14 +354,14 @@ public class CreateReportActivity extends BaseActivity {
             container.removeAllViews();
             container.addView(diagramViewA);
             tabA.setAlpha(1.0f);
-            tabB.setAlpha(0.6f);
+            tabB.setAlpha(0.3f);
         });
 
         tabB.setOnClickListener(v -> {
             activeDamageTab = 1;
             container.removeAllViews();
             container.addView(diagramViewB);
-            tabA.setAlpha(0.6f);
+            tabA.setAlpha(0.3f);
             tabB.setAlpha(1.0f);
         });
     }
@@ -452,14 +452,14 @@ public class CreateReportActivity extends BaseActivity {
             activeCircumstancesTab = 0;
             loadCircumstances(draftReport.getVehicleA(), stepView);
             tabA.setAlpha(1.0f);
-            tabB.setAlpha(0.6f);
+            tabB.setAlpha(0.3f);
         });
 
         tabB.setOnClickListener(v -> {
             saveCircumstances(activeCircumstancesTab == 0 ? draftReport.getVehicleA() : draftReport.getVehicleB(), stepView);
             activeCircumstancesTab = 1;
             loadCircumstances(draftReport.getVehicleB(), stepView);
-            tabA.setAlpha(0.6f);
+            tabA.setAlpha(0.3f);
             tabB.setAlpha(1.0f);
         });
     }
@@ -480,7 +480,7 @@ public class CreateReportActivity extends BaseActivity {
             loadVehicleInfo(draftReport.getVehicleA(), stepView);
             loadDriverInfo(draftReport.getVehicleA(), stepView);
             tabA.setAlpha(1.0f);
-            tabB.setAlpha(0.6f);
+            tabB.setAlpha(0.3f);
         });
 
         tabB.setOnClickListener(v -> {
@@ -489,7 +489,7 @@ public class CreateReportActivity extends BaseActivity {
             activeVehicleInfoTab = 1;
             loadVehicleInfo(draftReport.getVehicleB(), stepView);
             loadDriverInfo(draftReport.getVehicleB(), stepView);
-            tabA.setAlpha(0.6f);
+            tabA.setAlpha(0.3f);
             tabB.setAlpha(1.0f);
         });
     }
@@ -539,7 +539,7 @@ public class CreateReportActivity extends BaseActivity {
                     signatureViewA.isEmpty() ? View.VISIBLE : View.GONE
             );
             tabSigA.setAlpha(1.0f);
-            tabSigB.setAlpha(0.6f);
+            tabSigB.setAlpha(0.3f);
         });
 
         tabSigB.setOnClickListener(v -> {
@@ -549,7 +549,7 @@ public class CreateReportActivity extends BaseActivity {
             tvSignHint.setVisibility(
                     signatureViewB.isEmpty() ? View.VISIBLE : View.GONE
             );
-            tabSigA.setAlpha(0.6f);
+            tabSigA.setAlpha(0.3f);
             tabSigB.setAlpha(1.0f);
         });
 
@@ -753,17 +753,14 @@ public class CreateReportActivity extends BaseActivity {
 
         switch (currentStep) {
             case STEP_PLATES:
-                textTitle.setText(R.string.title_create_report);
                 stepContainer.addView(viewPlates);
                 loadPlatesData();
                 break;
             case STEP_TIME_LOCATION:
-                textTitle.setText(R.string.title_create_report);
                 stepContainer.addView(viewTimeLocation);
                 loadTimeLocationData();
                 break;
             case STEP_WITNESSES:
-                textTitle.setText(R.string.title_create_report);
                 stepContainer.addView(viewWitnesses);
                 break;
             case STEP_PHOTOS:
