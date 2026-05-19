@@ -33,6 +33,7 @@ public class AccidentReport implements Serializable {
     private VehicleSection vehicleB;
 
     private List<Witness> witnesses;
+    private List<Photo> photos;
     private List<Damage> damages;
     private String address;
     private Double latitude;
@@ -51,6 +52,7 @@ public class AccidentReport implements Serializable {
         this.vehicleA = new VehicleSection();
         this.vehicleB = new VehicleSection();
         this.witnesses = new ArrayList<>();
+        this.photos = new ArrayList<>();
         this.damages = new ArrayList<>();
     }
 
@@ -159,6 +161,14 @@ public class AccidentReport implements Serializable {
 
     public void setDamages(List<Damage> damages) {
         this.damages = damages;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 
     public String getAddress() {

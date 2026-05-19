@@ -2,6 +2,18 @@ import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 
+const STATUS_LABELS = {
+  0: "Waiting",
+  1: "Confirmed",
+  2: "Issue"
+};
+
+const STATUS_CLASS = {
+  0: "is-waiting",
+  1: "is-confirmed",
+  2: "is-issue"
+};
+
 export default function ReportsList() {
   const { user } = useContext(AuthContext);
   const [reports, setReports] = useState([]);
@@ -25,15 +37,19 @@ export default function ReportsList() {
       {loading ? <p>Loading…</p> : (
         <table className="table">
           <thead>
-            <tr><th>ID</th><th>When</th><th>Location</th><th>Status</th><th /></tr>
+            <tr><th>ID</th><th>When</th><th>Address</th><th>Status</th><th /></tr>
           </thead>
           <tbody>
             {reports.map(r => (
               <tr key={r.id}>
                 <td>{r.id}</td>
                 <td>{new Date(r.timestamp).toLocaleString()}</td>
-                <td>{r.address || r.location}</td>
-                <td>{r.status}</td>
+                <td>{r.address || "—"}</td>
+                <td>
+                  <span className={`status-pill ${STATUS_CLASS[r.status] || ""}`}>
+                    {STATUS_LABELS[r.status] || "Unknown"}
+                  </span>
+                </td>
                 <td><Link to={`/reports/${r.id}`}>View</Link></td>
               </tr>
             ))}

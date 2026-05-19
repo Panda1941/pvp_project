@@ -10,7 +10,9 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String url; // stored path or URL to the uploaded photo
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String url; // stored path, URL or data URL
     private String description;
     private Integer ord; // ordering index
 
