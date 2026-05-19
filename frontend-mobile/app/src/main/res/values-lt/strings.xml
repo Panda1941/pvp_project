@@ -30,7 +30,7 @@
     <string name="theme_dark">Tamsi</string>
 
     <!-- Report Details Strings -->
-    <string name="title_report_details">Informacija apie įvykį</string>
+    <string name="title_report_details">Įvykio info</string>
     <string name="label_location">Vieta</string>
     <string name="label_date_time">Data ir laikas</string>
     <string name="label_plate_number">Valstybinis numeris</string>

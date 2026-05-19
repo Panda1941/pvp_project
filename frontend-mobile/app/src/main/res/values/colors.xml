@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Custom Theme Colors -->
-    <color name="primary">#120D31</color> <!-- Deep Midnight -->
+    <color name="primary">#003B8E</color> <!-- Logo Blue -->
     <color name="primary_dark">#302F4D</color> <!-- Dark Slate -->
     <color name="primary_container">#F0D3F7</color> <!-- Pale Lavender -->
     <color name="accent">#A57982</color> <!-- Old Rose -->

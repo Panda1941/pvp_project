@@ -28,20 +28,22 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tab_damage_a"
-            style="@style/Widget.MaterialComponents.Button"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Vehicle A" />
+            android:text="@string/header_vehicle_a"
+            android:layout_marginEnd="4dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tab_damage_b"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="Vehicle B" />
+            android:text="@string/header_vehicle_b"
+            android:layout_marginStart="4dp"
+            android:alpha="0.3"/>
     </LinearLayout>
 
     <FrameLayout
