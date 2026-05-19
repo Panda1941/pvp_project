@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.map.secret)
 }
 
 android {
@@ -41,7 +40,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
-    implementation(libs.google.maps)
     implementation(libs.constraintlayout)
     // Fused Location Provider (single-shot high-accuracy requests)
     implementation("com.google.android.gms:play-services-location:21.0.1")
