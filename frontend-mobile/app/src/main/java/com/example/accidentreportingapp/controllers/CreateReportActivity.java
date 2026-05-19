@@ -1,8 +1,8 @@
 package com.example.accidentreportingapp.controllers;
-import com.example.accidentreportingapp.controllers.PdfReportGenerator;
 
 import android.content.Context;
-import android.graphics.PointF;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +43,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -55,7 +54,7 @@ import java.util.Locale;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import java.io.File;
+
 import java.io.IOException;
 
 /**
@@ -622,10 +621,26 @@ public class CreateReportActivity extends BaseActivity {
     private void applyLocationToForm(Location loc) {
         if (loc == null) return;
         TextInputEditText editLoc = v(viewTimeLocation, R.id.edit_address);
-        String text = getString(R.string.label_lat_lon, loc.getLatitude(), loc.getLongitude());
-        if (editLoc != null) editLoc.setText(text);
+        String address = convertCoordsToAddress(loc.getLatitude(),loc.getLongitude());
+        if (editLoc != null) editLoc.setText(address);
         draftReport.setLatitude(loc.getLatitude());
         draftReport.setLongitude(loc.getLongitude());
+    }
+    private String convertCoordsToAddress(double latitude, double longitude)
+    {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses != null && !addresses.isEmpty())
+            {
+                return addresses.get(0).getAddressLine(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void updateStepUI() {
