@@ -15,14 +15,14 @@
             android:id="@+id/header_damage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Damage"
+            android:text="@string/label_damage"
             android:textAppearance="?attr/textAppearanceHeadline5" />
 
         <TextView
             android:id="@+id/subtitle_damage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mark damaged areas for each vehicle"
+            android:text="@string/label_mark_damages"
             android:textAppearance="?attr/textAppearanceSubtitle1" />
 
         <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Vehicle A" />
+                android:text="@string/header_vehicle_a" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/tab_damage_b"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="Vehicle B" />
+                android:text="@string/header_vehicle_b" />
         </LinearLayout>
 
         <FrameLayout
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="1. Use arrow to mark the primary point of impact\n2. Tap on a vehicle area to mark it as damaged"
+            android:text="@string/instr_damage"
             android:textAppearance="?attr/textAppearanceBody2" />
 
     </LinearLayout>

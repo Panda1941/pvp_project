@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:hint="First name *">
+            android:hint="@string/field_first_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_witness_first_name"
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:hint="Last name *">
+            android:hint="@string/field_last_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_witness_last_name"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:hint="Phone number (e.g. +370...)">
+            android:hint="@string/hint_phone_format">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_witness_phone"
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Remove"
+            android:text="@string/btn_remove"
             android:textColor="@color/status_issue" />
 
     </LinearLayout>

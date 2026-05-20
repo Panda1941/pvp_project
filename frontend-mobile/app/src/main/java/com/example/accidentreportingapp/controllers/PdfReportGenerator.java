@@ -11,6 +11,7 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.util.Base64;
 
+import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
 import com.example.accidentreportingapp.models.Damage;
 import com.example.accidentreportingapp.models.VehicleSection;
@@ -26,9 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Generates a unified English PDF report of the accident.
- * This class ensures that all labels and headers are in English for official processing,
- * regardless of the user's interface language.
+ * Generates a unified localized PDF report of the accident.
  */
 public class PdfReportGenerator {
 
@@ -38,8 +37,10 @@ public class PdfReportGenerator {
     private static final int START_Y = 80;
     private static final int LINE_HEIGHT = 30;
 
-    // Fixed English Date Format for official PDF
-    private static final SimpleDateFormat PDF_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+    // Localized Date Format for official PDF
+    private static SimpleDateFormat getPdfDateFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+    }
 
     public static File generate(Context context, AccidentReport report, List<String> photos) throws IOException {
         PdfDocument pdfDocument = new PdfDocument();
@@ -76,31 +77,31 @@ public class PdfReportGenerator {
         int y = START_Y;
 
         // HEADER
-        canvas.drawText("ACCIDENT REPORT / EUROPEAN ACCIDENT STATEMENT", START_X, y, titlePaint);
+        canvas.drawText(context.getString(R.string.pdf_title), START_X, y, titlePaint);
         y += 60;
         canvas.drawLine(START_X, y, PAGE_WIDTH - START_X, y, linePaint);
         y += 50;
 
         // 1. GENERAL INFORMATION
-        canvas.drawText("1. GENERAL INFORMATION", START_X, y, subTitlePaint);
+        canvas.drawText("1. " + context.getString(R.string.summary_general_info), START_X, y, subTitlePaint);
         y += 40;
 
-        drawField(canvas, "Date & Time:", PDF_DATE_FORMAT.format(new Date(report.getTimestamp())), START_X, y, textPaint, labelPaint);
+        drawField(canvas, context.getString(R.string.date) + " & " + context.getString(R.string.time) + ":", getPdfDateFormat().format(new Date(report.getTimestamp())), START_X, y, textPaint, labelPaint);
         y += LINE_HEIGHT;
-        drawField(canvas, "Address:", report.getAddress() != null ? report.getAddress() : "N/A", START_X, y, textPaint, labelPaint);
+        drawField(canvas, context.getString(R.string.field_address), report.getAddress() != null ? report.getAddress() : context.getString(R.string.summary_na), START_X, y, textPaint, labelPaint);
         y += LINE_HEIGHT;
         
         if (report.getLatitude() != null && report.getLongitude() != null) {
-            String coords = String.format(Locale.US, "%.6f, %.6f", report.getLatitude(), report.getLongitude());
+            String coords = String.format(Locale.getDefault(), "%.6f, %.6f", report.getLatitude(), report.getLongitude());
             drawField(canvas, "Coordinates:", coords, START_X, y, textPaint, labelPaint);
             y += LINE_HEIGHT;
         }
 
         y += 10;
-        canvas.drawText("Description of accident:", START_X, y, labelPaint);
+        canvas.drawText(context.getString(R.string.label_description) + ":", START_X, y, labelPaint);
         y += 25;
         String desc = report.getDescription();
-        if (desc == null || desc.isEmpty()) desc = "No description provided.";
+        if (desc == null || desc.isEmpty()) desc = context.getString(R.string.summary_none_selected);
         y = drawWrappedText(canvas, desc, START_X + 20, y, PAGE_WIDTH - (START_X * 2) - 20, textPaint, LINE_HEIGHT);
         
         y += 40;
@@ -112,8 +113,8 @@ public class PdfReportGenerator {
         int colWidth = (PAGE_WIDTH - (START_X * 2) - 60) / 2;
         int yVehiclesStart = y;
         
-        int yA = drawVehicleColumn(canvas, "VEHICLE A", report.getVehicleA(), 0, report, START_X, yVehiclesStart, colWidth, textPaint, labelPaint, headerPaint);
-        int yB = drawVehicleColumn(canvas, "VEHICLE B", report.getVehicleB(), 1, report, midX + 30, yVehiclesStart, colWidth, textPaint, labelPaint, headerPaint);
+        int yA = drawVehicleColumn(context, canvas, context.getString(R.string.label_vehicle_a), report.getVehicleA(), 0, report, START_X, yVehiclesStart, colWidth, textPaint, labelPaint, headerPaint);
+        int yB = drawVehicleColumn(context, canvas, context.getString(R.string.label_vehicle_b), report.getVehicleB(), 1, report, midX + 30, yVehiclesStart, colWidth, textPaint, labelPaint, headerPaint);
         
         y = Math.max(yA, yB) + 60;
 
@@ -126,17 +127,17 @@ public class PdfReportGenerator {
         y = START_Y;
 
         // 3. WITNESSES
-        canvas.drawText("3. WITNESSES", START_X, y, subTitlePaint);
+        canvas.drawText("3. " + context.getString(R.string.summary_witnesses), START_X, y, subTitlePaint);
         y += 40;
         if (report.getWitnesses() == null || report.getWitnesses().isEmpty()) {
-            canvas.drawText("No witnesses recorded.", START_X + 20, y, textPaint);
+            canvas.drawText(context.getString(R.string.summary_no_witnesses), START_X + 20, y, textPaint);
             y += LINE_HEIGHT;
         } else {
             for (Witness w : report.getWitnesses()) {
                 String firstName = w.getFirstName() != null ? w.getFirstName() : "";
                 String lastName = w.getLastName() != null ? w.getLastName() : "";
                 String name = firstName + " " + lastName;
-                String phone = w.getPhone() != null ? "Tel: " + w.getPhone() : "No contact";
+                String phone = w.getPhone() != null ? context.getString(R.string.field_phone) + ": " + w.getPhone() : context.getString(R.string.summary_na);
                 canvas.drawText("• " + name.trim() + " (" + phone + ")", START_X + 20, y, textPaint);
                 y += LINE_HEIGHT;
             }
@@ -147,26 +148,26 @@ public class PdfReportGenerator {
         y += 50;
 
         // 4. FAULT & SIGNATURES
-        canvas.drawText("4. FAULT & SIGNATURES", START_X, y, subTitlePaint);
+        canvas.drawText("4. " + context.getString(R.string.summary_fault_signatures), START_X, y, subTitlePaint);
         y += 40;
 
-        String faultParty = "Not assigned";
-        if ("A".equals(report.getAtFaultVehicle())) faultParty = "Vehicle A";
-        else if ("B".equals(report.getAtFaultVehicle())) faultParty = "Vehicle B";
-        else if ("BOTH".equals(report.getAtFaultVehicle())) faultParty = "Both Vehicles";
+        String faultParty = context.getString(R.string.summary_fault_not_assigned);
+        if ("A".equals(report.getAtFaultVehicle())) faultParty = context.getString(R.string.label_vehicle_a);
+        else if ("B".equals(report.getAtFaultVehicle())) faultParty = context.getString(R.string.label_vehicle_b);
+        else if ("BOTH".equals(report.getAtFaultVehicle())) faultParty = context.getString(R.string.summary_fault_both);
         
-        drawField(canvas, "At-fault party:", faultParty, START_X, y, textPaint, labelPaint);
+        drawField(canvas, context.getString(R.string.label_at_fault_party) + ":", faultParty, START_X, y, textPaint, labelPaint);
         y += 60;
 
         int sigBoxW = 350;
         int sigBoxH = 180;
         
-        canvas.drawText("Signature Vehicle A", START_X, y, labelPaint);
-        canvas.drawText("Signature Vehicle B", midX + 30, y, labelPaint);
+        canvas.drawText(context.getString(R.string.summary_signature_a, ""), START_X, y, labelPaint);
+        canvas.drawText(context.getString(R.string.summary_signature_b, ""), midX + 30, y, labelPaint);
         y += 15;
         
-        drawSignatureBox(canvas, report.getSignatureA(), START_X, y, sigBoxW, sigBoxH);
-        drawSignatureBox(canvas, report.getSignatureB(), midX + 30, y, sigBoxW, sigBoxH);
+        drawSignatureBox(context, canvas, report.getSignatureA(), START_X, y, sigBoxW, sigBoxH);
+        drawSignatureBox(context, canvas, report.getSignatureB(), midX + 30, y, sigBoxW, sigBoxH);
         
         pdfDocument.finishPage(page);
 
@@ -178,7 +179,7 @@ public class PdfReportGenerator {
             canvas = page.getCanvas();
             y = START_Y;
 
-            canvas.drawText("5. ACCIDENT PHOTOS", START_X, y, subTitlePaint);
+            canvas.drawText("5. " + context.getString(R.string.pdf_header_photos), START_X, y, subTitlePaint);
             y += 60;
 
             int photoWidth = (PAGE_WIDTH - (START_X * 2) - 40) / 2;
@@ -219,7 +220,7 @@ public class PdfReportGenerator {
         // SAVE FILE
         File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         if (!downloads.exists()) downloads.mkdirs();
-        File file = new File(downloads, "Accident_Report_EN_" + System.currentTimeMillis() + ".pdf");
+        File file = new File(downloads, "Accident_Report_" + System.currentTimeMillis() + ".pdf");
         FileOutputStream fos = new FileOutputStream(file);
         pdfDocument.writeTo(fos);
         pdfDocument.close();
@@ -228,51 +229,51 @@ public class PdfReportGenerator {
         return file;
     }
 
-    private static int drawVehicleColumn(Canvas canvas, String title, VehicleSection v, int vIndex, AccidentReport report, int x, int y, int width, Paint textPaint, Paint labelPaint, Paint headerPaint) {
+    private static int drawVehicleColumn(Context context, Canvas canvas, String title, VehicleSection v, int vIndex, AccidentReport report, int x, int y, int width, Paint textPaint, Paint labelPaint, Paint headerPaint) {
         int curY = y;
         canvas.drawText(title, x, curY, headerPaint);
         curY += 35;
 
         // Section: Insured
-        canvas.drawText("Insured / Policy Holder", x, curY, textPaint);
+        canvas.drawText(context.getString(R.string.pdf_label_insured), x, curY, textPaint);
         curY += 25;
-        drawField(canvas, "Name:", v.insuredName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "Address:", v.insuredAddress, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_name), v.insuredName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_address), v.insuredAddress, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
         
         curY += 15;
         // Section: Vehicle
-        canvas.drawText("Vehicle & Insurance", x, curY, textPaint);
+        canvas.drawText(context.getString(R.string.pdf_label_vehicle_insurance), x, curY, textPaint);
         curY += 25;
-        drawField(canvas, "Make/Type:", v.vehicleMakeType, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "Plate No:", v.vehicleRegistration, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_make_type), v.vehicleMakeType, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.label_plate_number) + ":", v.vehicleRegistration, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
         if (v.hasTrailer) {
-            drawField(canvas, "Trailer Plate:", v.trailerRegistration, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+            drawField(canvas, context.getString(R.string.hint_trailer_plate) + ":", v.trailerRegistration, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
         }
-        drawField(canvas, "Insurer:", v.insuranceName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "Policy No:", v.policyNumber, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.label_insurance_company) + ":", v.insuranceName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_policy_no), v.policyNumber, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
         
         curY += 15;
         // Section: Driver
-        canvas.drawText("Driver Information", x, curY, textPaint);
+        canvas.drawText(context.getString(R.string.pdf_label_driver_info), x, curY, textPaint);
         curY += 25;
-        drawField(canvas, "Name:", v.driverName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "DOB:", v.driverDob, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "License No:", v.licenseNumber, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
-        drawField(canvas, "Contact:", v.driverContact, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_name), v.driverName, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.hint_dob) + ":", v.driverDob, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_license_no), v.licenseNumber, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
+        drawField(canvas, context.getString(R.string.field_phone) + ":", v.driverContact, x + 10, curY, textPaint, labelPaint); curY += LINE_HEIGHT;
 
         curY += 20;
         // Section: Visual Diagram
-        canvas.drawText("Visual Damage Assessment", x, curY, textPaint);
+        canvas.drawText(context.getString(R.string.pdf_label_damage_visual), x, curY, textPaint);
         curY += 20;
-        drawDamageDiagram(canvas, x + 10, curY, width - 20, 300, vIndex, report);
+        drawDamageDiagram(context, canvas, x + 10, curY, width - 20, 300, vIndex, report);
         curY += 320;
 
         // Section: Circumstances
-        canvas.drawText("Circumstances", x, curY, textPaint);
+        canvas.drawText(context.getString(R.string.label_circumstances), x, curY, textPaint);
         curY += 25;
-        List<String> circs = getEnglishCircumstances(v);
+        List<String> circs = getLocalizedCircumstances(context, v);
         if (circs.isEmpty()) {
-            canvas.drawText("No circumstances selected.", x + 10, curY, textPaint);
+            canvas.drawText(context.getString(R.string.summary_none_selected), x + 10, curY, textPaint);
             curY += LINE_HEIGHT;
         } else {
             for (String s : circs) {
@@ -308,7 +309,7 @@ public class PdfReportGenerator {
         return curY + lineHeight;
     }
 
-    private static void drawSignatureBox(Canvas canvas, String base64, int x, int y, int w, int h) {
+    private static void drawSignatureBox(Context context, Canvas canvas, String base64, int x, int y, int w, int h) {
         Paint boxPaint = new Paint();
         boxPaint.setStyle(Paint.Style.STROKE);
         boxPaint.setColor(android.graphics.Color.GRAY);
@@ -330,11 +331,11 @@ public class PdfReportGenerator {
             textPaint.setTextSize(14);
             textPaint.setColor(android.graphics.Color.LTGRAY);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("NO SIGNATURE", x + w/2, y + h/2, textPaint);
+            canvas.drawText(context.getString(R.string.pdf_no_signature), x + w/2, y + h/2, textPaint);
         }
     }
 
-    private static void drawDamageDiagram(Canvas canvas, int x, int y, int w, int h, int vehicleIndex, AccidentReport report) {
+    private static void drawDamageDiagram(Context context, Canvas canvas, int x, int y, int w, int h, int vehicleIndex, AccidentReport report) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(3f);
@@ -360,7 +361,7 @@ public class PdfReportGenerator {
         Paint labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         labelPaint.setTextSize(14);
         labelPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("FRONT", carLeft + carW/2, carTop - 10, labelPaint);
+        canvas.drawText(context.getString(R.string.label_front), carLeft + carW/2, carTop - 10, labelPaint);
         
         // Damage markers from the data
         Paint markerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -386,43 +387,42 @@ public class PdfReportGenerator {
         float cy = top + h/2;
         
         // Match string names to physical coordinates on the diagram
-        // Normalizes input to handle both English and Lithuanian data entry
         String z = zone.toLowerCase();
-        if (z.contains("front") || z.contains("priekis")) {
-            if (z.contains("left") || z.contains("kairė")) return new PointF(left + 10, top + 50);
-            if (z.contains("right") || z.contains("dešinė")) return new PointF(left + w - 10, top + 50);
+        if (z.contains("front") || z.contains("priekis") || z.contains("перед")) {
+            if (z.contains("left") || z.contains("kairė") || z.contains("слева")) return new PointF(left + 10, top + 50);
+            if (z.contains("right") || z.contains("dešinė") || z.contains("справа")) return new PointF(left + w - 10, top + 50);
             return new PointF(cx, top + 20);
         }
-        if (z.contains("rear") || z.contains("galas")) {
-            if (z.contains("left") || z.contains("kairė")) return new PointF(left + 10, top + h - 50);
-            if (z.contains("right") || z.contains("dešinė")) return new PointF(left + w - 10, top + h - 50);
+        if (z.contains("rear") || z.contains("galas") || z.contains("зад")) {
+            if (z.contains("left") || z.contains("kairė") || z.contains("слева")) return new PointF(left + 10, top + h - 50);
+            if (z.contains("right") || z.contains("dešinė") || z.contains("справа")) return new PointF(left + w - 10, top + h - 50);
             return new PointF(cx, top + h - 20);
         }
-        if (z.contains("left") || z.contains("kairė")) return new PointF(left - 5, cy);
-        if (z.contains("right") || z.contains("dešinė")) return new PointF(left + w + 5, cy);
+        if (z.contains("left") || z.contains("kairė") || z.contains("слева")) return new PointF(left - 5, cy);
+        if (z.contains("right") || z.contains("dešinė") || z.contains("справа")) return new PointF(left + w + 5, cy);
         
         return new PointF(cx, cy);
     }
 
-    private static List<String> getEnglishCircumstances(VehicleSection v) {
+    private static List<String> getLocalizedCircumstances(Context context, VehicleSection v) {
         List<String> list = new ArrayList<>();
-        if (v.isParkedStopped) list.add("Parked/Stopped");
-        if (v.isLeavingParking) list.add("Leaving parking space");
-        if (v.isEnteringParking) list.add("Entering parking space");
-        if (v.isReversing) list.add("Reversing");
-        if (v.isOpeningDoor) list.add("Opening door");
-        if (v.isStopping) list.add("Stopping");
-        if (v.isStartingOff) list.add("Starting off");
-        if (v.isEnteringRoundabout) list.add("Entering roundabout");
-        if (v.isCirculatingRoundabout) list.add("Circulating roundabout");
-        if (v.isRearEndSameDirection) list.add("Striking rear-end");
-        if (v.isChangingLanes) list.add("Changing lanes");
-        if (v.isOvertaking) list.add("Overtaking");
-        if (v.isTurningRight) list.add("Turning right");
-        if (v.isTurningLeft) list.add("Turning left");
-        if (v.isEnteringOppositelane) list.add("Entering opposite lane");
-        if (v.isFromRightAtIntersection) list.add("Coming from right");
-        if (v.isFailedToPrioritize) list.add("Failed to give way");
+        if (v.isParkedStopped) list.add(context.getString(R.string.circ_parked_full));
+        if (v.isLeavingParking) list.add(context.getString(R.string.circ_leaving_parking_full));
+        if (v.isEnteringParking) list.add(context.getString(R.string.circ_entering_parking_full));
+        if (v.isReversing) list.add(context.getString(R.string.circ_reversing_full));
+        if (v.isOpeningDoor) list.add(context.getString(R.string.circ_opening_door_full));
+        if (v.isStopping) list.add(context.getString(R.string.circ_stopping_full));
+        if (v.isStartingOff) list.add(context.getString(R.string.circ_starting_off_full));
+        if (v.isEnteringRoundabout) list.add(context.getString(R.string.circ_entering_roundabout_full));
+        if (v.isCirculatingRoundabout) list.add(context.getString(R.string.circ_in_roundabout_full));
+        if (v.isRearEndSameDirection) list.add(context.getString(R.string.circ_rear_end_full));
+        if (v.isChangingLanes) list.add(context.getString(R.string.circ_changing_lanes_full));
+        if (v.isOvertaking) list.add(context.getString(R.string.circ_overtaking_full));
+        if (v.isTurningRight) list.add(context.getString(R.string.circ_turning_right_full));
+        if (v.isTurningLeft) list.add(context.getString(R.string.circ_turning_left_full));
+        if (v.isEnteringOppositelane) list.add(context.getString(R.string.circ_opposite_lane_full));
+        if (v.isFromRightAtIntersection) list.add(context.getString(R.string.circ_from_right_full));
+        if (v.isFailedToPrioritize) list.add(context.getString(R.string.circ_failed_priority_full));
         return list;
     }
 
@@ -460,13 +460,5 @@ public class PdfReportGenerator {
             img.recycle();
             return rotatedImg;
         } catch (IOException e) { return img; }
-    }
-
-    private static Bitmap rotateImage(Bitmap img, int degree) {
-        android.graphics.Matrix matrix = new android.graphics.Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg;
     }
 }

@@ -95,6 +95,15 @@
                             android:drawablePadding="16dp"
                             android:text="@string/lang_lithuanian"
                             android:textSize="16sp" />
+
+                        <RadioButton
+                            android:id="@+id/radio_ru"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:drawableStart="@drawable/ic_flag_ru"
+                            android:drawablePadding="16dp"
+                            android:text="@string/lang_russian"
+                            android:textSize="16sp" />
                     </RadioGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

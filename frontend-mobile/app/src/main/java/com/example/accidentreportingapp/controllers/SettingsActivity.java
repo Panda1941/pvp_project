@@ -24,7 +24,7 @@ public class SettingsActivity extends BaseActivity {
 
     private ImageButton btnBack;
     private RadioGroup radioGroupLanguage;
-    private RadioButton radioEn, radioLt;
+    private RadioButton radioEn, radioLt, radioRu;
     private MaterialButtonToggleGroup themeToggleGroup;
 
 
@@ -54,6 +54,7 @@ public class SettingsActivity extends BaseActivity {
         radioGroupLanguage = v(R.id.radio_group_language);
         radioEn = v(R.id.radio_en);
         radioLt = v(R.id.radio_lt);
+        radioRu = v(R.id.radio_ru);
         themeToggleGroup = v(R.id.theme_toggle_group);
     }
 
@@ -64,6 +65,8 @@ public class SettingsActivity extends BaseActivity {
         String selectedLanguage = prefs.getString("My_Lang", "en");
         if (selectedLanguage.equals("lt")) {
             radioLt.setChecked(true);
+        } else if (selectedLanguage.equals("ru")) {
+            radioRu.setChecked(true);
         } else {
             radioEn.setChecked(true);
         }
@@ -84,7 +87,14 @@ public class SettingsActivity extends BaseActivity {
 
         // Language change - Saves immediately and restarts app
         radioGroupLanguage.setOnCheckedChangeListener((group, checkedId) -> {
-            String newLang = (checkedId == R.id.radio_lt) ? "lt" : "en";
+            String newLang;
+            if (checkedId == R.id.radio_lt) {
+                newLang = "lt";
+            } else if (checkedId == R.id.radio_ru) {
+                newLang = "ru";
+            } else {
+                newLang = "en";
+            }
             saveLanguage(newLang);
         });
 

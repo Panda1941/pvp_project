@@ -148,10 +148,24 @@ public class ReportDetailsActivity extends BaseActivity {
 
         StringBuilder circStr = new StringBuilder();
         if (vehicle.isParkedStopped) circStr.append("• ").append(getString(R.string.circ_parked_short)).append("\n");
+        if (vehicle.isStopping) circStr.append("• ").append(getString(R.string.circ_stopping_short)).append("\n");
+        if (vehicle.isStartingOff) circStr.append("• ").append(getString(R.string.circ_starting_off_short)).append("\n");
+        if (vehicle.isOpeningDoor) circStr.append("• ").append(getString(R.string.circ_opening_door_short)).append("\n");
         if (vehicle.isLeavingParking) circStr.append("• ").append(getString(R.string.circ_leaving_parking_short)).append("\n");
+        if (vehicle.isEnteringParking) circStr.append("• ").append(getString(R.string.circ_entering_parking_short)).append("\n");
+        if (vehicle.isEnteringRoundabout) circStr.append("• ").append(getString(R.string.circ_entering_roundabout_short)).append("\n");
+        if (vehicle.isCirculatingRoundabout) circStr.append("• ").append(getString(R.string.circ_in_roundabout_short)).append("\n");
+        if (vehicle.isRearEndSameDirection) circStr.append("• ").append(getString(R.string.circ_rear_end_short)).append("\n");
+        if (vehicle.isChangingLanes) circStr.append("• ").append(getString(R.string.circ_changing_lanes_short)).append("\n");
+        if (vehicle.isOvertaking) circStr.append("• ").append(getString(R.string.circ_overtaking_short)).append("\n");
+        if (vehicle.isTurningRight) circStr.append("• ").append(getString(R.string.circ_turning_right_short)).append("\n");
+        if (vehicle.isTurningLeft) circStr.append("• ").append(getString(R.string.circ_turning_left_short)).append("\n");
         if (vehicle.isReversing) circStr.append("• ").append(getString(R.string.circ_reversing_short)).append("\n");
+        if (vehicle.isEnteringOppositelane) circStr.append("• ").append(getString(R.string.circ_opposite_lane_short)).append("\n");
+        if (vehicle.isFromRightAtIntersection) circStr.append("• ").append(getString(R.string.circ_from_right_short)).append("\n");
+        if (vehicle.isFailedToPrioritize) circStr.append("• ").append(getString(R.string.circ_failed_priority_short)).append("\n");
 
-        circumstances.setText(circStr.length() > 0 ? circStr.toString().trim() : "---");
+        circumstances.setText(circStr.length() > 0 ? circStr.toString().trim() : getString(R.string.summary_none_selected));
     }
 
     private void setupClickListeners() {

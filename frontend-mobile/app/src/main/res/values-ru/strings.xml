@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Geležinis Kelias</string>
+    <string name="app_header_title">Geležinis Kelias</string>
+    <string name="main_menu_subtitle">Главное меню</string>
+    <string name="btn_report_accident">Сообщить о новом\nДТП</string>
+    <string name="btn_view_reports">Мои\nотчеты</string>
+    <string name="btn_vehicle_info">Информация о\nтранспорте</string>
+    <string name="btn_emergency_contacts">Экстренные\nконтакты</string>
+    <string name="desc_settings">Настройки</string>
+    <string name="toast_settings">Открыть настройки</string>
+    <string name="toast_report">Переход к: Сообщить о новом ДТП</string>
+    <string name="toast_view_reports">Переход к: Мои отчеты</string>
+    <string name="toast_vehicle">Переход к: Информация о транспорте</string>
+    <string name="toast_emergency">Переход к: Экстренные контакты</string>
+
+    <!-- Page Titles -->
+    <string name="title_view_reports">Мои отчеты</string>
+    <string name="title_create_report">Новый отчет</string>
+
+    <!-- Settings Strings -->
+    <string name="title_settings">Настройки</string>
+    <string name="label_select_language">Выберите язык</string>
+    <string name="lang_english">Английский</string>
+    <string name="lang_lithuanian">Литовский</string>
+    <string name="lang_russian">Русский</string>
+    <string name="btn_save">Сохранить изменения</string>
+
+    <string name="label_select_theme">Выберите тему</string>
+    <string name="theme_system">Системная по умолчанию</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+
+    <!-- Report Details Strings -->
+    <string name="title_report_details">Детали отчета</string>
+    <string name="label_location">Местоположение</string>
+    <string name="label_date_time">Дата и время</string>
+    <string name="label_plate_number">Гос. номер</string>
+    <string name="label_description">Описание</string>
+
+    <!-- Status Strings -->
+    <string name="status_waiting">Ожидание</string>
+    <string name="status_confirmed">Подтверждено</string>
+    <string name="status_issue">Проблема</string>
+
+    <!-- New Section Labels -->
+    <string name="header_vehicle_a">Транспортное средство A</string>
+    <string name="header_vehicle_b">Транспортное средство B</string>
+    <string name="label_insured">Страхователь / Собственник</string>
+    <string name="label_vehicle">Информация о транспортном средстве</string>
+    <string name="header_insurance_info">Информация о страховании</string>
+    <string name="label_insurance_company">Страховая компания</string>
+    <string name="label_driver">Информация о водителе</string>
+    <string name="label_circumstances">Обстоятельства ДТП</string>
+    <string name="header_circumstances">Обстоятельства ДТП</string>
+    <string name="header_photos">Фотографии ДТП</string>
+    <string name="header_vehicle_insurance">Трансп. средство и страховка</string>
+    <string name="header_insurance_driver">Страховка и водитель</string>
+    <string name="header_driver_vehicle">Водитель и трансп. средство</string>
+    <string name="header_witnesses">Свидетели</string>
+    <string name="header_damage">Схема повреждений</string>
+    <string name="header_signature">Подпись и вина</string>
+
+    <!-- Plate Step Strings -->
+    <string name="header_license_plates">Гос. номера</string>
+    <string name="label_your_vehicle">Ваше транспортное средство</string>
+    <string name="label_other_party">Другая сторона</string>
+    <string name="hint_plate_example">ABC123</string>
+    <string name="label_has_trailer">С прицепом</string>
+    <string name="hint_trailer_plate">Номер прицепа</string>
+    <string name="label_no_plate">Нет гос. номера</string>
+
+    <!-- Time & Location Step Strings -->
+    <string name="header_time_location">Время и место</string>
+    <string name="label_date_mandatory">Дата *</string>
+    <string name="label_time_mandatory">Время *</string>
+    <string name="label_address">Адрес</string>
+    <string name="hint_address_format">Улица, номер дома, город</string>
+    <string name="hint_driver_address">Полный адрес (улица, номер дома, город и т.д.)</string>
+    <string name="label_or">ИЛИ</string>
+    <string name="label_map_instruction">Отметьте место ДТП на карте *</string>
+    <string name="placeholder_map_loading">Загрузка карты...</string>
+    <string name="hint_date_format">ГГГГ-ММ-ДД</string>
+    <string name="hint_time_format">ЧЧ:ММ</string>
+
+    <!-- Field Labels -->
+    <string name="field_name">Имя, фамилия:</string>
+    <string name="field_first_name">Имя *</string>
+    <string name="field_last_name">Фамилия *</string>
+    <string name="field_address">Адрес:</string>
+    <string name="field_contact">Контакт:</string>
+    <string name="field_make_type">Марка/тип:</string>
+    <string name="field_policy_no">№ полиса:</string>
+    <string name="field_license_no">№ вод. удостоверения:</string>
+    <string name="field_license_category">Категория вод. удостоверения</string>
+    <string name="field_license_expiry">Срок действия вод. удостоверения</string>
+    <string name="field_personal_id">Личный код *</string>
+    <string name="field_email">Эл. почта</string>
+    <string name="field_phone">Телефон</string>
+    <string name="field_country">Страна *</string>
+    <string name="photos_header">Пожалуйста, сделайте или прикрепите фотографии места происшествия и повреждений автомобиля.</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+
+
+    <!-- Wizard Strings -->
+    <string name="btn_next">Далее</string>
+    <string name="btn_previous">Назад</string>
+    <string name="btn_finish">Завершить</string>
+    <string name="hint_location">Введите место ДТП</string>
+    <string name="hint_description">Опишите, что произошло</string>
+    <string name="desc_use_current_location">Использовать GPS устройства для заполнения места</string>
+    <string name="hint_name">Имя Фамилия</string>
+    <string name="hint_plate">Гос. номер</string>
+    <string name="hint_dob">Дата рождения (ГГГГ-ММ-ДД)</string>
+    <string name="hint_insurance_covers">Покрывает ли страховка материальный ущерб?</string>
+    <string name="step_indicator">Шаг %1$d из %2$d</string>
+    <string name="title_summary">Сводка</string>
+    <string name="btn_download_report">Скачать отчет</string>
+    <string name="summary_photos">Фотографии:</string>
+    <string name="summary_demo_note">Примечание: Этот отчет является черновиком и не будет сохранен в этой демо-версии.</string>
+    <string name="label_circ_prompt">Выберите всё, что применимо к этому транспортному средству:</string>
+    <string name="label_circ_prompt_multi">Выберите всё, что применимо к каждому транспортному средству</string>
+    <string name="btn_addphoto">Нажмите, чтобы добавить фото</string>
+    <string name="btn_pick_gallery">Выбрать из галереи</string>
+
+    <!-- Summary Sections -->
+    <string name="summary_general_info">ОБЩАЯ ИНФОРМАЦИЯ</string>
+    <string name="summary_date_time">Дата и время: %1$s</string>
+    <string name="summary_address">Адрес: %1$s</string>
+    <string name="summary_not_specified">Не указано</string>
+    <string name="summary_coordinates">Координаты: %1$.5f, %2$.5f</string>
+    <string name="summary_description">Описание: %1$s</string>
+    <string name="summary_witnesses">СВИДЕТЕЛИ</string>
+    <string name="summary_no_witnesses">Свидетели не зафиксированы.</string>
+    <string name="summary_fault_signatures">ВИНА И ПОДПИСИ</string>
+    <string name="summary_fault_not_assigned">Виновник: Не назначен</string>
+    <string name="summary_fault_both">Виновник: Оба транспортных средства</string>
+    <string name="summary_fault_vehicle">Виновник: Транспортное средство %1$s</string>
+    <string name="summary_signature_a">Подпись A: %1$s</string>
+    <string name="summary_signature_b">Подпись B: %1$s</string>
+    <string name="summary_signed">✓ Подписано</string>
+    <string name="summary_missing">✗ Отсутствует</string>
+
+    <!-- Vehicle Summary -->
+    <string name="summary_plate">Гос. номер: %1$s</string>
+    <string name="summary_trailer">Прицеп: %1$s</string>
+    <string name="summary_yes_no_plate">Да (без номера)</string>
+    <string name="summary_vehicle_label">Трансп. средство: %1$s</string>
+    <string name="summary_na">Н/Д</string>
+    <string name="summary_driver">Водитель: %1$s %2$s</string>
+    <string name="summary_contact">Контакт: %1$s</string>
+    <string name="summary_insurance">Страхование: %1$s</string>
+    <string name="summary_policy_format">(Полис: %1$s)</string>
+    <string name="summary_damages">Повреждения: %1$s</string>
+    <string name="summary_none_noted">Не отмечено</string>
+    <string name="summary_circumstances">Обстоятельства: %1$s</string>
+    <string name="summary_none_selected">Не выбрано</string>
+
+    <!-- Witness Step -->
+    <string name="label_any_witnesses">Есть ли свидетели?</string>
+    <string name="btn_add_witness">Добавить свидетеля</string>
+    <string name="btn_remove">Удалить</string>
+    <string name="hint_phone_format">Номер телефона (напр. +370...)</string>
+
+    <!-- Damage Step -->
+    <string name="label_damage">Повреждения</string>
+    <string name="label_mark_damages">Отметьте поврежденные места для каждого транспортного средства</string>
+    <string name="instr_damage">1. Стрелкой отметьте точку основного удара\n2. Нажмите на область автомобиля, чтобы отметить повреждение</string>
+
+    <!-- Fault & Signature -->
+    <string name="label_indicate_fault">Укажите виновную сторону</string>
+    <string name="label_signatures">Подписи</string>
+    <string name="label_at_fault_party">Виновная сторона</string>
+    <string name="hint_tap_to_sign">Нажмите здесь, чтобы подписать</string>
+    <string name="btn_clear">Очистить</string>
+
+    <!-- PDF Generation (Localized Labels) -->
+    <string name="pdf_title">Извещение о ДТП</string>
+    <string name="pdf_label_location">Место: %1$s</string>
+    <string name="pdf_label_description">Описание: %1$s</string>
+    <string name="pdf_label_date">Дата: %1$s</string>
+    <string name="pdf_header_witnesses">Свидетели</string>
+    <string name="pdf_header_photos">Фотографии</string>
+    <string name="pdf_label_owner">Собственник: </string>
+    <string name="pdf_label_address">Адрес: </string>
+    <string name="pdf_label_vehicle">Транспортное средство: </string>
+    <string name="pdf_label_plate">Гос. номер: </string>
+    <string name="pdf_label_insurance">Страхование: </string>
+    <string name="pdf_label_policy">Полис: </string>
+    <string name="pdf_label_driver">Водитель: </string>
+    <string name="pdf_label_dob">Дата рождения: </string>
+    <string name="pdf_label_license">Удостоверение: </string>
+    <string name="pdf_label_circumstances">Обстоятельства: </string>
+    <string name="pdf_label_insured">Страхователь / Собственник</string>
+    <string name="pdf_label_vehicle_insurance">Транспортное средство и страховка</string>
+    <string name="pdf_label_driver_info">Информация о водителе</string>
+    <string name="pdf_label_damage_visual">Визуальная оценка повреждений</string>
+    <string name="pdf_no_signature">НЕТ ПОДПИСИ</string>
+    <string name="label_captured_photo">Сделанное фото</string>
+
+    <!-- Operational Messages -->
+    <string name="msg_permissions_not_granted">Разрешения на местоположение и камеру не предоставлены — вы можете ввести местоположение вручную.</string>
+    <string name="msg_generating_pdf">Генерация...</string>
+    <string name="msg_saved_to_downloads">Сохранено в «Загрузки» (Downloads)</string>
+    <string name="msg_failed_pdf">Не удалось сгенерировать PDF</string>
+    <string name="msg_gallery_error">Не удалось загрузить фото из галереи</string>
+    <string name="msg_location_denied">В разрешении на местоположение отказано. Вы можете ввести его вручную.</string>
+    <string name="msg_location_error">Ошибка доступа к местоположению</string>
+    <string name="label_lat_lon">Шир: %1$.5f, Долг: %2$.5f</string>
+    <string name="fault_summary_a">Транспортное средство А выбрано виновной стороной.</string>
+    <string name="fault_summary_b">Транспортное средство B выбрано виновной стороной.</string>
+    <string name="fault_summary_both">Оба транспортных средства выбраны виновными.</string>
+    <string name="label_vehicle_a">Транспортное средство A</string>
+    <string name="label_vehicle_b">Транспортное средство B</string>
+    <string name="label_none">---</string>
+    <string name="rationale_location">Разрешите доступ к местоположению для автоматического заполнения координат ДТП.</string>
+    <string name="rationale_camera">Разрешение на камеру требуется для того, чтобы делать фотографии ДТП.</string>
+
+    <!-- Formatting -->
+    <string name="format_address">%1$s, %2$s %3$s</string>
+    <string name="format_vehicle_info">%1$s (%2$s)</string>
+    <string name="format_insurance_info">%1$s\nПолис: %2$s</string>
+    <string name="format_driver_info">%1$s (%2$s)</string>
+    <string name="format_license_info">%1$s %2$s [%3$s]</string>
+
+    <!-- Circumstances (Short) -->
+    <string name="circ_parked_short">На стоянке</string>
+    <string name="circ_stopping_short">Остановка</string>
+    <string name="circ_starting_off_short">Начало движения</string>
+    <string name="circ_opening_door_short">Открытие двери</string>
+    <string name="circ_leaving_parking_short">Выезд со стоянки</string>
+    <string name="circ_entering_parking_short">Въезд на стоянку</string>
+    <string name="circ_entering_roundabout_short">Въезд на кольцо</string>
+    <string name="circ_in_roundabout_short">На кольце</string>
+    <string name="circ_rear_end_short">Удар сзади (в той же полосе)</string>
+    <string name="circ_changing_lanes_short">Смена полосы</string>
+    <string name="circ_overtaking_short">Обгон</string>
+    <string name="circ_turning_right_short">Поворот направо</string>
+    <string name="circ_turning_left_short">Поворот налево</string>
+    <string name="circ_reversing_short">Движение задним ходом</string>
+    <string name="circ_opposite_lane_short">Встречная полоса</string>
+    <string name="circ_from_right_short">Справа</string>
+    <string name="circ_failed_priority_short">Несоблюдение приоритета</string>
+
+    <!-- Circumstances (Full) -->
+    <string name="circ_parked_full">Находился на стоянке / был припаркован</string>
+    <string name="circ_stopping_full">Останавливался</string>
+    <string name="circ_starting_off_full">Начинал движение</string>
+    <string name="circ_opening_door_full">Открывал дверь</string>
+    <string name="circ_leaving_parking_full">Выезжал со стоянки, частной дороги или тропинки</string>
+    <string name="circ_entering_parking_full">Въезжал на стоянку, частную дорогу или тропинку</string>
+    <string name="circ_entering_roundabout_full">Въезжал на кольцевую развязку</string>
+    <string name="circ_in_roundabout_full">Двигался по кольцевой развязке</string>
+    <string name="circ_rear_end_full">Ударил в заднюю часть транспортного средства, двигавшегося в том же направлении и по той же полосе</string>
+    <string name="circ_changing_lanes_full">Менял полосу движения</string>
+    <string name="circ_overtaking_full">Обгонял</string>
+    <string name="circ_turning_right_full">Поворачивал направо</string>
+    <string name="circ_turning_left_full">Поворачивал налево</string>
+    <string name="circ_reversing_full">Двигался задним ходом</string>
+    <string name="circ_opposite_lane_full">Выехал на полосу встречного движения</string>
+    <string name="circ_from_right_full">Двигался справа на перекрестке</string>
+    <string name="circ_failed_priority_full">Не соблюдал знак приоритета или проехал на красный свет</string>
+
+    <!-- Damage Zones -->
+    <string name="label_front">ПЕРЕД</string>
+    <string name="label_rear">ЗАД</string>
+    <string name="zone_front_left">спереди-слева</string>
+    <string name="zone_front_right">спереди-справа</string>
+    <string name="zone_front_center">спереди-центр</string>
+    <string name="zone_rear_left">сзади-слева</string>
+    <string name="zone_rear_right">сзади-справа</string>
+    <string name="zone_rear_center">сзади-центр</string>
+    <string name="zone_left_side">левая сторона</string>
+    <string name="zone_right_side">правая сторона</string>
+    <string name="zone_center">центр</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_finish_title">Подтверждение</string>
+    <string name="dialog_finish_message">Вы уверены, что хотите завершить создание отчета?</string>
+    <string name="dialog_exit_title">Выход</string>
+    <string name="dialog_exit_message">Вы уверены, что хотите выйти? Весь несохраненный прогресс будет утерян.</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
+    <string name="toast_report_created">Отчет о ДТП успешно создан (Demo)</string>
+
+    <!-- Mock Data (For Demo) -->
+    <string name="mock_unknown_driver">Неизвестный водитель</string>
+    <string name="mock_country_lithuania">Литва</string>
+    <string name="mock_insurance_missing">Данные отсутствуют</string>
+    <string name="mock_loc_kaunas">Каунас, Литва</string>
+    <string name="mock_loc_vilnius">Вильнюс, Литва</string>
+    <string name="mock_loc_klaipeda">Клайпеда, Литва</string>
+    <string name="mock_desc_1">Небольшое столкновение на кольцевой развязке.</string>
+    <string name="mock_desc_2">Боковое столкновение при смене полосы движения.</string>
+    <string name="mock_desc_3">Столкновение при движении задним ходом на парковке.</string>
+
+</resources>

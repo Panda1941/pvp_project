@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.accidentreportingapp.R;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -122,7 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (r != PackageManager.PERMISSION_GRANTED) { anyDenied = true; break; }
         }
         if (anyDenied) {
-            showToast("Required permissions were not granted");
+            showToast(getString(R.string.msg_permissions_not_granted));
         }
     }
 

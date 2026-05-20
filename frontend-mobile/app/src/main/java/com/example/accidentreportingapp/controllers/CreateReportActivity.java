@@ -63,8 +63,14 @@ import java.util.Locale;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import network.api.ReportApi;
 import network.client.ApiClient;
@@ -98,6 +104,13 @@ public class CreateReportActivity extends BaseActivity {
     private AccidentReport draftReport;
     private List<Witness> witnesses = new ArrayList<>();
 
+    private final ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    onImagePickedFromGallery(uri);
+                }
+            });
+
     private ImageButton btnBack;
     ImageButton btnPrevOverlay;
     ImageButton btnNextOverlay;
@@ -105,7 +118,7 @@ public class CreateReportActivity extends BaseActivity {
     private LinearProgressIndicator progressIndicator;
     private ViewGroup stepContainer;
     private MaterialButton btnPrevious, btnNext;
-    private MaterialButton btnAddPhoto;
+    private MaterialButton btnAddPhoto, btnPickGallery;
     private MaterialButton btnDownloadReport;
     private RecyclerView recyclerPhotos;
     private PhotoAdapter photoAdapter;
@@ -215,6 +228,7 @@ public class CreateReportActivity extends BaseActivity {
         previewView = viewPhotos.findViewById(R.id.previewView);
         imgOverlay = viewPhotos.findViewById(R.id.img_overlay);
         btnAddPhoto = v(viewPhotos, R.id.btn_add_photo);
+        btnPickGallery = v(viewPhotos, R.id.btn_pick_gallery);
         recyclerPhotos = v(viewPhotos, R.id.recycler_photos);
         photoAdapter = new PhotoAdapter(capturedPhotos);
 
@@ -245,6 +259,9 @@ public class CreateReportActivity extends BaseActivity {
         }
         if (btnAddPhoto != null) {
             btnAddPhoto.setOnClickListener(v -> onAddPhotoClicked());
+        }
+        if (btnPickGallery != null) {
+            btnPickGallery.setOnClickListener(v -> onPickGalleryClicked());
         }
 
         if (btnDownloadReport != null) {
@@ -382,7 +399,7 @@ public class CreateReportActivity extends BaseActivity {
         for (int i = 0; i < capturedPhotos.size(); i++) {
             String path = capturedPhotos.get(i);
             String dataUri = toCompressedDataUri(path);
-            reportPhotos.add(new Photo(dataUri != null ? dataUri : path, "Captured photo " + (i + 1), i + 1));
+            reportPhotos.add(new Photo(dataUri != null ? dataUri : path, getString(R.string.label_captured_photo) + " " + (i + 1), i + 1));
         }
         draftReport.setPhotos(reportPhotos);
     }
@@ -635,13 +652,52 @@ public class CreateReportActivity extends BaseActivity {
 
     private void onAddPhotoClicked() { takePhoto(); }
 
+    private void onPickGalleryClicked() {
+        pickImageLauncher.launch("image/*");
+    }
+
+    private void onImagePickedFromGallery(Uri uri) {
+        try {
+            File photoFile = new File(
+                    getExternalFilesDir(null),
+                    "gallery_" + System.currentTimeMillis() + ".jpg"
+            );
+            copyUriToFile(uri, photoFile);
+
+            capturedPhotos.add(photoFile.getAbsolutePath());
+            if (photoAdapter != null) {
+                photoAdapter.notifyItemInserted(capturedPhotos.size() - 1);
+            }
+            currentPhotoStep++;
+            if (!overlayManualMode) {
+                selectedOverlayIndex = currentPhotoStep;
+            }
+            setOverlayStep();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showToast(getString(R.string.msg_gallery_error));
+        }
+    }
+
+    private void copyUriToFile(Uri uri, File destFile) throws IOException {
+        try (InputStream is = getContentResolver().openInputStream(uri);
+             FileOutputStream fos = new FileOutputStream(destFile)) {
+            if (is == null) throw new IOException("InputStream is null");
+            byte[] buffer = new byte[1024 * 4];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+            }
+        }
+    }
+
     private void onUseCurrentLocationClicked() {
         String fine = android.Manifest.permission.ACCESS_FINE_LOCATION;
         if (hasPermissions(fine)) {
             fetchAndSetCurrentLocation();
         } else {
             requestAppPermissions(new String[]{fine}, REQ_PERMISSION_LOCATION_ONLY,
-                    "Allow location to auto-fill your current accident location.");
+                    getString(R.string.rationale_location));
         }
     }
 
@@ -771,7 +827,7 @@ public class CreateReportActivity extends BaseActivity {
                     currentPhotoStep = 0;
                     setOverlayStep();
                 } else {
-                    requestAppPermissions(new String[]{android.Manifest.permission.CAMERA}, REQ_PERMISSION_CAMERA, "Camera permission required");
+                    requestAppPermissions(new String[]{android.Manifest.permission.CAMERA}, REQ_PERMISSION_CAMERA, getString(R.string.rationale_camera));
                 }
                 break;
             case STEP_DAMAGE:

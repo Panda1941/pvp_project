@@ -1,240 +1,297 @@
 <resources>
     <string name="app_name">Geležinis Kelias</string>
     <string name="app_header_title">Geležinis Kelias</string>
-    <string name="main_menu_subtitle">Main Menu</string>
-    <string name="btn_report_accident">Report New\nAccident</string>
-    <string name="btn_view_reports">View My\nReports</string>
-    <string name="btn_vehicle_info">Vehicle\nInfo</string>
-    <string name="btn_emergency_contacts">Emergency\nContacts</string>
-    <string name="desc_settings">Settings</string>
-    <string name="toast_settings">Open Settings</string>
-    <string name="toast_report">Navigating to: Report New Accident</string>
-    <string name="toast_view_reports">Navigating to: My Reports</string>
-    <string name="toast_vehicle">Navigating to: Vehicle Information</string>
-    <string name="toast_emergency">Navigating to: Emergency Contacts</string>
+    <string name="main_menu_subtitle">Pagrindinis meniu</string>
+    <string name="btn_report_accident">Registruoti naują\neismo įvykį</string>
+    <string name="btn_view_reports">Mano\nįvykiai</string>
+    <string name="btn_vehicle_info">Transporto\npriemonės informacija</string>
+    <string name="btn_emergency_contacts">Skubios pagalbos\nkontaktai</string>
+    <string name="desc_settings">Nustatymai</string>
+    <string name="toast_settings">Atidaryti nustatymus</string>
+    <string name="toast_report">Navigacija į: Registruoti naują eismo įvykį</string>
+    <string name="toast_view_reports">Navigacija į: Mano įvykiai</string>
+    <string name="toast_vehicle">Navigacija į: Transporto priemonės informacija</string>
+    <string name="toast_emergency">Navigacija į: Skubios pagalbos kontaktai</string>
 
     <!-- Page Titles -->
-    <string name="title_view_reports">My Reports</string>
-    <string name="title_create_report">Create New Report</string>
+    <string name="title_view_reports">Mano įvykiai</string>
+    <string name="title_create_report">Naujas įvykis</string>
 
     <!-- Settings Strings -->
-    <string name="title_settings">Settings</string>
-    <string name="label_select_language">Select Language</string>
-    <string name="lang_english">English</string>
-    <string name="lang_lithuanian">Lithuanian</string>
-    <string name="btn_save">Save Changes</string>
+    <string name="title_settings">Nustatymai</string>
+    <string name="label_select_language">Pasirinkite kalbą</string>
+    <string name="lang_english">Anglų</string>
+    <string name="lang_lithuanian">Lietuvių</string>
+    <string name="lang_russian">Rusų</string>
+    <string name="btn_save">Išsaugoti pakeitimus</string>
 
-    <string name="label_select_theme">Select Theme</string>
-    <string name="theme_system">System Default</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
+    <string name="label_select_theme">Pasirinkite temą</string>
+    <string name="theme_system">Sistemos numatytoji</string>
+    <string name="theme_light">Šviesi</string>
+    <string name="theme_dark">Tamsi</string>
 
     <!-- Report Details Strings -->
-    <string name="title_report_details">Report Details</string>
-    <string name="label_location">Location</string>
-    <string name="label_date_time">Date &amp; Time</string>
-    <string name="label_plate_number">Vehicle Plate Number</string>
-    <string name="label_description">Description</string>
+    <string name="title_report_details">Informacija apie įvykį</string>
+    <string name="label_location">Vieta</string>
+    <string name="label_date_time">Data ir laikas</string>
+    <string name="label_plate_number">Valstybinis numeris</string>
+    <string name="label_description">Aprašymas</string>
 
     <!-- Status Strings -->
-    <string name="status_waiting">Waiting</string>
-    <string name="status_confirmed">Confirmed</string>
-    <string name="status_issue">Issue</string>
+    <string name="status_waiting">Laukia</string>
+    <string name="status_confirmed">Patvirtinta</string>
+    <string name="status_issue">Problema</string>
 
     <!-- New Section Labels -->
-    <string name="header_vehicle_a">Vehicle A</string>
-    <string name="header_vehicle_b">Vehicle B</string>
-    <string name="label_insured">Insured / Policy Holder</string>
-    <string name="label_vehicle">Vehicle Information</string>
-    <string name="header_insurance_info">Insurance Information</string>
-    <string name="label_insurance_company">Insurance Company</string>
-    <string name="label_driver">Driver Information</string>
-    <string name="label_circumstances">Accident Circumstances</string>
-    <string name="header_circumstances">Accident Circumstances</string>
-    <string name="header_photos">Accident Photos</string>
-    <string name="header_vehicle_insurance">Vehicle &amp; Insurance Info</string>
-    <string name="header_insurance_driver">Insurance &amp; Driver Information</string>
-    <string name="header_driver_vehicle">Driver and Vehicle Info</string>
-    <string name="header_witnesses">Witnesses</string>
-    <string name="header_damage">Damage Diagram</string>
-    <string name="header_signature">Signature &amp; Fault</string>
+    <string name="header_vehicle_a">Transporto priemonė A</string>
+    <string name="header_vehicle_b">Transporto priemonė B</string>
+    <string name="label_insured">Draudėjas / Savininkas</string>
+    <string name="label_vehicle">Informacija apie transporto priemonę</string>
+    <string name="header_insurance_info">Draudimo informacija</string>
+    <string name="label_insurance_company">Draudimo bendrovė</string>
+    <string name="label_driver">Informacija apie vairuotoją</string>
+    <string name="label_circumstances">Avarijos aplinkybės</string>
+    <string name="header_circumstances">Avarijos aplinkybės</string>
+    <string name="header_photos">Avarijos nuotraukos</string>
+    <string name="header_vehicle_insurance">Transp. priemonės ir draudimo info</string>
+    <string name="header_insurance_driver">Draudimo ir vairuotojo informacija</string>
+    <string name="header_driver_vehicle">Vairuotojo ir transp. priemonės info</string>
+    <string name="header_witnesses">Liudininkai</string>
+    <string name="header_damage">Sugadinimų schema</string>
+    <string name="header_signature">Parašas ir kaltė</string>
 
     <!-- Plate Step Strings -->
-    <string name="header_license_plates">License Plates</string>
-    <string name="label_your_vehicle">Your vehicle</string>
-    <string name="label_other_party">Other party</string>
+    <string name="header_license_plates">Valstybiniai numeriai</string>
+    <string name="label_your_vehicle">Jūsų transporto priemonė</string>
+    <string name="label_other_party">Kita šalis</string>
     <string name="hint_plate_example">ABC123</string>
-    <string name="label_has_trailer">Has trailer</string>
-    <string name="hint_trailer_plate">Trailer plate</string>
-    <string name="label_no_plate">No license plate</string>
+    <string name="label_has_trailer">Turi priekabą</string>
+    <string name="hint_trailer_plate">Priekabos numeris</string>
+    <string name="label_no_plate">Nėra valstybinio numerio</string>
 
     <!-- Time & Location Step Strings -->
-    <string name="header_time_location">Time &amp; Location</string>
-    <string name="label_date_mandatory">Date *</string>
-    <string name="label_time_mandatory">Time *</string>
-    <string name="label_address">Address</string>
-    <string name="hint_address_format">Street, house no., city</string>
-    <string name="hint_driver_address">Full Address (Street, House no., City, etc.)</string>
-    <string name="label_or">OR</string>
-    <string name="label_map_instruction">Pin accident location on map *</string>
-    <string name="placeholder_map_loading">Map loading...</string>
+    <string name="header_time_location">Laikas ir vieta</string>
+    <string name="label_date_mandatory">Data *</string>
+    <string name="label_time_mandatory">Laikas *</string>
+    <string name="label_address">Adresas</string>
+    <string name="hint_address_format">Gatvė, namo nr., miestas</string>
+    <string name="hint_driver_address">Pilnas adresas (Gatvė, Namo nr., Miestas ir kt.)</string>
+    <string name="label_or">ARBA</string>
+    <string name="label_map_instruction">Pažymėkite įvykio vietą žemėlapyje *</string>
+    <string name="placeholder_map_loading">Žemėlapis kraunamas...</string>
+    <string name="hint_date_format">MMMM-MM-DD</string>
+    <string name="hint_time_format">VV:MM</string>
 
     <!-- Field Labels -->
-    <string name="field_name">Name:</string>
-    <string name="field_address">Address:</string>
-    <string name="field_contact">Contact:</string>
-    <string name="field_make_type">Make/Type:</string>
-    <string name="field_policy_no">Policy No:</string>
-    <string name="field_license_no">License No:</string>
-    <string name="photos_header">Please take or attach photos of the accident scene and vehicle damage.</string>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
+    <string name="field_name">Vardas, pavardė:</string>
+    <string name="field_first_name">Vardas *</string>
+    <string name="field_last_name">Pavardė *</string>
+    <string name="field_address">Adresas:</string>
+    <string name="field_contact">Kontaktai:</string>
+    <string name="field_make_type">Markė/tipas:</string>
+    <string name="field_policy_no">Poliso Nr.:</string>
+    <string name="field_license_no">Vairuotojo pažymėjimo Nr.:</string>
+    <string name="field_license_category">Vairuotojo pažymėjimo kategorija</string>
+    <string name="field_license_expiry">Vairuotojo pažymėjimo galiojimas</string>
+    <string name="field_personal_id">Asmens kodas *</string>
+    <string name="field_email">El. paštas</string>
+    <string name="field_phone">Telefonas</string>
+    <string name="field_country">Valstybė *</string>
+    <string name="photos_header">Prašome nufotografuoti arba pridėti avarijos vietos ir transporto priemonės apgadinimų nuotraukas.</string>
+    <string name="date">Data</string>
+    <string name="time">Laikas</string>
 
 
     <!-- Wizard Strings -->
-    <string name="btn_next">Next</string>
-    <string name="btn_previous">Previous</string>
-    <string name="btn_finish">Finish</string>
-    <string name="hint_location">Enter accident location</string>
-    <string name="hint_description">Describe what happened</string>
-    <string name="desc_use_current_location">Use device GPS to fill location</string>
-    <string name="hint_name">Full Name</string>
-    <string name="hint_plate">Plate Number</string>
-    <string name="hint_dob">Date of Birth (YYYY-MM-DD)</string>
-    <string name="hint_insurance_covers">Does insurance cover material damage?</string>
-    <string name="step_indicator">Step %1$d of %2$d</string>
-    <string name="title_summary">Report Summary</string>
-    <string name="btn_download_report">Download Report</string>
-    <string name="summary_photos">Photos:</string>
-    <string name="summary_demo_note">Note: This report is a draft and will not be saved in this demo version.</string>
-    <string name="label_circ_prompt">Select all that apply for this vehicle:</string>
-    <string name="btn_addphoto">Tap to Add Photo</string>
+    <string name="btn_next">Toliau</string>
+    <string name="btn_previous">Atgal</string>
+    <string name="btn_finish">Baigti</string>
+    <string name="hint_location">Įveskite įvykio vietą</string>
+    <string name="hint_description">Aprašykite kas nutiko</string>
+    <string name="desc_use_current_location">Užpildyti įvykio vietą pagal GPS</string>
+    <string name="hint_name">Vardas Pavardė</string>
+    <string name="hint_plate">Valstybinis numeris</string>
+    <string name="hint_dob">Gimimo data (YYYY-MM-DD)</string>
+    <string name="hint_insurance_covers">Ar draudimas dengia materialinę žalą?</string>
+    <string name="step_indicator">%1$d žingsnis iš %2$d</string>
+    <string name="title_summary">Suvestinė</string>
+    <string name="btn_download_report">Parsisiųsti ataskaitą</string>
+    <string name="summary_photos">Nuotraukos:</string>
+    <string name="summary_demo_note">Pastaba: Šis įvykis yra juodraštis ir nebus išsaugotas šioje demo versijoje.</string>
+    <string name="label_circ_prompt">Pažymėkite viską, kas tinka šiai transporto priemonei:</string>
+    <string name="label_circ_prompt_multi">Pažymėkite viską, kas tinka kiekvienai transporto priemonei</string>
+    <string name="btn_addphoto">Paspauskite, kad pridėtumėte nuotrauką</string>
+    <string name="btn_pick_gallery">Pasirinkti iš galerijos</string>
 
     <!-- Summary Sections -->
-    <string name="summary_general_info">GENERAL INFORMATION</string>
-    <string name="summary_date_time">Date &amp; Time: %1$s</string>
-    <string name="summary_address">Address: %1$s</string>
-    <string name="summary_not_specified">Not specified</string>
-    <string name="summary_coordinates">Coordinates: %1$.5f, %2$.5f</string>
-    <string name="summary_description">Description: %1$s</string>
-    <string name="summary_witnesses">WITNESSES</string>
-    <string name="summary_no_witnesses">No witnesses recorded.</string>
-    <string name="summary_fault_signatures">FAULT &amp; SIGNATURES</string>
-    <string name="summary_fault_not_assigned">At-fault party: Not assigned</string>
-    <string name="summary_fault_both">At-fault party: Both vehicles</string>
-    <string name="summary_fault_vehicle">At-fault party: Vehicle %1$s</string>
-    <string name="summary_signature_a">Signature A: %1$s</string>
-    <string name="summary_signature_b">Signature B: %1$s</string>
-    <string name="summary_signed">✓ Signed</string>
-    <string name="summary_missing">✗ Missing</string>
+    <string name="summary_general_info">BENDRA INFORMACIJA</string>
+    <string name="summary_date_time">Data ir laikas: %1$s</string>
+    <string name="summary_address">Adresas: %1$s</string>
+    <string name="summary_not_specified">Nenurodyta</string>
+    <string name="summary_coordinates">Koordinatės: %1$.5f, %2$.5f</string>
+    <string name="summary_description">Aprašymas: %1$s</string>
+    <string name="summary_witnesses">LIUDININKAI</string>
+    <string name="summary_no_witnesses">Liudininkų nėra.</string>
+    <string name="summary_fault_signatures">KALTĖ IR PARAŠAI</string>
+    <string name="summary_fault_not_assigned">Kaltininkas: Nepriskirtas</string>
+    <string name="summary_fault_both">Kaltininkas: Abi transporto priemonės</string>
+    <string name="summary_fault_vehicle">Kaltininkas: Transporto priemonė %1$s</string>
+    <string name="summary_signature_a">Parašas A: %1$s</string>
+    <string name="summary_signature_b">Parašas B: %1$s</string>
+    <string name="summary_signed">✓ Pasirašyta</string>
+    <string name="summary_missing">✗ Trūksta</string>
 
     <!-- Vehicle Summary -->
-    <string name="summary_plate">Plate: %1$s</string>
-    <string name="summary_trailer">Trailer: %1$s</string>
-    <string name="summary_yes_no_plate">Yes (no plate)</string>
-    <string name="summary_vehicle_label">Vehicle: %1$s</string>
-    <string name="summary_na">N/A</string>
-    <string name="summary_driver">Driver: %1$s %2$s</string>
-    <string name="summary_contact">Contact: %1$s</string>
-    <string name="summary_insurance">Insurance: %1$s</string>
-    <string name="summary_policy_format">(Policy: %1$s)</string>
-    <string name="summary_damages">Damages: %1$s</string>
-    <string name="summary_none_noted">None noted</string>
-    <string name="summary_circumstances">Circumstances: %1$s</string>
-    <string name="summary_none_selected">None selected</string>
+    <string name="summary_plate">Numeris: %1$s</string>
+    <string name="summary_trailer">Priekaba: %1$s</string>
+    <string name="summary_yes_no_plate">Taip (be numerio)</string>
+    <string name="summary_vehicle_label">Transp. priemonė: %1$s</string>
+    <string name="summary_na">Nėra duomenų</string>
+    <string name="summary_driver">Vairuotojas: %1$s %2$s</string>
+    <string name="summary_contact">Kontaktai: %1$s</string>
+    <string name="summary_insurance">Draudimas: %1$s</string>
+    <string name="summary_policy_format">(Polisas: %1$s)</string>
+    <string name="summary_damages">Sugadinimai: %1$s</string>
+    <string name="summary_none_noted">Nepasirinkta</string>
+    <string name="summary_circumstances">Aplinkybės: %1$s</string>
+    <string name="summary_none_selected">Nepasirinkta</string>
 
-    <!-- PDF Generation -->
-    <string name="pdf_title">Accident Report</string>
-    <string name="pdf_label_location">Location: %1$s</string>
-    <string name="pdf_label_description">Description: %1$s</string>
-    <string name="pdf_label_date">Date: %1$s</string>
-    <string name="pdf_header_witnesses">Witnesses</string>
-    <string name="pdf_header_photos">Photos</string>
-    <string name="pdf_label_owner">Owner: </string>
-    <string name="pdf_label_address">Address: </string>
-    <string name="pdf_label_vehicle">Vehicle: </string>
-    <string name="pdf_label_plate">Plate: </string>
-    <string name="pdf_label_insurance">Insurance: </string>
-    <string name="pdf_label_policy">Policy: </string>
-    <string name="pdf_label_driver">Driver: </string>
-    <string name="pdf_label_dob">DOB: </string>
-    <string name="pdf_label_license">License: </string>
-    <string name="pdf_label_circumstances">Circumstances: </string>
+    <!-- Witness Step -->
+    <string name="label_any_witnesses">Ar yra liudininkų?</string>
+    <string name="btn_add_witness">Pridėti liudininką</string>
+    <string name="btn_remove">Pašalinti</string>
+    <string name="hint_phone_format">Telefono numeris (pvz. +370...)</string>
+
+    <!-- Damage Step -->
+    <string name="label_damage">Sugadinimai</string>
+    <string name="label_mark_damages">Pažymėkite sugadintas vietas kiekvienai transporto priemonei</string>
+    <string name="instr_damage">1. Rodykle pažymėkite pirminį smūgio tašką\n2. Paspauskite ant transporto priemonės vietos, kad pažymėtumėte sugadinimą</string>
+
+    <!-- Fault & Signature -->
+    <string name="label_indicate_fault">Nurodykite kaltąją šalį</string>
+    <string name="label_signatures">Parašai</string>
+    <string name="label_at_fault_party">Kaltoji šalis</string>
+    <string name="hint_tap_to_sign">Paspauskite čia, kad pasirašytumėte</string>
+    <string name="btn_clear">Išvalyti</string>
+
+    <!-- PDF Generation (Localized Labels) -->
+    <string name="pdf_title">Eismo įvykio deklaracija</string>
+    <string name="pdf_label_location">Vieta: %1$s</string>
+    <string name="pdf_label_description">Aprašymas: %1$s</string>
+    <string name="pdf_label_date">Data: %1$s</string>
+    <string name="pdf_header_witnesses">Liudininkai</string>
+    <string name="pdf_header_photos">Nuotraukos</string>
+    <string name="pdf_label_owner">Savininkas: </string>
+    <string name="pdf_label_address">Adresas: </string>
+    <string name="pdf_label_vehicle">Transporto priemonė: </string>
+    <string name="pdf_label_plate">Valst. numeris: </string>
+    <string name="pdf_label_insurance">Draudimas: </string>
+    <string name="pdf_label_policy">Polisas: </string>
+    <string name="pdf_label_driver">Vairuotojas: </string>
+    <string name="pdf_label_dob">Gimimo data: </string>
+    <string name="pdf_label_license">Pažymėjimas: </string>
+    <string name="pdf_label_circumstances">Aplinkybės: </string>
+    <string name="pdf_label_insured">Draudėjas / Savininkas</string>
+    <string name="pdf_label_vehicle_insurance">Transporto priemonė ir draudimas</string>
+    <string name="pdf_label_driver_info">Informacija apie vairuotoją</string>
+    <string name="pdf_label_damage_visual">Vizualinis sugadinimų įvertinimas</string>
+    <string name="pdf_no_signature">NĖRA PARAŠO</string>
+    <string name="label_captured_photo">Užfiksuota nuotrauka</string>
 
     <!-- Operational Messages -->
-    <string name="msg_permissions_not_granted">Location/Camera permissions not granted — you can enter location manually.</string>
-    <string name="msg_generating_pdf">Generating...</string>
-    <string name="msg_saved_to_downloads">Saved to Downloads</string>
-    <string name="msg_failed_pdf">Failed to generate PDF</string>
-    <string name="msg_location_denied">Location permission denied. You can enter location manually.</string>
-    <string name="msg_location_error">Permission error while accessing location</string>
+    <string name="msg_permissions_not_granted">Vietovės ir kameros leidimai nesuteikti — galite įvesti vietą rankiniu būdu.</string>
+    <string name="msg_generating_pdf">Generuojama...</string>
+    <string name="msg_saved_to_downloads">Išsaugota į „Atsisiuntimai“ (Downloads)</string>
+    <string name="msg_failed_pdf">Nepavyko sugeneruoti PDF</string>
+    <string name="msg_gallery_error">Nepavyko įkelti nuotraukos iš galerijos</string>
+    <string name="msg_location_denied">Vietovės leidimas atmestas. Galite įvesti vietą rankiniu būdu.</string>
+    <string name="msg_location_error">Klaida nustatant vietą</string>
     <string name="label_lat_lon">Lat: %1$.5f, Lon: %2$.5f</string>
-    <string name="fault_summary_a">Vehicle A selected as the at-fault party.</string>
-    <string name="fault_summary_b">Vehicle B selected as the at-fault party.</string>
-    <string name="fault_summary_both">Both vehicles selected as at-fault.</string>
-    <string name="label_vehicle_a">Vehicle A</string>
-    <string name="label_vehicle_b">Vehicle B</string>
+    <string name="fault_summary_a">Transporto priemonė A pasirinkta kaip atsakinga šalis.</string>
+    <string name="fault_summary_b">Transporto priemonė B pasirinkta kaip atsakinga šalis.</string>
+    <string name="fault_summary_both">Abi transporto priemonės pasirinktos kaip atsakingos.</string>
+    <string name="label_vehicle_a">Transporto priemonė A</string>
+    <string name="label_vehicle_b">Transporto priemonė B</string>
     <string name="label_none">---</string>
-    <string name="rationale_location">Allow location to auto-fill your current accident location.</string>
-    <string name="rationale_camera">Camera permission required to take accident photos.</string>
+    <string name="rationale_location">Leiskite nustatyti vietą, kad automatiškai užpildytumėte įvykio koordinates.</string>
+    <string name="rationale_camera">Kameros leidimas reikalingas nuotraukoms daryti.</string>
 
     <!-- Formatting -->
     <string name="format_address">%1$s, %2$s %3$s</string>
     <string name="format_vehicle_info">%1$s (%2$s)</string>
-    <string name="format_insurance_info">%1$s\nPolicy: %2$s</string>
+    <string name="format_insurance_info">%1$s\nPolisas: %2$s</string>
     <string name="format_driver_info">%1$s (%2$s)</string>
     <string name="format_license_info">%1$s %2$s [%3$s]</string>
 
     <!-- Circumstances (Short) -->
-    <string name="circ_parked_short">Parked</string>
-    <string name="circ_stopping_short">Stopping</string>
-    <string name="circ_starting_off_short">Starting off</string>
-    <string name="circ_opening_door_short">Opening door</string>
-    <string name="circ_leaving_parking_short">Leaving parking</string>
-    <string name="circ_entering_parking_short">Entering parking</string>
-    <string name="circ_entering_roundabout_short">Entering roundabout</string>
-    <string name="circ_in_roundabout_short">In roundabout</string>
-    <string name="circ_rear_end_short">Rear-end (same lane)</string>
-    <string name="circ_changing_lanes_short">Changing lanes</string>
-    <string name="circ_overtaking_short">Overtaking</string>
-    <string name="circ_turning_right_short">Turning right</string>
-    <string name="circ_turning_left_short">Turning left</string>
-    <string name="circ_reversing_short">Reversing</string>
-    <string name="circ_opposite_lane_short">Opposite lane</string>
-    <string name="circ_from_right_short">From right</string>
-    <string name="circ_failed_priority_short">Failed priority</string>
+    <string name="circ_parked_short">Priparkuota</string>
+    <string name="circ_stopping_short">Stoja</string>
+    <string name="circ_starting_off_short">Pradeda važiuoti</string>
+    <string name="circ_opening_door_short">Atidaro duris</string>
+    <string name="circ_leaving_parking_short">Išvažiuoja iš stovėjimo vietos</string>
+    <string name="circ_entering_parking_short">Įvažiuoja į stovėjimo vietą</string>
+    <string name="circ_entering_roundabout_short">Įvažiuoja į žiedą</string>
+    <string name="circ_in_roundabout_short">Žiede</string>
+    <string name="circ_rear_end_short">Atsitrenkė į galą (ta pačia kryptimi)</string>
+    <string name="circ_changing_lanes_short">Keičia juostą</string>
+    <string name="circ_overtaking_short">Lenkia</string>
+    <string name="circ_turning_right_short">Suka į dešinę</string>
+    <string name="circ_turning_left_short">Suka į kairę</string>
+    <string name="circ_reversing_short">Važiuoja atbulomis</string>
+    <string name="circ_opposite_lane_short">Priešpriešinė juosta</string>
+    <string name="circ_from_right_short">Iš dešinės</string>
+    <string name="circ_failed_priority_short">Nepaisė pirmumo</string>
+
+    <!-- Circumstances (Full) -->
+    <string name="circ_parked_full">Stovėjo / buvo priparkuota</string>
+    <string name="circ_stopping_full">Stojo</string>
+    <string name="circ_starting_off_full">Pradėjo važiuoti</string>
+    <string name="circ_opening_door_full">Atidarė duris</string>
+    <string name="circ_leaving_parking_full">Išvažiavo iš stovėjimo vietos, privataus kelio ar tako</string>
+    <string name="circ_entering_parking_full">Įvažiavo į stovėjimo vietą, privatų kelią ar taką</string>
+    <string name="circ_entering_roundabout_full">Įvažiavo į žiedinę sankryžą</string>
+    <string name="circ_in_roundabout_full">Važiavo žiedinėje sankryžoje</string>
+    <string name="circ_rear_end_full">Atsitrenkė į tos pačios krypties transporto priemonės galą toje pačioje eismo juostoje</string>
+    <string name="circ_changing_lanes_full">Keitė eismo juostą</string>
+    <string name="circ_overtaking_full">Lenkė</string>
+    <string name="circ_turning_right_full">Suko į dešinę</string>
+    <string name="circ_turning_left_full">Suko į kairę</string>
+    <string name="circ_reversing_full">Važiavo atbulomis</string>
+    <string name="circ_opposite_lane_full">Išvažiavo į priešpriešinę eismo juostą</string>
+    <string name="circ_from_right_full">Važiavo iš dešinės sankryžoje</string>
+    <string name="circ_failed_priority_full">Nepaisė pirmumo ženklo arba važiavo degant raudonam šviesoforo signalui</string>
 
     <!-- Damage Zones -->
-    <string name="label_front">FRONT</string>
-    <string name="label_rear">REAR</string>
-    <string name="zone_front_left">front-left</string>
-    <string name="zone_front_right">front-right</string>
-    <string name="zone_front_center">front-center</string>
-    <string name="zone_rear_left">rear-left</string>
-    <string name="zone_rear_right">rear-right</string>
-    <string name="zone_rear_center">rear-center</string>
-    <string name="zone_left_side">left-side</string>
-    <string name="zone_right_side">right-side</string>
-    <string name="zone_center">center</string>
+    <string name="label_front">PRIEKIS</string>
+    <string name="label_rear">GALAS</string>
+    <string name="zone_front_left">priekis-kairė</string>
+    <string name="zone_front_right">priekis-dešinė</string>
+    <string name="zone_front_center">priekis-centras</string>
+    <string name="zone_rear_left">galas-kairė</string>
+    <string name="zone_rear_right">galas-dešinė</string>
+    <string name="zone_rear_center">galas-centras</string>
+    <string name="zone_left_side">kairė pusė</string>
+    <string name="zone_right_side">dešinė pusė</string>
+    <string name="zone_center">centras</string>
 
     <!-- Dialogs -->
-    <string name="dialog_finish_title">Confirmation</string>
-    <string name="dialog_finish_message">Are you sure you want to finish creating the report?</string>
-    <string name="dialog_exit_title">Exit Declaration</string>
-    <string name="dialog_exit_message">Are you sure you want to exit? All unsaved progress will be lost.</string>
-    <string name="dialog_yes">Yes</string>
-    <string name="dialog_no">No</string>
-    <string name="toast_report_created">Accident Report Created Successfully (Demo)</string>
+    <string name="dialog_finish_title">Patvirtinimas</string>
+    <string name="dialog_finish_message">Ar tikrai norite užbaigti ataskaitos kūrimą?</string>
+    <string name="dialog_exit_title">Išeiti</string>
+    <string name="dialog_exit_message">Ar tikrai norite išeiti? Visi nesaugoti duomenys bus prarasti.</string>
+    <string name="dialog_yes">Taip</string>
+    <string name="dialog_no">Ne</string>
+    <string name="toast_report_created">Eismo įvykio ataskaita sėkmingai sukurta (Demo)</string>
 
     <!-- Mock Data (For Demo) -->
-    <string name="mock_unknown_driver">Unknown Driver</string>
-    <string name="mock_country_lithuania">Lithuania</string>
-    <string name="mock_insurance_missing">Missing data</string>
-    <string name="mock_loc_kaunas">Kaunas, Lithuania</string>
-    <string name="mock_loc_vilnius">Vilnius, Lithuania</string>
-    <string name="mock_loc_klaipeda">Klaipėda, Lithuania</string>
-    <string name="mock_desc_1">Minor fender bender at the roundabout.</string>
-    <string name="mock_desc_2">Side-swipe collision while changing lanes.</string>
-    <string name="mock_desc_3">Reverse collision in a parking lot.</string>
+    <string name="mock_unknown_driver">Nežinomas vairuotojas</string>
+    <string name="mock_country_lithuania">Lietuva</string>
+    <string name="mock_insurance_missing">Trūksta duomenų</string>
+    <string name="mock_loc_kaunas">Kaunas, Lietuva</string>
+    <string name="mock_loc_vilnius">Vilnius, Lietuva</string>
+    <string name="mock_loc_klaipeda">Klaipėda, Lietuva</string>
+    <string name="mock_desc_1">Nedidelis susidūrimas žiedinėje sankryžoje.</string>
+    <string name="mock_desc_2">Šoninis susidūrimas keičiant eismo juostą.</string>
+    <string name="mock_desc_3">Susidūrimas važiuojant atbulomis stovėjimo aikštelėje.</string>
 
 </resources>
