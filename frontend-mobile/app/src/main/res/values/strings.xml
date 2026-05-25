@@ -163,6 +163,8 @@
     <string name="btn_add_witness">Pridėti liudininką</string>
     <string name="btn_remove">Pašalinti</string>
     <string name="hint_phone_format">Telefono numeris (pvz. +370...)</string>
+    <string name="label_witnesses">Liudininkai</string>
+
 
     <!-- Damage Step -->
     <string name="label_damage">Sugadinimai</string>
@@ -295,5 +297,4 @@
     <string name="mock_desc_1">Nedidelis susidūrimas žiedinėje sankryžoje.</string>
     <string name="mock_desc_2">Šoninis susidūrimas keičiant eismo juostą.</string>
     <string name="mock_desc_3">Susidūrimas važiuojant atbulomis stovėjimo aikštelėje.</string>
-
 </resources>

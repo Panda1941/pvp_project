@@ -74,7 +74,7 @@ public class AccidentReport implements Serializable {
      */
     public AccidentReport(String location, String plateA) {
         this();
-        this.location = location;
+        this.address = location;
         this.vehicleA.vehicleRegistration = plateA;
     }
 

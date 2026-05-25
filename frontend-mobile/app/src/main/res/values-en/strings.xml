@@ -165,6 +165,8 @@
     <string name="btn_add_witness">Add witness</string>
     <string name="btn_remove">Remove</string>
     <string name="hint_phone_format">Phone number (e.g. +370...)</string>
+    <string name="label_witnesses">Witnesses</string>
+
 
     <!-- Damage Step -->
     <string name="label_damage">Damage</string>

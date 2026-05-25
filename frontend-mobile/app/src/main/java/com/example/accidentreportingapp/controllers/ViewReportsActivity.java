@@ -1,6 +1,7 @@
 package com.example.accidentreportingapp.controllers;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -12,10 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
+import com.example.accidentreportingapp.models.Driver;
 import com.example.accidentreportingapp.models.VehicleSection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import network.api.ReportApi;
+import network.client.ApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * ViewReportsActivity displays a list of submitted and draft accident reports.
@@ -26,6 +34,8 @@ public class ViewReportsActivity extends BaseActivity {
     private ImageButton btnBack;
     private RecyclerView recyclerView;
     private ReportsAdapter adapter;
+    public static List<AccidentReport> reports = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,7 @@ public class ViewReportsActivity extends BaseActivity {
         initializeViews();
         setupRecyclerView();
         setupClickListeners();
+        loadReports();
 
         ViewCompat.setOnApplyWindowInsetsListener(v(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -56,14 +67,21 @@ public class ViewReportsActivity extends BaseActivity {
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
+
+        adapter = new ReportsAdapter(new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private List<AccidentReport> addMockReports()
+    {
         List<AccidentReport> mockReports = new ArrayList<>();
 
         // Report 1: WAITING (Amber) - Kaunas
         AccidentReport r1 = new AccidentReport(getString(R.string.mock_loc_kaunas), "ABC-123");
         r1.setStatus(AccidentReport.STATUS_WAITING);
         r1.setDescription(getString(R.string.mock_desc_1));
-        
+
         VehicleSection v1A = r1.getVehicleA();
         v1A.insuredName = "Jonas Jonaitis";
         v1A.insuredAddress = "Laisvės al. 5";
@@ -99,7 +117,7 @@ public class ViewReportsActivity extends BaseActivity {
         AccidentReport r2 = new AccidentReport(getString(R.string.mock_loc_vilnius), "REG-555");
         r2.setStatus(AccidentReport.STATUS_CONFIRMED);
         r2.setDescription(getString(R.string.mock_desc_2));
-        
+
         VehicleSection v2A = r2.getVehicleA();
         v2A.insuredName = "Mantas Mantaitis";
         v2A.insuredAddress = "Sodų g. 12";
@@ -119,14 +137,14 @@ public class ViewReportsActivity extends BaseActivity {
         v2B.insuranceName = "Gjensidige";
         v2B.driverName = "Karolis Karolaitis";
         v2B.isParkedStopped = true;
-        
+
         mockReports.add(r2);
 
         // Report 3: ISSUE (Red) - Klaipėda
         AccidentReport r3 = new AccidentReport(getString(R.string.mock_loc_klaipeda), "LTU-555");
         r3.setStatus(AccidentReport.STATUS_ISSUE);
         r3.setDescription(getString(R.string.mock_desc_3));
-        
+
         VehicleSection v3A = r3.getVehicleA();
         v3A.insuredName = "UAB TransLogistics";
         v3A.insuredAddress = "Mainų g. 4";
@@ -145,10 +163,43 @@ public class ViewReportsActivity extends BaseActivity {
 
         mockReports.add(r3);
 
-        adapter = new ReportsAdapter(mockReports);
-        recyclerView.setAdapter(adapter);
+        return mockReports;
     }
+    private void loadReports()
+    {
+        ReportApi api = ApiClient.getClient().create(ReportApi.class);
 
+        Call<List<AccidentReport>> call = api.getReports();
+
+        call.enqueue(new Callback<List<AccidentReport>>() {
+
+            @Override
+            public void onResponse(Call<List<AccidentReport>> call, Response<List<AccidentReport>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    List<AccidentReport> reports = response.body();
+                    AccidentReport report1 = reports.get(reports.size()-1);
+                    com.example.accidentreportingapp.models.VehicleSection vA = report1.getVehicleA();
+
+                    for (AccidentReport r : reports) {
+                        if (r.getVehicleA() != null) r.getVehicleA().normalizeDriver();
+                        if (r.getVehicleB() != null) r.getVehicleB().normalizeDriver();
+                    }
+                    adapter.updateData(response.body());
+                }
+                else
+                {
+                    adapter.updateData(addMockReports());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<AccidentReport>> call, Throwable t)
+            {
+                adapter.updateData(addMockReports());
+            }
+        });
+    }
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
     }

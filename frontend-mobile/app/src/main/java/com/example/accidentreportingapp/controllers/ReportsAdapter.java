@@ -15,6 +15,7 @@ import com.example.accidentreportingapp.R;
 import com.example.accidentreportingapp.models.AccidentReport;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +26,7 @@ import java.util.Locale;
  */
 public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHolder> {
 
-    private final List<AccidentReport> reports;
+    private List<AccidentReport> reports;
     // NOTE: We use `Serializable` for `AccidentReport` in this demo.
     // When passing objects via Intents consider switching to `Parcelable`
     // for better performance on Android IPC. The `dateFormat` below is
@@ -34,7 +35,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     public ReportsAdapter(List<AccidentReport> reports) {
-        this.reports = reports;
+        this.reports = new ArrayList<>(reports);
     }
 
     @SuppressWarnings("unchecked")
@@ -54,7 +55,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
     public void onBindViewHolder(@NonNull ReportsAdapter.ViewHolder holder, int position) {
         AccidentReport report = reports.get(position);
         
-        holder.textLocation.setText(report.getLocation());
+        holder.textLocation.setText(report.getAddress());
         holder.textPlate.setText(report.getVehicleA().vehicleRegistration);
         holder.textDescription.setText(report.getDescription());
         
@@ -109,5 +110,10 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHold
             textDescription = vv(view, R.id.text_description);
             textStatus = vv(view, R.id.text_status);
         }
+    }
+    public void updateData(List<AccidentReport> newReports) {
+        this.reports.clear();
+        this.reports.addAll(newReports);
+        notifyDataSetChanged();
     }
 }

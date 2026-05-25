@@ -1,5 +1,7 @@
 package com.example.accidentreportingapp.models;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 public class Photo implements Serializable {
@@ -38,5 +40,18 @@ public class Photo implements Serializable {
 
     public void setOrd(Integer ord) {
         this.ord = ord;
+    }
+
+    public Bitmap decodePhoto() {
+        if (this.url == null) return null;
+
+        String data = this.url;
+
+        if (data.contains(",")) {
+            data = data.split(",")[1];
+        }
+
+        byte[] decoded = android.util.Base64.decode(data, android.util.Base64.DEFAULT);
+        return android.graphics.BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
     }
 }
