@@ -82,6 +82,9 @@
     <string name="placeholder_map_loading">Map loading...</string>
     <string name="hint_date_format">YYYY-MM-DD</string>
     <string name="hint_time_format">HH:MM</string>
+    <string name="open_map_to_select_location">Open map to select location</string>
+    <string name="confirm_location">Confirm location</string>
+
 
     <!-- Field Labels -->
     <string name="field_name">Name:</string>

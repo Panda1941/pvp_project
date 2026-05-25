@@ -140,28 +140,13 @@
                 android:background="?android:attr/listDivider" />
         </LinearLayout>
 
-        <!-- Map Section -->
-        <TextView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_open_map"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/label_map_instruction"
-            android:textAppearance="?attr/textAppearanceLabelLarge"
-            android:layout_marginBottom="8dp" />
-
-        <FrameLayout
-            android:id="@+id/map_container"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="?attr/colorSurfaceVariant">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/placeholder_map_loading"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?attr/colorOnSurfaceVariant" />
-        </FrameLayout>
+            android:layout_marginTop="8dp"
+            android:text="@string/open_map_to_select_location"/>
 
     </LinearLayout>
 </ScrollView>

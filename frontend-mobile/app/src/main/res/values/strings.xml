@@ -81,6 +81,8 @@
     <string name="placeholder_map_loading">Žemėlapis kraunamas...</string>
     <string name="hint_date_format">MMMM-MM-DD</string>
     <string name="hint_time_format">VV:MM</string>
+    <string name="open_map_to_select_location">Atidaryti žemėlapį vietos pasirinkimui</string>
+    <string name="confirm_location">Patvirtinti pasirinkimą</string>
 
     <!-- Field Labels -->
     <string name="field_name">Vardas, pavardė:</string>

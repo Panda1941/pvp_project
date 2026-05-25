@@ -82,6 +82,8 @@
     <string name="placeholder_map_loading">Загрузка карты...</string>
     <string name="hint_date_format">ГГГГ-ММ-ДД</string>
     <string name="hint_time_format">ЧЧ:ММ</string>
+    <string name="open_map_to_select_location">Откройте карту, чтобы выбрать местоположение</string>
+    <string name="confirm_location">Подтвердить выбор</string>
 
     <!-- Field Labels -->
     <string name="field_name">Имя, фамилия:</string>

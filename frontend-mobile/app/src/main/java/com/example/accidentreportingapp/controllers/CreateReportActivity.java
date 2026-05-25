@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
 import android.os.Looper;
+import android.content.Intent;
 import java.util.Locale;
 import android.location.Location;
 import android.location.LocationListener;
@@ -111,6 +112,15 @@ public class CreateReportActivity extends BaseActivity {
                 }
             });
 
+    private final ActivityResultLauncher<Intent> mapPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    double lat = result.getData().getDoubleExtra("lat", 0);
+                    double lng = result.getData().getDoubleExtra("lng", 0);
+                    onLocationSelected(lat, lng);
+                }
+            });
+
     private ImageButton btnBack;
     ImageButton btnPrevOverlay;
     ImageButton btnNextOverlay;
@@ -138,6 +148,7 @@ public class CreateReportActivity extends BaseActivity {
     private SignatureView signatureViewA, signatureViewB;
 
     private ImageButton btnUseCurrentLocation;
+    private MaterialButton btnOpenMap;
     private static final int REQ_PERMISSION_LOCATION_ONLY = 1002;
     private static final int REQ_CAPTURE_PHOTO = 1003;
     private static final int REQ_PERMISSION_CAMERA = 1004;
@@ -236,6 +247,7 @@ public class CreateReportActivity extends BaseActivity {
         editTime = viewTimeLocation.findViewById(R.id.edit_time);
         editAddress = viewTimeLocation.findViewById(R.id.edit_address);
         btnUseCurrentLocation = viewTimeLocation.findViewById(R.id.btn_use_current_location);
+        btnOpenMap = viewTimeLocation.findViewById(R.id.btn_open_map);
 
         setupDateTimePickers();
         setupPlatesListeners();
@@ -256,6 +268,9 @@ public class CreateReportActivity extends BaseActivity {
         btnNext.setOnClickListener(v -> goToNextStep());
         if (btnUseCurrentLocation != null) {
             btnUseCurrentLocation.setOnClickListener(v -> onUseCurrentLocationClicked());
+        }
+        if (btnOpenMap != null) {
+            btnOpenMap.setOnClickListener(v -> openMapPicker());
         }
         if (btnAddPhoto != null) {
             btnAddPhoto.setOnClickListener(v -> onAddPhotoClicked());
@@ -688,6 +703,41 @@ public class CreateReportActivity extends BaseActivity {
             while ((read = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, read);
             }
+        }
+    }
+
+    private void openMapPicker() {
+        if (hasPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location loc = null;
+            try {
+                if (lm != null) {
+                    loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (loc == null) loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+            } catch (SecurityException ignored) {}
+
+            Intent intent = new Intent(this, MapPickerActivity.class);
+            if (draftReport.getLatitude() != null && draftReport.getLongitude() != null) {
+                intent.putExtra("default_lat", draftReport.getLatitude());
+                intent.putExtra("default_lng", draftReport.getLongitude());
+            } else if (loc != null) {
+                intent.putExtra("default_lat", loc.getLatitude());
+                intent.putExtra("default_lng", loc.getLongitude());
+            }
+            mapPickerLauncher.launch(intent);
+        } else {
+            requestAppPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQ_PERMISSION_LOCATION_ONLY,
+                    getString(R.string.rationale_location));
+        }
+    }
+
+    private void onLocationSelected(double lat, double lng) {
+        draftReport.setLatitude(lat);
+        draftReport.setLongitude(lng);
+        String address = convertCoordsToAddress(lat, lng);
+        if (editAddress != null) {
+            editAddress.setText(address);
         }
     }
 

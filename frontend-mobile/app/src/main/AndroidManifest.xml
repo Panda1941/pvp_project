@@ -58,6 +58,15 @@
             android:label="@string/title_create_report"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".controllers.MapPickerActivity"
+            android:exported="false"
+            android:label="Select Location" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
     </application>
 
 </manifest>

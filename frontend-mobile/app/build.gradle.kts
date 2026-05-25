@@ -28,6 +28,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "SERVER_IP", "\"$serverIp\"")
+        manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_KEY") ?: ""
     }
 
     buildTypes {
@@ -54,6 +55,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.play.services.maps)
     // Fused Location Provider (single-shot high-accuracy requests)
     implementation("com.google.android.gms:play-services-location:21.0.1")
     testImplementation(libs.junit)
