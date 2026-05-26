@@ -98,4 +98,12 @@ public class VehicleSection implements Serializable {
         }
         return sb.toString();
     }
+    public void normalizeDriver() {
+        if (driver != null) {
+            this.driverName = driver.firstName + " " + driver.lastName;
+            this.driverDob = driver.dob;
+            this.licenseNumber = driver.licenseNumber;
+            this.licenseCategory = driver.licenseCategory;
+        }
+    }
 }
